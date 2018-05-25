@@ -8,7 +8,7 @@
   </parent>
 
     <groupId>nl.uva.sne.vre4eic</groupId>
-    <artifactId>rest</artifactId>
+    <artifactId>catalogue_mapper</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
