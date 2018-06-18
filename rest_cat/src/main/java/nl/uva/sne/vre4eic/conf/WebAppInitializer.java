@@ -28,8 +28,6 @@ public class WebAppInitializer implements WebApplicationInitializer {
         AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
         ctx.register(AppConfig.class);
         ctx.register(AsyncConfig.class);
-        ctx.register(RestTemplateConfig.class);
-//        ctx.register(ServletRegistrationConf.class);
         ctx.setServletContext(servletContext);
         ServletRegistration.Dynamic servlet = servletContext.addServlet("dispatcher",
                 new DispatcherServlet(ctx));

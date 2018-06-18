@@ -31,11 +31,10 @@ public class ConvertController {
 
 //    @RequestMapping(value = "/convert", method = RequestMethod.GET, params = {"catalogue_url", "cerif_store_url"})
     @RequestMapping(value = "/convert", method = RequestMethod.GET)
-    public @ResponseBody
-    String convert(@RequestParam(value = "catalogue_url") String catalogueURL) {
+    public @ResponseBody CompletableFuture<User> convert(@RequestParam(value = "catalogue_url") String catalogueURL) {
         try {
             CompletableFuture<User> res = service.findUser("skoulouzis");
-            return res.toString();
+            return res;
         } catch (InterruptedException ex) {
             Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
         }
