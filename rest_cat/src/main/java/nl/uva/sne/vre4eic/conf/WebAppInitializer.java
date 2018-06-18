@@ -11,10 +11,11 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package nl.uva.sne.vre4eic.rest.conf;
+package nl.uva.sne.vre4eic.conf;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
 import javax.servlet.ServletRegistration.Dynamic;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -25,11 +26,17 @@ public class WebAppInitializer implements WebApplicationInitializer {
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
+        ctx.register(AppConfig.class);
+        ctx.register(AsyncConfig.class);
+        ctx.register(RestTemplateConfig.class);
+//        ctx.register(ServletRegistrationConf.class);
         ctx.setServletContext(servletContext);
-ctx.register(AppConfig.class);  
-
-        Dynamic dynamic = servletContext.addServlet("dispatcher", new DispatcherServlet(ctx));
-        dynamic.addMapping("/");
-        dynamic.setLoadOnStartup(1);
+        ServletRegistration.Dynamic servlet = servletContext.addServlet("dispatcher",
+                new DispatcherServlet(ctx));
+        servlet.setLoadOnStartup(1);
+        servlet.addMapping("/");
+        servlet.setAsyncSupported(true); //Servlets were marked as supporting async
+        // For CORS Pre Filght Request
+        servlet.setInitParameter("dispatchOptionsRequest", "true");
     }
 }
