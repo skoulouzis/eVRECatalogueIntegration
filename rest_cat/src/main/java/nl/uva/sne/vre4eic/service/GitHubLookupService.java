@@ -9,10 +9,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import nl.uva.sne.vre4eic.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 /**
  *
@@ -29,7 +27,7 @@ public class GitHubLookupService {
         results.setBlog("blog");
         results.setName(user);
         // Artificial delay of 1s for demonstration purposes
-        Thread.sleep(1000L);
+        Thread.sleep(10000L);
         return CompletableFuture.completedFuture(results);
     }
 

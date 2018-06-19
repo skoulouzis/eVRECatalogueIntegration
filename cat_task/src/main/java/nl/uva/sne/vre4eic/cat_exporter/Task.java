@@ -21,6 +21,8 @@ import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,6 +43,7 @@ public class Task {
     private static final String CKAN_TASK_QUEUE_NAME = "ckan_task_queue";
     private static String catalogueURL;
     private static String rabbitMQHost;
+    private static String directoryPath;
 
     public static void main(String[] argv) {
 
@@ -48,13 +51,16 @@ public class Task {
 
             Options options = new Options();
 
-            Option cat = new Option("c", "catalogue", true, "catalogue url");
-            cat.setRequired(true);
-            options.addOption(cat);
-
+//            Option cat = new Option("c", "catalogue", true, "catalogue url");
+//            cat.setRequired(true);
+//            options.addOption(cat);
             Option rabbitHost = new Option("r", "rabbit_host", true, "rabbitMQ host");
             rabbitHost.setRequired(true);
             options.addOption(rabbitHost);
+
+            Option directoryPath = new Option("d", "directory", true, "directory path");
+            directoryPath.setRequired(true);
+            options.addOption(directoryPath);
 
             CommandLineParser parser = new BasicParser();
             HelpFormatter formatter = new HelpFormatter();
@@ -69,7 +75,7 @@ public class Task {
                 return;
             }
 
-            setCatalogueURL(cmd.getOptionValue("catalogue"));
+            setDirectoryPath(cmd.getOptionValue("directory"));
             setRabbitMQHost(cmd.getOptionValue("rabbit_host"));
 
             Logger.getLogger(Task.class.getName()).log(Level.INFO, "catalogue url: {0}", catalogueURL);
@@ -117,7 +123,8 @@ public class Task {
 
             for (WatchEvent event : watchKey.pollEvents()) {
                 WatchEvent.Kind kind = event.kind();
-                if (StandardWatchEventKinds.ENTRY_CREATE.equals(event.kind())) {
+                if (StandardWatchEventKinds.ENTRY_CREATE.equals(event.kind()) ||
+                    StandardWatchEventKinds.ENTRY_MODIFY.equals(event.kind())    ) {
                     String fileName = event.context().toString();
                     sendFile(new File(path + File.separator + fileName), rabbitMQHost);
                 }
@@ -142,15 +149,18 @@ public class Task {
     }
 
     public static void doit() throws MalformedURLException, IOException, InterruptedException, TimeoutException {
-        File out = new File(System.getProperty("java.io.tmpdir") + File.separator + "ckan" + new URL(catalogueURL).getHost());
-        out.mkdirs();
-        Logger.getLogger(Task.class.getName()).log(Level.INFO, "Documents will be saved in: {0}", out.getAbsolutePath());
+//        File out = new File(System.getProperty("java.io.tmpdir") + File.separator + "ckan" + new URL(catalogueURL).getHost());
+//        out.mkdirs();
+//        Logger.getLogger(Task.class.getName()).log(Level.INFO, "Documents will be saved in: {0}", out.getAbsolutePath());
 
-        Thread exp = new Thread(new ExportDocTask(catalogueURL, out));
-        exp.start();
-
-        monitorDirectory(out.getAbsolutePath());
-
-        exp.join();
+//        ExecutorService service = Executors.newFixedThreadPool(3);
+//        service.submit(new ExportDocTask(catalogueURL, out));
+        monitorDirectory(directoryPath);
+//        service.shutdown();
     }
+
+    private static void setDirectoryPath(String aDdirectoryPath) {
+        directoryPath = aDdirectoryPath;
+    }
+
 }

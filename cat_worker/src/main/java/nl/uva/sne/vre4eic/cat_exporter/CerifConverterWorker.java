@@ -38,6 +38,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.codec.binary.Base64;
 
 /**
  *
@@ -130,7 +131,9 @@ public class CerifConverterWorker {
         final Consumer consumer = new DefaultConsumer(channel) {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException, FileNotFoundException {
-                String message = new String(body, "UTF-8");
+
+                byte[] decodedBytes = Base64.decodeBase64(body);
+                String message = new String(decodedBytes, "UTF-8");
                 try {
                     X3MLEngine.Output rdf = convert(message);
                     String fileName = UUID.randomUUID().toString();
