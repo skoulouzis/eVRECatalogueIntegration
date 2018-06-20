@@ -10,10 +10,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Future;
 import nl.uva.sne.vre4eic.cat_exporter.ExportDocTask;
 import nl.uva.sne.vre4eic.model.ProcessingStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.metrics.MetricsEndpoint;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,9 @@ public class Services {
 
     @Autowired
     ConnectionFactory factory;
+
+    @Autowired
+    MetricsEndpoint endpoint;
 
     Map<String, Future<String>> taskMap = new HashMap<>();
 
@@ -38,6 +43,13 @@ public class Services {
         }
         ProcessingStatus process = new ProcessingStatus();
         process.setCatalogueURL(new URL(catalogueURL));
+
+        Set<String> names = endpoint.listNames().getNames();
+        
+        for (String name : names) {
+            System.err.println(name);
+        }
+
         if (retdouble.isDone()) {
             taskMap.remove(catalogueURL);
             process.setStatus("FINISHED");
