@@ -5,6 +5,7 @@
  */
 package nl.uva.sne.vre4eic.service;
 
+import com.rabbitmq.client.ConnectionFactory;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -22,13 +23,16 @@ public class Services {
     @Autowired
     ThreadPoolTaskExecutor exec;
 
+    @Autowired
+    ConnectionFactory factory;
+
     Map<String, Future<String>> taskMap = new HashMap<>();
 
     public ProcessingStatus doProcess(String catalogueURL) throws MalformedURLException {
         Future<String> retdouble = taskMap.get(catalogueURL);
 
         if (retdouble == null) {
-            ExportDocTask task = new ExportDocTask(catalogueURL);
+            ExportDocTask task = new ExportDocTask(catalogueURL, factory);
             retdouble = exec.submit(task);
             taskMap.put(catalogueURL, retdouble);
         }

@@ -30,11 +30,12 @@ import org.json.JSONObject;
 public class ExportDocTask implements Callable<String> {
 
     private final String catalogueURL;
-    private String rabbitmqHost;
     private static final String CKAN_TASK_QUEUE_NAME = "ckan_task_queue";
+    private final ConnectionFactory factory;
 
-    public ExportDocTask(String catalogueURL) {
+    public ExportDocTask(String catalogueURL, ConnectionFactory factory) {
         this.catalogueURL = catalogueURL;
+        this.factory = factory;
     }
 
     private void exportDocuments(String catalogueURL) throws MalformedURLException, GenericException {
@@ -42,8 +43,6 @@ public class ExportDocTask implements Callable<String> {
         try {
             CatalogueExporter exporter = getExporter(catalogueURL);
             Collection<String> allResourceIDs = exporter.fetchAllDatasetUUIDs();
-            ConnectionFactory factory = new ConnectionFactory();
-            factory.setHost(rabbitmqHost);
             for (String resourceId : allResourceIDs) {
                 JSONObject resource = exporter.exportResource(resourceId);
                 String xml = exporter.transformToXml(resource);
