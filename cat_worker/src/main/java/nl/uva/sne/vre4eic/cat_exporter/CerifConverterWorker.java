@@ -12,9 +12,17 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Consumer;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
+import com.rabbitmq.client.MetricsCollector;
+import com.rabbitmq.client.impl.MicrometerMetricsCollector;
 import eu.delving.x3ml.X3MLEngine;
 import eu.delving.x3ml.X3MLGeneratorPolicy;
 import eu.delving.x3ml.engine.Generator;
+import io.micrometer.core.instrument.Clock;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.composite.CompositeMeterRegistry;
+import io.micrometer.influx.InfluxConfig;
+import io.micrometer.influx.InfluxMeterRegistry;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -28,7 +36,6 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 import java.io.ByteArrayInputStream;
 import java.io.PrintStream;
-import java.net.URL;
 import java.util.UUID;
 import java.util.concurrent.TimeoutException;
 import org.apache.commons.cli.BasicParser;
@@ -121,6 +128,11 @@ public class CerifConverterWorker {
     private static void consume() throws IOException, TimeoutException {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost(rabbitMQHost);
+//        MeterRegistry registry = new InfluxMeterRegistry(InfluxConfig.DEFAULT, Clock.SYSTEM);
+//
+//        MicrometerMetricsCollector metricsCollector = new MicrometerMetricsCollector(registry);
+//        factory.setMetricsCollector(metricsCollector);
+
         final Connection connection = factory.newConnection();
         final Channel channel = connection.createChannel();
 

@@ -5,6 +5,7 @@
  */
 package nl.uva.sne.vre4eic.rest;
 
+import io.micrometer.core.annotation.Timed;
 import java.net.MalformedURLException;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author S. Koulouzis
  */
 @RestController
+@Timed
 public class ConvertController {
 
     @Autowired

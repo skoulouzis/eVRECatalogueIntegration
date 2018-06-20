@@ -10,7 +10,6 @@
     </properties> 
   <modules>
     <module>rest_cat</module>
-    <module>cat_task</module>
     <module>cat_worker</module>
   </modules>
 </project>

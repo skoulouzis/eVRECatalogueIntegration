@@ -12,6 +12,7 @@ import com.rabbitmq.client.MessageProperties;
 import gr.forth.ics.isl.exception.GenericException;
 import gr.forth.ics.isl.exporter.CatalogueExporter;
 import gr.forth.ics.isl.exporter.D4ScienceExporter;
+import io.micrometer.core.instrument.MeterRegistry;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collection;
@@ -37,6 +38,9 @@ public class ExportDocTask implements Callable<String> {
 
     @Autowired
     MetricsEndpoint endpoint;
+
+    @Autowired
+    MeterRegistry meterRegistry;
 
     public ExportDocTask(String catalogueURL, ConnectionFactory factory) {
         this.catalogueURL = catalogueURL;
@@ -66,6 +70,10 @@ public class ExportDocTask implements Callable<String> {
                 }
 
             }
+
+//            Set<String> names = endpoint.listNames().getNames();
+
+//        endpoint.metric(catalogueURL, list);
         } catch (IOException ex) {
             Logger.getLogger(ExportDocTask.class.getName()).log(Level.SEVERE, null, ex);
         }

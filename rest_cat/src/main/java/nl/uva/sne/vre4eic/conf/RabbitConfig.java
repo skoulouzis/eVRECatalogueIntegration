@@ -13,27 +13,27 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
-@Configuration
-@PropertySources({
-    @PropertySource(value = "classpath:application.properties", ignoreResourceNotFound = true)
-    ,
-    @PropertySource(value = "file:etc/application.properties", ignoreResourceNotFound = true)
-})
+//@Configuration
+//@PropertySources({
+//    @PropertySource(value = "classpath:application.properties", ignoreResourceNotFound = true)
+//    ,
+//    @PropertySource(value = "file:etc/application.properties", ignoreResourceNotFound = true)
+//})
 public class RabbitConfig {
 
-    @Value("${rabbit.host}")
-    private String rabbitHost;
-    @Value("${rabbit.username}")
-    private String rabbitUserName;
-
-    @Bean
-    public ConnectionFactory getConnectionFactory() {
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost(rabbitHost);
-//     MetricsCollector metricsCollector = new Inf
-        factory.setUsername(rabbitUserName);
-//factory.setPassword(password);
-//factory.setMetricsCollector(metricsCollector);
-        return factory;
-    }
+//    @Value("${rabbit.host}")
+//    private String rabbitHost;
+//    @Value("${rabbit.username}")
+//    private String rabbitUserName;
+//
+//    @Bean
+//    public ConnectionFactory getConnectionFactory() {
+//        ConnectionFactory factory = new ConnectionFactory();
+//        factory.setHost(rabbitHost);
+////     MetricsCollector metricsCollector = new Inf
+//        factory.setUsername(rabbitUserName);
+////factory.setPassword(password);
+////factory.setMetricsCollector(metricsCollector);
+//        return factory;
+//    }
 }
