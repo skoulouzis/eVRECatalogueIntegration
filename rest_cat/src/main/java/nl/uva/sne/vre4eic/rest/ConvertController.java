@@ -31,8 +31,7 @@ public class ConvertController {
     @Autowired
     private Services service;
 
-//    @RequestMapping(value = "/convert", method = RequestMethod.GET, params = {"catalogue_url", "cerif_store_url"})
-    @RequestMapping(value = "/convert", method = RequestMethod.GET)
+    @RequestMapping(value = "/convert", method = RequestMethod.GET, params = {"catalogue_url", "mapping_url"})
     public @ResponseBody
     ProcessingStatus convert(@RequestParam(value = "catalogue_url") String catalogueURL) {
         try {
