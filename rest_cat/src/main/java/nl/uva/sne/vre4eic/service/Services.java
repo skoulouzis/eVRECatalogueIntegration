@@ -5,22 +5,15 @@
  */
 package nl.uva.sne.vre4eic.service;
 
-import io.micrometer.core.instrument.Measurement;
-import io.micrometer.core.instrument.Meter;
-import io.micrometer.core.instrument.MeterRegistry;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.Future;
 import nl.uva.sne.vre4eic.cat_exporter.ExportDocTask;
 import nl.uva.sne.vre4eic.model.ProcessingStatus;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.metrics.MetricsEndpoint;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
@@ -33,15 +26,14 @@ public class Services {
     @Autowired
     CachingConnectionFactory connectionFactory;
 
-    @Autowired
-    MetricsEndpoint endpoint;
-
-    @Autowired
-    MeterRegistry meterRegistry;
-
+//    @Autowired
+//    MetricsEndpoint endpoint;
+//
+//    @Autowired
+//    MeterRegistry meterRegistry;
     Map<String, Future<String>> taskMap = new HashMap<>();
 
-    public ProcessingStatus doProcess(String catalogueURL) throws MalformedURLException {
+    public ProcessingStatus doProcess(String catalogueURL, String mappingURL) throws MalformedURLException {
         Future<String> retdouble = taskMap.get(catalogueURL);
 
         if (retdouble == null) {

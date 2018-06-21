@@ -33,9 +33,10 @@ public class ConvertController {
 
     @RequestMapping(value = "/convert", method = RequestMethod.GET, params = {"catalogue_url", "mapping_url"})
     public @ResponseBody
-    ProcessingStatus convert(@RequestParam(value = "catalogue_url") String catalogueURL) {
+    ProcessingStatus convert(@RequestParam(value = "catalogue_url") String catalogueURL, 
+            @RequestParam(value = "mapping_url") String mappingURL) {
         try {
-            ProcessingStatus status = service.doProcess(catalogueURL);
+            ProcessingStatus status = service.doProcess(catalogueURL,mappingURL);
             return status;
         } catch (MalformedURLException ex) {
             Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
