@@ -28,6 +28,7 @@ public class WebAppInitializer implements WebApplicationInitializer {
         ctx.register(AppConfig.class);
         ctx.register(AsyncConfig.class);
         ctx.register(ThreadConfig.class);
+//        ctx.register(ZKConf.class);
         ctx.setServletContext(servletContext);
         ServletRegistration.Dynamic servlet = servletContext.addServlet("dispatcher",
                 new DispatcherServlet(ctx));

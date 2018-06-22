@@ -5,7 +5,13 @@
  */
 package nl.uva.sne.vre4eic.cat_exporter;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,12 +33,12 @@ public class ConfigMonitor implements Watcher, StatCallback {
 
     boolean dead;
 
-    IConfigListener listener;
+    Executor listener;
 
     byte prevData[];
 
     public ConfigMonitor(ZooKeeper zk, String znode, Watcher chainedWatcher,
-            IConfigListener listener) {
+            Executor listener) {
         this.zk = zk;
         this.znode = znode;
         this.chainedWatcher = chainedWatcher;
@@ -93,22 +99,34 @@ public class ConfigMonitor implements Watcher, StatCallback {
                 return;
         }
 
-        byte b[] = null;
         if (exists) {
             try {
-                b = zk.getData(znode, false, null);
-            } catch (KeeperException ex) {
+                byte b[] = null;
+                Map<String, byte[]> conf = new HashMap();
+                List<String> children = zk.getChildren(znode, false, null);
+                for (String ch : children) {
+                    if (ch.equals("mapping")) {
+                        b = zk.getData(znode + "/" + ch, false, null);
+                        conf.put(ch, b);
+//                        System.err.println(new String(mappingData, "UTF-8"));
+                    } else if (ch.equals("generator")) {
+                        b = zk.getData(znode + "/" + ch, false, null);
+                        conf.put(ch, b);
+//                        System.err.println(new String(generatorData, "UTF-8"));
+                    } else if (ch.equals("queueName")) {
+                        b = zk.getData(znode + "/" + ch, false, null);
+                        conf.put(ch, b);
+//                        System.err.println(new String(queueNameData, "UTF-8"));
+                    }
+                }
+                listener.setConf(conf);
+            } catch (KeeperException | IOException | TimeoutException ex) {
                 // We don't need to worry about recovering now. The watch
                 // callbacks will kick off any exception handling
                 Logger.getLogger(ConfigMonitor.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InterruptedException ex) {
                 return;
             }
-        }
-        if ((b == null && b != prevData)
-                || (b != null && !Arrays.equals(prevData, b))) {
-            listener.exists(b);
-            prevData = b;
         }
     }
 }

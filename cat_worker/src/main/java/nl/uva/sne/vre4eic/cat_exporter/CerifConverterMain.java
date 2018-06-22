@@ -25,9 +25,6 @@ import org.apache.zookeeper.KeeperException;
 public class CerifConverterMain {
 
     private static String rabbitMQHost;
-    private static String mappingsPath;
-    private static String generatorPathPolicy;
-    private static File output;
     private static String zookeeperHost;
 
     public static void main(String[] argv) {
@@ -67,8 +64,8 @@ public class CerifConverterMain {
             zookeeperHost = cmd.getOptionValue("zookeeper_host");
             Logger.getLogger(CerifConverterMain.class.getName()).log(Level.INFO, "zookeeper host: {0}", zookeeperHost);
 
-            mappingsPath = "/tmp/mapping.xml";
-            new Executor(rabbitMQHost, zookeeperHost, "/conf", mappingsPath).run();
+           
+            new Executor(rabbitMQHost, zookeeperHost, "/catmap_conf").run();
 
 //            mappingsPath = cmd.getOptionValue("mappings");
 //            Logger.getLogger(CerifConverterWorker.class.getName()).log(Level.INFO, "mappings path: {0}", mappingsPath);

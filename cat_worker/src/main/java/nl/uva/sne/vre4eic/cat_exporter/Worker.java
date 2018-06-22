@@ -38,8 +38,8 @@ public class Worker {
     private final String rabbitMQHost;
     private final String taskQeueName;
     private final String outputRfdFolder;
-    private final String mappingsPath;
-    private final String generatorPathPolicy;
+    private File mappingsFile;
+    private File generatorPathFile;
 
 //        private enum outputFormat {
 //        RDF_XML,
@@ -52,12 +52,19 @@ public class Worker {
 //        FILE,
 //        DISABLED
 //    }
-    public Worker(String rabbitMQHost, String taskQeueName, String output, String mappingsPath, String generatorPathPolicy) {
+    public Worker(String rabbitMQHost, String taskQeueName, String output, File confFolder) {
         this.taskQeueName = taskQeueName;
         this.rabbitMQHost = rabbitMQHost;
         this.outputRfdFolder = output;
-        this.mappingsPath = mappingsPath;
-        this.generatorPathPolicy = generatorPathPolicy;
+        File[] files = confFolder.listFiles();
+        for (File f : files) {
+            if (f.getName().equals("mapping")) {
+                mappingsFile = f;
+            } else if (f.getName().equals("generator")) {
+                generatorPathFile = f;
+            }
+        }
+
     }
 
     public void consume() throws IOException, TimeoutException {
@@ -82,10 +89,10 @@ public class Worker {
                 byte[] decodedBytes = Base64.decodeBase64(body);
                 String message = new String(decodedBytes, "UTF-8");
                 try {
-//                    X3MLEngine.Output rdf = convert(message);
-//                    String fileName = UUID.randomUUID().toString();
-//                    rdf.write(new PrintStream(new File(outputRfdFolder + File.separator + fileName + ".rdf")), "application/rdf+xml");
-                } catch (Exception ex) {
+                    X3MLEngine.Output rdf = convert(message);
+                    String fileName = UUID.randomUUID().toString();
+                    rdf.write(new PrintStream(new File(outputRfdFolder + File.separator + fileName + ".rdf")), "application/rdf+xml");
+                } catch (IOException | ParserConfigurationException | SAXException ex) {
                     Logger.getLogger(CerifConverterMain.class.getName()).log(Level.SEVERE, null, ex);
                 } finally {
                     channel.basicAck(envelope.getDeliveryTag(), false);
@@ -100,13 +107,13 @@ public class Worker {
 
         X3MLEngine.REPORT_PROGRESS = true;
         X3MLEngine engine;
-        engine = createEngine(mappingsPath);
+        engine = createEngine(mappingsFile);
 
         Generator policy;
-        if (generatorPathPolicy.isEmpty()) {
+        if (generatorPathFile == null || !generatorPathFile.exists() || generatorPathFile.length() < 1) {
             policy = X3MLGeneratorPolicy.load(null, X3MLGeneratorPolicy.createUUIDSource(UUID_SIZE));
         } else {
-            policy = X3MLGeneratorPolicy.load(new FileInputStream(new File(generatorPathPolicy)), X3MLGeneratorPolicy.createUUIDSource(UUID_SIZE));
+            policy = X3MLGeneratorPolicy.load(new FileInputStream(generatorPathFile), X3MLGeneratorPolicy.createUUIDSource(UUID_SIZE));
         }
         Element doc = createDocument(new ByteArrayInputStream(task.getBytes()));
         X3MLEngine.Output output = engine.execute(doc, policy);
@@ -124,8 +131,8 @@ public class Worker {
         return factory;
     }
 
-    private X3MLEngine createEngine(String path) throws FileNotFoundException {
-        return X3MLEngine.load(new FileInputStream(new File(path)));
+    private X3MLEngine createEngine(File mappingsFile) throws FileNotFoundException {
+        return X3MLEngine.load(new FileInputStream(mappingsFile));
     }
 
 }

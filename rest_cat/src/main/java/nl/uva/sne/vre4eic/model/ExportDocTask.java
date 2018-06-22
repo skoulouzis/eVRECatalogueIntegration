@@ -16,7 +16,6 @@ import io.micrometer.core.instrument.MeterRegistry;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collection;
-import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
@@ -33,7 +32,6 @@ import org.springframework.boot.actuate.metrics.MetricsEndpoint;
 public class ExportDocTask implements Callable<String> {
 
     private final String catalogueURL;
-    private static final String CKAN_TASK_QUEUE_NAME = "ckan_task_queue";
     private final ConnectionFactory factory;
 
     @Autowired
@@ -41,10 +39,12 @@ public class ExportDocTask implements Callable<String> {
 
     @Autowired
     MeterRegistry meterRegistry;
+    private final String queue;
 
-    public ExportDocTask(String catalogueURL, ConnectionFactory factory) {
+    public ExportDocTask(String catalogueURL, ConnectionFactory factory, String queue) {
         this.catalogueURL = catalogueURL;
         this.factory = factory;
+        this.queue = queue;
     }
 
     private void exportDocuments(String catalogueURL) throws MalformedURLException, GenericException {
@@ -56,7 +56,7 @@ public class ExportDocTask implements Callable<String> {
                 JSONObject resource = exporter.exportResource(resourceId);
                 String xml = exporter.transformToXml(resource);
                 try (Connection connection = factory.newConnection(); Channel channel = connection.createChannel()) {
-                    String qName = getTaskQueName();
+                    String qName = queue;
                     channel.queueDeclare(qName, true, false, false, null);
                     byte[] encoded = (Base64.encodeBase64(xml.getBytes()));
                     String message = new String(encoded, "UTF-8");
@@ -72,7 +72,6 @@ public class ExportDocTask implements Callable<String> {
             }
 
 //            Set<String> names = endpoint.listNames().getNames();
-
 //        endpoint.metric(catalogueURL, list);
         } catch (IOException ex) {
             Logger.getLogger(ExportDocTask.class.getName()).log(Level.SEVERE, null, ex);
@@ -87,9 +86,5 @@ public class ExportDocTask implements Callable<String> {
     public String call() throws Exception {
         exportDocuments(this.catalogueURL);
         return null;
-    }
-
-    private String getTaskQueName() {
-        return CKAN_TASK_QUEUE_NAME;
     }
 }
