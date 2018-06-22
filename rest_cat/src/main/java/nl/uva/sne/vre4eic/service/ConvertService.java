@@ -5,10 +5,12 @@
  */
 package nl.uva.sne.vre4eic.service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -46,7 +48,7 @@ public class ConvertService {
         Future<String> convertTask = taskMap.get(catalogueURL);
 
         if (convertTask == null) {
-            setConvertConf();
+            setConvertConf(mappingURL, generatorURL);
             ExportDocTask task = new ExportDocTask(catalogueURL, connectionFactory.getRabbitConnectionFactory(), this.queueName);
             convertTask = exec.submit(task);
             taskMap.put(catalogueURL, convertTask);
@@ -63,21 +65,42 @@ public class ConvertService {
         }
     }
 
-    private void setConvertConf() throws FileNotFoundException, IOException, KeeperException, InterruptedException {
+    private void setConvertConf(String mappingURL, String generatorURL) throws FileNotFoundException, IOException, KeeperException, InterruptedException {
         String confParentPath = "/catmap_conf";
         String mappinghPath = confParentPath + "/mapping";
         String generatorPath = confParentPath + "/generator";
         String queueNamePath = confParentPath + "/queueName";
-        // Assign path to znode
-        // data in byte array
-        File mappingFile = new File("/home/alogo/workspace/CatMap/etc/Mapping62.x3ml");
-        byte[] mappingData = IOUtils.toByteArray(new FileInputStream(mappingFile));
-        File generatorFile = new File("/home/alogo/workspace/CatMap/etc/generator.xml");
-        byte[] generatorData = IOUtils.toByteArray(new FileInputStream(generatorFile));
+
+//        File mappingFile = new File("workspace/CatMap/etc/Mapping62.x3ml");
+//        byte[] mappingData = IOUtils.toByteArray(new FileInputStream(mappingFile));
+//        File generatorFile = new File("workspace/CatMap/etc/generator.xml");
+//        byte[] generatorData = IOUtils.toByteArray(new FileInputStream(generatorFile));
+        URL mapping = new URL(mappingURL);
+        ByteArrayOutputStream mappingData = new ByteArrayOutputStream();
+
+        try (InputStream inputStream = mapping.openStream()) {
+            int n = 0;
+            byte[] buffer = new byte[1024];
+            while (-1 != (n = inputStream.read(buffer))) {
+                mappingData.write(buffer, 0, n);
+            }
+        }
+
+        URL generator = new URL(generatorURL);
+        ByteArrayOutputStream generatorData = new ByteArrayOutputStream();
+
+        try (InputStream inputStream = mapping.openStream()) {
+            int n = 0;
+            byte[] buffer = new byte[1024];
+            while (-1 != (n = inputStream.read(buffer))) {
+                generatorData.write(buffer, 0, n);
+            }
+        }
+
         zkService.createParent(confParentPath);
-        zkService.create(mappinghPath, mappingData);
-        zkService.create(generatorPath, generatorData);
-        this.queueName = "ckan_" + mappingFile.getName();
+        zkService.create(mappinghPath, mappingData.toByteArray());
+        zkService.create(generatorPath, generatorData.toByteArray());
+        this.queueName = "ckan_" + mapping.getFile();
         zkService.create(queueNamePath, this.queueName.getBytes());
     }
 
