@@ -75,33 +75,32 @@ public class ConvertService {
 //        byte[] mappingData = IOUtils.toByteArray(new FileInputStream(mappingFile));
 //        File generatorFile = new File("workspace/CatMap/etc/generator.xml");
 //        byte[] generatorData = IOUtils.toByteArray(new FileInputStream(generatorFile));
-        URL mapping = new URL(mappingURL);
-        ByteArrayOutputStream mappingData = new ByteArrayOutputStream();
+        byte[] mappingData = getBytes(new URL(mappingURL));
 
-        try (InputStream inputStream = mapping.openStream()) {
-            int n = 0;
-            byte[] buffer = new byte[1024];
-            while (-1 != (n = inputStream.read(buffer))) {
-                mappingData.write(buffer, 0, n);
-            }
-        }
-
-        URL generator = new URL(generatorURL);
-        ByteArrayOutputStream generatorData = new ByteArrayOutputStream();
-
-        try (InputStream inputStream = mapping.openStream()) {
-            int n = 0;
-            byte[] buffer = new byte[1024];
-            while (-1 != (n = inputStream.read(buffer))) {
-                generatorData.write(buffer, 0, n);
-            }
-        }
+        byte[] generatorData = getBytes(new URL(generatorURL));
 
         zkService.createParent(confParentPath);
-        zkService.create(mappinghPath, mappingData.toByteArray());
-        zkService.create(generatorPath, generatorData.toByteArray());
-        this.queueName = "ckan_" + mapping.getFile();
+        zkService.create(mappinghPath, mappingData);
+        zkService.create(generatorPath, generatorData);
+        String[] segments = (new URL(mappingURL)).getPath().split("/");
+        String mappingName = segments[segments.length - 1];
+
+        this.queueName = "ckan_" + mappingName;
         zkService.create(queueNamePath, this.queueName.getBytes());
+    }
+
+    private byte[] getBytes(URL url) throws IOException {
+
+        ByteArrayOutputStream data = new ByteArrayOutputStream();
+
+        try (InputStream inputStream = url.openStream()) {
+            int n = 0;
+            byte[] buffer = new byte[1024];
+            while (-1 != (n = inputStream.read(buffer))) {
+                data.write(buffer, 0, n);
+            }
+        }
+        return data.toByteArray();
     }
 
 }

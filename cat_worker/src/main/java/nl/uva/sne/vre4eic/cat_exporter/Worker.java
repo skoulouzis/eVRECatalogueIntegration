@@ -95,7 +95,9 @@ public class Worker {
                 } catch (IOException | ParserConfigurationException | SAXException ex) {
                     Logger.getLogger(CerifConverterMain.class.getName()).log(Level.SEVERE, null, ex);
                 } finally {
-                    channel.basicAck(envelope.getDeliveryTag(), false);
+                    if (channel.isOpen()) {
+                        channel.basicAck(envelope.getDeliveryTag(), false);
+                    }
                 }
             }
         };
