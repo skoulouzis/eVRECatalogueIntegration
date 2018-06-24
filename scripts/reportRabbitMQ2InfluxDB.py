@@ -5,38 +5,27 @@ import json
 from base64 import b64encode
 import time
 import requests
+import sys
 
 
-RABBIT_HOST='localhost'
-RABBIT_PORT='15672'
-RABBIT_USERNAME='guest'
-RABBIT_PASSWORD='guest'
-RABBIT_QNAME='ckan_Mapping62.x3ml'
-RABBIT_VHOST='%2F'
+#RABBIT_HOST='localhost'
+#RABBIT_PORT='15672'
+#RABBIT_USERNAME='guest'
+#RABBIT_PASSWORD='guest'
+#RABBIT_QNAME='ckan_Mapping62.x3ml'
+#RABBIT_VHOST='%2F'
 
-INFLUX_HOST='localhost'
-INFLUX_PORT='8086'
-INFLUX_DB='mydb'
-
-
-influx_base_url = 'http://'+'localhost'+':'+INFLUX_PORT
-create_db_influx_url = influx_base_url+'/query?q=CREATE DATABASE '+INFLUX_DB
-r = requests.post(create_db_influx_url)
+#INFLUX_HOST='localhost'
+#INFLUX_PORT='8086'
+#INFLUX_DB='mydb'
 
 
 
 
- 
-
-rabbit_url = 'http://'+RABBIT_HOST+':'+RABBIT_PORT+'/api/queues/'+RABBIT_VHOST+'/'+RABBIT_QNAME
-req = urllib2.Request(rabbit_url)
-authorization = 'Basic ' + b64encode('%s:%s' % (RABBIT_USERNAME, RABBIT_PASSWORD))
-req.add_header('Authorization', authorization)
-
-
-
-rabbit_metric_keys = {''}
-
+def init(INFLUX_HOST,INFLUX_PORT,INFLUX_DB,influx_base_url): 
+    create_db_influx_url = influx_base_url+'/query?q=CREATE DATABASE '+INFLUX_DB
+    r = requests.post(create_db_influx_url)
+    
 
 def build_influx_metrics(metrics):
     influx_metrics = {}
@@ -139,22 +128,44 @@ def build_influx_line(influx_metrics):
     return data_string
 
     
-while True:
-    metrics = json.load(urllib2.urlopen(req, timeout=100))
-    influx_metrics = build_influx_metrics(metrics)
+def report(RABBIT_HOST,RABBIT_PORT,RABBIT_VHOST,RABBIT_QNAME,RABBIT_USERNAME,RABBIT_PASSWORD,INFLUX_DB,influx_base_url):
+    rabbit_url = 'http://'+RABBIT_HOST+':'+RABBIT_PORT+'/api/queues/'+RABBIT_VHOST+'/'+RABBIT_QNAME
+    print rabbit_url
+    req = urllib2.Request(rabbit_url)
+    authorization = 'Basic ' + b64encode('%s:%s' % (RABBIT_USERNAME, RABBIT_PASSWORD))
+    req.add_header('Authorization', authorization)
+    
+    while True:
+        metrics = json.load(urllib2.urlopen(req, timeout=100))
+        influx_metrics = build_influx_metrics(metrics)
 
-    influx_db_string = build_influx_line(influx_metrics)
-    r = requests.post(influx_base_url+'/write?db='+INFLUX_DB, data=influx_db_string)    
-    time.sleep(60)
+        influx_db_string = build_influx_line(influx_metrics)
+        print influx_db_string
+        r = requests.post(influx_base_url+'/write?consistency=one&precision=ms&db='+INFLUX_DB, data=influx_db_string)  
+        print r
+        time.sleep(60)
     
 
 
 
 
 
-
-
-
+#python reportRabbitMQ2InfluxDB.py  localhost 15672 guest guest ckan_Mapping62.x3ml %2F  localhost 8086 mydb
+if __name__ == "__main__":
+    RABBIT_HOST = sys.argv[1] 
+    RABBIT_PORT = sys.argv[2]
+    RABBIT_USERNAME = sys.argv[3]
+    RABBIT_PASSWORD = sys.argv[4]
+    RABBIT_QNAME = sys.argv[5]
+    RABBIT_VHOST = sys.argv[6]
+    INFLUX_HOST = sys.argv[7]
+    INFLUX_PORT = sys.argv[8]
+    INFLUX_DB = sys.argv[9] 
+        
+    influx_base_url = 'http://'+INFLUX_HOST+':'+INFLUX_PORT
+    
+    init(INFLUX_HOST,INFLUX_PORT,INFLUX_DB,influx_base_url);
+    report(RABBIT_HOST,RABBIT_PORT,RABBIT_VHOST,RABBIT_QNAME,RABBIT_USERNAME,RABBIT_PASSWORD,INFLUX_DB,influx_base_url)
 
 
 
