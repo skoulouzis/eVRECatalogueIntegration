@@ -8,14 +8,13 @@ package nl.uva.sne.vre4eic.rest;
 import io.micrometer.core.annotation.Timed;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import nl.uva.sne.vre4eic.model.ProcessingStatus;
-import nl.uva.sne.vre4eic.model.User;
 import nl.uva.sne.vre4eic.service.ConvertService;
 import org.apache.zookeeper.KeeperException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,15 +26,15 @@ import org.springframework.web.bind.annotation.RestController;
  * @author S. Koulouzis
  */
 @RestController
-@Timed
 public class ConvertController {
 
     @Autowired
     private ConvertService service;
 
-    
 //    http://localhost:8080/rest/convert?catalogue_url=%20https://ckan-d4s.d4science.org&mapping_url=https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping62.x3ml&generator_url=https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/generator.xml
     @RequestMapping(value = "/convert", method = RequestMethod.GET, params = {"catalogue_url", "mapping_url", "generator_url"})
+    @GetMapping("/")
+    @Timed("my.awesome.timer")
     public @ResponseBody
     ProcessingStatus convert(@RequestParam(value = "catalogue_url") String catalogueURL,
             @RequestParam(value = "mapping_url") String mappingURL,

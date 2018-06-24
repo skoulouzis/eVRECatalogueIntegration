@@ -5,6 +5,7 @@
  */
 package nl.uva.sne.vre4eic.service;
 
+import io.micrometer.core.instrument.MeterRegistry;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,8 +40,9 @@ public class ConvertService {
 //    @Autowired
 //    MetricsEndpoint endpoint;
 //
-//    @Autowired
-//    MeterRegistry meterRegistry;
+    @Autowired
+    MeterRegistry meterRegistry;
+    
     Map<String, Future<String>> taskMap = new HashMap<>();
     private String queueName;
 

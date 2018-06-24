@@ -34,7 +34,7 @@ public class ZKConf {
     private String zookeeperHost;
 //
 
-    @Bean
+    @Bean(destroyMethod = "close")
     public ZooKeeper getZooKeeper() throws IOException, InterruptedException {
         CountDownLatch connectedSignal = new CountDownLatch(1);
         ZooKeeper zoo = new ZooKeeper(zookeeperHost, 8000, new Watcher() {
