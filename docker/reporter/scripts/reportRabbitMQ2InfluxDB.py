@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import urllib2
+import urllib2 
 import base64
 import json
 from base64 import b64encode
@@ -130,7 +130,6 @@ def build_influx_line(influx_metrics):
     
 def report(RABBIT_HOST,RABBIT_PORT,RABBIT_VHOST,RABBIT_QNAME,RABBIT_USERNAME,RABBIT_PASSWORD,INFLUX_DB,influx_base_url):
     rabbit_url = 'http://'+RABBIT_HOST+':'+RABBIT_PORT+'/api/queues/'+RABBIT_VHOST+'/'+RABBIT_QNAME
-    print rabbit_url
     req = urllib2.Request(rabbit_url)
     authorization = 'Basic ' + b64encode('%s:%s' % (RABBIT_USERNAME, RABBIT_PASSWORD))
     req.add_header('Authorization', authorization)
@@ -140,9 +139,8 @@ def report(RABBIT_HOST,RABBIT_PORT,RABBIT_VHOST,RABBIT_QNAME,RABBIT_USERNAME,RAB
         influx_metrics = build_influx_metrics(metrics)
 
         influx_db_string = build_influx_line(influx_metrics)
-        print influx_db_string
         r = requests.post(influx_base_url+'/write?consistency=one&precision=ms&db='+INFLUX_DB, data=influx_db_string)  
-        print r
+        print (r)
         time.sleep(60)
     
 
@@ -161,6 +159,7 @@ if __name__ == "__main__":
     INFLUX_HOST = sys.argv[7]
     INFLUX_PORT = sys.argv[8]
     INFLUX_DB = sys.argv[9] 
+    print('RABBIT_HOST: '+RABBIT_HOST+' RABBIT_PORT: '+RABBIT_PORT+' RABBIT_USERNAME: '+RABBIT_PASSWORD+' RABBIT_QNAME: '+RABBIT_QNAME+' RABBIT_VHOST: '+INFLUX_HOST+' INFLUX_PORT: '+INFLUX_DB)
         
     influx_base_url = 'http://'+INFLUX_HOST+':'+INFLUX_PORT
     

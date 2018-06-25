@@ -28,6 +28,15 @@ public class Executor implements Watcher, Runnable {
 
     public Executor(String rabbimqHost, String zookeeperHost, String znode) throws KeeperException, IOException {
         zk = new ZooKeeper(zookeeperHost, 3000, this);
+        ZooKeeper.States state = zk.getState();
+        int count = 0;
+        while (!state.isConnected() && count < 1000) {
+            state = zk.getState();
+            count++;
+        }
+        if (state.isConnected() && count >= 1000) {
+            throw new IOException("Could not cpnnect with zookeeper");
+        }
         dm = new ConfigMonitor(zk, znode, null, this);
         this.rabbimqHost = rabbimqHost;
 

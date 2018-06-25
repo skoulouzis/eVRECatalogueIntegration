@@ -1,0 +1,88 @@
+version: '3.1'
+
+services:
+    zookeeper:
+        image: zookeeper
+        deploy:
+            restart_policy:
+                condition: on-failure 
+        ports:
+            - 2181:2181               
+                
+    rabbit:
+        image: rabbitmq:3-management
+        deploy:
+            restart_policy:
+                condition: on-failure      
+        ports:
+            - 15672:15672                       
+                
+                
+                
+    influx:
+        image: influxdb
+        environment:
+            INFLUXDB_DB: mydb
+        volumes:
+            - influx:/var/lib/influxdb
+                    
+ 
+ 
+    rabbit-reporter :
+        image: rabbit-reporter
+        environment:
+            RABBIT_HOST: rabbit
+            RABBIT_PORT: 5672
+            RABBIT_USERNAME: guest
+            RABBIT_PASSWORD: guest
+            RABBIT_QNAME: ckan_Mapping62.x3ml
+            RABBIT_VHOST: '%2F'
+            INFLUX_HOST: influx
+            INFLUX_PORT: 8086
+            INFLUX_DB: mydb
+        depends_on:
+            - rabbit
+            - influx          
+                
+    rest-cat:
+        image: rest-cat
+        deploy:
+            restart_policy:
+                condition: on-failure
+            placement:
+                constraints:
+                - node.role == manager                
+        environment:
+            RABBIT_HOST: rabbit
+            RABBIT_PORT: 5672
+            RABBIT_USERNAME: guest
+            RABBIT_PASSWORD: guest
+            INFLUX_URI: http://influx:8086
+            ZOOKEEPER_CONNECT_STRING: zookeeper:2181
+        ports:
+            - 8083:8080      
+        depends_on:
+            - zookeeper
+            - rabbit          
+            - influx          
+            
+    cat-worker:
+        image: cat-worker
+        deploy:
+            restart_policy:
+                condition: on-failure                
+        environment:
+            RABBIT_HOST: rabbit
+            RABBIT_PORT: 5672
+            RABBIT_USERNAME: guest
+            RABBIT_PASSWORD: guest
+            INFLUX_URI: http://influx:8086
+            ZOOKEEPER_HOST: zookeeper  
+        depends_on:
+            - zookeeper
+            - rabbit                           
+                                
+volumes:
+  influx:
+    driver: local
+    

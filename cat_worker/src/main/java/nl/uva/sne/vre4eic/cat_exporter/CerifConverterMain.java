@@ -64,7 +64,6 @@ public class CerifConverterMain {
             zookeeperHost = cmd.getOptionValue("zookeeper_host");
             Logger.getLogger(CerifConverterMain.class.getName()).log(Level.INFO, "zookeeper host: {0}", zookeeperHost);
 
-           
             new Executor(rabbitMQHost, zookeeperHost, "/catmap_conf").run();
 
 //            mappingsPath = cmd.getOptionValue("mappings");
@@ -72,8 +71,9 @@ public class CerifConverterMain {
 //            generatorPathPolicy = cmd.getOptionValue("generator");
 //            Logger.getLogger(CerifConverterWorker.class.getName()).log(Level.INFO, "generator policy path: {0}", generatorPathPolicy);
 //            consume();
-        } catch (IOException | IllegalArgumentException | KeeperException ex) {
+        } catch (Throwable ex) {
             Logger.getLogger(CerifConverterMain.class.getName()).log(Level.SEVERE, null, ex);
+            System.exit(-1);
         }
 
     }

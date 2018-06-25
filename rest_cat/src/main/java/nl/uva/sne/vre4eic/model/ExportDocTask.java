@@ -44,6 +44,9 @@ public class ExportDocTask implements Callable<String> {
     public ExportDocTask(String catalogueURL, ConnectionFactory factory, String queue) {
         this.catalogueURL = catalogueURL;
         this.factory = factory;
+        if(this.factory == null){
+            throw new NullPointerException("RabbitMQ ConnectionFactory is NULL!");
+        }
         this.queue = queue;
     }
 

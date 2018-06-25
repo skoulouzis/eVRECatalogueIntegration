@@ -43,8 +43,6 @@ public class ConfigMonitor implements Watcher, StatCallback {
         this.znode = znode;
         this.chainedWatcher = chainedWatcher;
         this.listener = listener;
-        // Get things started by checking if the node exists. We are going
-        // to be completely event driven
         zk.exists(znode, true, this, null);
     }
 
