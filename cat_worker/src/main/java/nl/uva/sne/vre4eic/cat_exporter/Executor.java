@@ -6,7 +6,6 @@
 package nl.uva.sne.vre4eic.cat_exporter;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
@@ -26,15 +25,17 @@ public class Executor implements Watcher, Runnable {
     private final ZooKeeper zk;
     private final String rabbimqHost;
 
-    public Executor(String rabbimqHost, String zookeeperHost, String znode) throws KeeperException, IOException {
+    public Executor(String rabbimqHost, String zookeeperHost, String znode) throws KeeperException, IOException, InterruptedException {
         zk = new ZooKeeper(zookeeperHost, 3000, this);
         ZooKeeper.States state = zk.getState();
         int count = 0;
-        while (!state.isConnected() && count < 1000) {
+        while (!state.isConnected() && count < 100) {
             state = zk.getState();
+            Thread.sleep(100);
             count++;
+            System.err.println(count);
         }
-        if (state.isConnected() && count >= 1000) {
+        if (!state.isConnected() && count >= 100) {
             throw new IOException("Could not cpnnect with zookeeper");
         }
         dm = new ConfigMonitor(zk, znode, null, this);
@@ -55,7 +56,8 @@ public class Executor implements Watcher, Runnable {
                     wait();
                 }
             }
-        } catch (InterruptedException e) {
+        } catch (Exception ex) {
+            Logger.getLogger(Executor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
