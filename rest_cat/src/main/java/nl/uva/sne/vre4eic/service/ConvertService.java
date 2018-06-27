@@ -78,7 +78,6 @@ public class ConvertService {
 //        File generatorFile = new File("workspace/CatMap/etc/generator.xml");
 //        byte[] generatorData = IOUtils.toByteArray(new FileInputStream(generatorFile));
         byte[] mappingData = getBytes(new URL(mappingURL));
-
         byte[] generatorData = getBytes(new URL(generatorURL));
 
         zkService.createParent(confParentPath);

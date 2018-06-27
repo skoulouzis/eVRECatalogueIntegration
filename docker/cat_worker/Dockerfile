@@ -1,9 +1,11 @@
-FROM java:8
+# FROM java:8
+FROM airdock/oracle-jdk
 
 ADD cat_worker-1.0-SNAPSHOT-jar-with-dependencies.jar /
 
+RUN echo "log4j.logger.org.apache.zookeeper=INFO \n log4j.logger.nl.uva.sne.vre4eic=FINE" > log4j.properties
 
-CMD java -jar /cat_worker-1.0-SNAPSHOT-jar-with-dependencies.jar -r $RABBIT_HOST -z $ZOOKEEPER_HOST
+CMD java -jar -Dlog4j.configuration=log4j.properties /cat_worker-1.0-SNAPSHOT-jar-with-dependencies.jar -r ${RABBIT_HOST} -z ${ZOOKEEPER_HOST}
     
     
 # docker run -i -t -P -e RABBIT_HOST=172.17.0.3 -e ZOOKEEPER_HOST=172.17.0.2 cat-worker

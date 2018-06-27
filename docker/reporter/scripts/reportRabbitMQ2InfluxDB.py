@@ -6,6 +6,7 @@ from base64 import b64encode
 import time
 import requests
 import sys
+import urllib
 
 
 #RABBIT_HOST='localhost'
@@ -22,9 +23,10 @@ import sys
 
 
 
-def init(INFLUX_HOST,INFLUX_PORT,INFLUX_DB,influx_base_url): 
+def init(INFLUX_DB,influx_base_url): 
     create_db_influx_url = influx_base_url+'/query?q=CREATE DATABASE '+INFLUX_DB
     r = requests.post(create_db_influx_url)
+    print r
     
 
 def build_influx_metrics(metrics):
@@ -68,9 +70,9 @@ def build_influx_metrics(metrics):
     
 
     
-    if metrics['message_stats']:
+    if 'message_stats' in metrics and  metrics['message_stats']:
         if metrics['message_stats']['deliver_get_details']:
-            influx_metrics['message_stats=.rate'] = metrics['message_stats']['deliver_get_details']['rate']        
+            influx_metrics['message_stats=rate'] = metrics['message_stats']['deliver_get_details']['rate']        
         influx_metrics['message_stats=deliver_get'] = metrics['message_stats']['deliver_get']           
 
         if metrics['message_stats']['ack_details']:
@@ -120,31 +122,30 @@ def build_influx_metrics(metrics):
         return influx_metrics
 
 
-def build_influx_line(influx_metrics):
+def build_influx_line(influx_metrics,rabbit_q_name):
     data_string = ''
-    for key in influx_metrics:
-        if(influx_metrics[key]!= None):
-            data_string += 'rabbit,queue='+RABBIT_QNAME+','+key+' value='+str(influx_metrics[key]) +'\n'
+    if influx_metrics: 
+        for key in influx_metrics:
+            if(influx_metrics[key]!= None):
+                data_string += 'rabbit,queue='+rabbit_q_name+','+key+' value='+str(influx_metrics[key]) +'\n'
     return data_string
 
     
-def report(RABBIT_HOST,RABBIT_PORT,RABBIT_VHOST,RABBIT_QNAME,RABBIT_USERNAME,RABBIT_PASSWORD,INFLUX_DB,influx_base_url):
-    rabbit_url = 'http://'+RABBIT_HOST+':'+RABBIT_PORT+'/api/queues/'+RABBIT_VHOST+'/'+RABBIT_QNAME
-    req = urllib2.Request(rabbit_url)
-    authorization = 'Basic ' + b64encode('%s:%s' % (RABBIT_USERNAME, RABBIT_PASSWORD))
-    req.add_header('Authorization', authorization)
-    
-    while True:
-        metrics = json.load(urllib2.urlopen(req, timeout=100))
-        influx_metrics = build_influx_metrics(metrics)
-
-        influx_db_string = build_influx_line(influx_metrics)
-        r = requests.post(influx_base_url+'/write?consistency=one&precision=ms&db='+INFLUX_DB, data=influx_db_string)  
-        print (r)
-        time.sleep(60)
+def report(req,INFLUX_DB,influx_base_url,rabbit_q_name):
+    metrics = json.load(urllib2.urlopen(req, timeout=100))
+    influx_metrics = build_influx_metrics(metrics)
+    influx_db_string = build_influx_line(influx_metrics,rabbit_q_name)
+    r = requests.post(influx_base_url+'/write?consistency=one&precision=ms&db='+INFLUX_DB, data=influx_db_string)
+    print r
     
 
 
+def get_rabbit_definitions(rabbit_base_url,RABBIT_USERNAME,RABBIT_PASSWORD):
+    definitions = []
+    rabbit_hosts_url = rabbit_base_url+'/api/definitions'
+    print rabbit_hosts_url
+    definitions = json.loads(requests.get(rabbit_hosts_url, auth=(RABBIT_USERNAME, RABBIT_PASSWORD)).content)
+    return definitions
 
 
 
@@ -154,17 +155,47 @@ if __name__ == "__main__":
     RABBIT_PORT = sys.argv[2]
     RABBIT_USERNAME = sys.argv[3]
     RABBIT_PASSWORD = sys.argv[4]
-    RABBIT_QNAME = sys.argv[5]
-    RABBIT_VHOST = sys.argv[6]
-    INFLUX_HOST = sys.argv[7]
-    INFLUX_PORT = sys.argv[8]
-    INFLUX_DB = sys.argv[9] 
-    print('RABBIT_HOST: '+RABBIT_HOST+' RABBIT_PORT: '+RABBIT_PORT+' RABBIT_USERNAME: '+RABBIT_PASSWORD+' RABBIT_QNAME: '+RABBIT_QNAME+' RABBIT_VHOST: '+INFLUX_HOST+' INFLUX_PORT: '+INFLUX_DB)
+    INFLUX_HOST = sys.argv[5]
+    INFLUX_PORT = sys.argv[6]
+    INFLUX_DB = sys.argv[7] 
+    print('RABBIT_HOST: '+RABBIT_HOST+' RABBIT_PORT: '+RABBIT_PORT+' RABBIT_USERNAME: '+RABBIT_PASSWORD+' RABBIT_VHOST: '+INFLUX_HOST+' INFLUX_PORT: '+INFLUX_DB)
         
     influx_base_url = 'http://'+INFLUX_HOST+':'+INFLUX_PORT
     
-    init(INFLUX_HOST,INFLUX_PORT,INFLUX_DB,influx_base_url);
-    report(RABBIT_HOST,RABBIT_PORT,RABBIT_VHOST,RABBIT_QNAME,RABBIT_USERNAME,RABBIT_PASSWORD,INFLUX_DB,influx_base_url)
+    init(INFLUX_DB,influx_base_url);
+    
+    
+    rabbit_base_url = 'http://'+RABBIT_HOST+':'+RABBIT_PORT
+    while True:
+        definitions = get_rabbit_definitions(rabbit_base_url,RABBIT_USERNAME,RABBIT_PASSWORD)
+        urls = set()
+        for queues in definitions['queues']:
+            for queue in queues:
+                vhost = urllib.quote_plus(queues['vhost'])
+                queue_name = urllib.quote_plus(queues['name'])
+                rabbit_url = 'http://'+RABBIT_HOST+':'+RABBIT_PORT+'/api/queues/'+vhost+'/'+queue_name
+                urls.add(rabbit_url)
+                
+        
+        for url in urls:
+            req = urllib2.Request(url)
+            authorization = 'Basic     ' + b64encode('%s:%s' % (RABBIT_USERNAME, RABBIT_PASSWORD))
+            req.add_header('Authorization', authorization)
+            print('Reporting: '+url);
+            rabbit_q_name = url.rsplit('/', 1)[-1]
+            report(req,INFLUX_DB,influx_base_url,rabbit_q_name)
+        time.sleep(60) 
+    
+    
+    #rabbit_url = 'http://'+RABBIT_HOST+':'+RABBIT_PORT+'/api/queues/'+RABBIT_VHOST+'/'+RABBIT_QNAME
+    #req = urllib2.Request(rabbit_url)
+    #authorization = 'Basic ' + b64encode('%s:%s' % (RABBIT_USERNAME, RABBIT_PASSWORD))
+    #req.add_header('Authorization', authorization)
+    
+    
+    
+    
+    #report(req,INFLUX_DB,influx_base_url)
 
 
 

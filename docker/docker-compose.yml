@@ -6,8 +6,8 @@ services:
         deploy:
             restart_policy:
                 condition: on-failure 
-        ports:
-            - 2181:2181               
+        #ports:
+            #- 2181:2181               
                 
     rabbit:
         image: rabbitmq:3-management
@@ -15,35 +15,9 @@ services:
             restart_policy:
                 condition: on-failure      
         ports:
-            - 15672:15672                       
-                
-                
-                
-    influx:
-        image: influxdb
-        environment:
-            INFLUXDB_DB: mydb
-        volumes:
-            - influx:/var/lib/influxdb
-                    
- 
- 
-    rabbit-reporter :
-        image: rabbit-reporter
-        environment:
-            RABBIT_HOST: rabbit
-            RABBIT_PORT: 5672
-            RABBIT_USERNAME: guest
-            RABBIT_PASSWORD: guest
-            RABBIT_QNAME: ckan_Mapping62.x3ml
-            RABBIT_VHOST: '%2F'
-            INFLUX_HOST: influx
-            INFLUX_PORT: 8086
-            INFLUX_DB: mydb
-        depends_on:
-            - rabbit
-            - influx          
-                
+            - 15672:15672         
+            #- 5672:5672
+                                
     rest-cat:
         image: rest-cat
         deploy:
@@ -76,11 +50,93 @@ services:
             RABBIT_PORT: 5672
             RABBIT_USERNAME: guest
             RABBIT_PASSWORD: guest
+            ZOOKEEPER_HOST: zookeeper
             INFLUX_URI: http://influx:8086
-            ZOOKEEPER_HOST: zookeeper  
         depends_on:
             - zookeeper
-            - rabbit                           
+            - rabbit   
+            
+    influx:
+        image: influxdb
+        environment:
+            INFLUXDB_DB: mydb
+        volumes:
+            - influx:/var/lib/influxdb
+                    
+    rabbit-reporter :
+        image: rabbit-reporter
+        environment:
+            RABBIT_HOST: rabbit
+            RABBIT_PORT: 15672
+            RABBIT_USERNAME: guest
+            RABBIT_PASSWORD: guest
+            INFLUX_HOST: influx
+            INFLUX_PORT: 8086
+            INFLUX_DB: mydb
+        depends_on:
+            - rabbit
+            - influx    
+            
+    chronograf :
+        image: chronograf
+        command: chronograf --influxdb-url=http://influx:8086
+        environment:
+            INFLUX_HOST: influx
+            INFLUX_PORT: 8086
+            INFLUX_DB: mydb
+        depends_on:
+            - influx                
+        ports:
+            - 8888:8888      
+        deploy:
+            resources:
+                limits:
+                    cpus: '0.10'
+                    memory: 100M
+                reservations:
+                    cpus: '0.05'
+                    memory: 50M         
+                    
+    cadvisor:
+        image: google/cadvisor
+        ports:
+            - 0.0.0.0:8080:8080
+        hostname: '{{.Node.ID}}'
+        command: -logtostderr -docker_only -storage_driver=influxdb -storage_driver_db=mydb -storage_driver_host=influx:8086
+        volumes:
+            - /:/rootfs:ro
+            - /var/run:/var/run:rw
+            - /sys:/sys:ro
+            - /var/lib/docker/:/var/lib/docker:ro
+        depends_on:
+            - influx
+        deploy:
+            mode: global
+            resources:
+                limits:
+                    cpus: '0.10'
+                    memory: 50M
+                reservations:
+                    cpus: '0.05'
+                    memory: 25M
+                    
+    kapacitor:
+        image: kapacitor
+        ports:
+            - 9092:9092
+        depends_on:
+            - influx
+        environment:      
+            KAPACITOR_INFLUXDB_0_URLS_0: http://influx:8086            
+        deploy:
+            resources:
+                limits:
+                    cpus: '0.10'
+                    memory: 100M
+                reservations:
+                    cpus: '0.05'
+                    memory: 50M                    
+            
                                 
 volumes:
   influx:
