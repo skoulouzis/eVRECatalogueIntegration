@@ -31,7 +31,7 @@ public class CerifConverterMain {
             rabbitHostOption.setRequired(true);
             options.addOption(rabbitHostOption);
 
-            Option zookeeperHostOption = new Option("z", "zookeeper_host", true, "rzookeeper host");
+            Option zookeeperHostOption = new Option("z", "zookeeper_host", true, "zookeeper host");
             zookeeperHostOption.setRequired(true);
             options.addOption(zookeeperHostOption);
 //
@@ -49,7 +49,7 @@ public class CerifConverterMain {
             try {
                 cmd = parser.parse(options, argv);
             } catch (ParseException e) {
-                System.out.println(e.getMessage());
+                System.err.println(e.getMessage());
                 formatter.printHelp("utility-name", options);
                 System.exit(1);
                 return;

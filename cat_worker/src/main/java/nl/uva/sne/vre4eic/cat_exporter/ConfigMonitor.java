@@ -6,8 +6,6 @@
 package nl.uva.sne.vre4eic.cat_exporter;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -99,31 +97,52 @@ public class ConfigMonitor implements Watcher, StatCallback {
 
         if (exists) {
             try {
-                byte b[] = null;
                 Map<String, byte[]> conf = new HashMap();
+
+                Stat parent = zk.exists(znode, false);
+                while (parent == null) {
+                    parent = zk.exists(znode, false);
+                    Thread.sleep(100);
+                }
                 List<String> children = zk.getChildren(znode, false, null);
+                while (children == null || children.size() <= 1) {
+                    children = zk.getChildren(znode, false, null);
+                    Logger.getLogger(ConfigMonitor.class.getName()).log(Level.WARNING, "Node: {0} has no children. List size: {1}", new Object[]{znode, children.size()});
+                    Thread.sleep(100);
+                }
                 for (String ch : children) {
-                    if (ch.equals("mapping")) {
-                        b = zk.getData(znode + "/" + ch, false, null);
-                        conf.put(ch, b);
-//                        System.err.println(new String(mappingData, "UTF-8"));
-                    } else if (ch.equals("generator")) {
-                        b = zk.getData(znode + "/" + ch, false, null);
-                        conf.put(ch, b);
-//                        System.err.println(new String(generatorData, "UTF-8"));
-                    } else if (ch.equals("queueName")) {
-                        b = zk.getData(znode + "/" + ch, false, null);
-                        conf.put(ch, b);
-//                        System.err.println(new String(queueNameData, "UTF-8"));
+                    byte[] b = zk.getData(znode + "/" + ch, false, null);
+                    Logger.getLogger(ConfigMonitor.class.getName()).log(Level.INFO, "Children node name: {0}. Data len: {1}", new Object[]{ch, b.length});
+                    switch (ch) {
+                        case "mapping":
+                            if (b == null) {
+                                throw new NullPointerException("mapping data is null!");
+                            }
+                            Logger.getLogger(ConfigMonitor.class.getName()).log(Level.INFO, "Conf: {0}", conf.keySet());
+                            conf.put(ch, b);
+                            break;
+                        case "generator":
+                            if (b == null) {
+                                throw new NullPointerException("generator data is null!");
+                            }
+                            Logger.getLogger(ConfigMonitor.class.getName()).log(Level.INFO, "Conf: {0}", conf.keySet());
+                            conf.put(ch, b);
+                            break;
+                        case "queueName":
+                            if (b == null) {
+                                throw new NullPointerException("queueName data is null!");
+                            }
+                            Logger.getLogger(ConfigMonitor.class.getName()).log(Level.INFO, "Conf: {0}", conf.keySet());
+                            conf.put(ch, b);
+                            break;
+                        default:
+                            break;
                     }
                 }
+                Logger.getLogger(ConfigMonitor.class.getName()).log(Level.INFO, "Conf: {0}", conf.keySet());
                 listener.setConf(conf);
-            } catch (KeeperException | IOException | TimeoutException ex) {
-                // We don't need to worry about recovering now. The watch
-                // callbacks will kick off any exception handling
+            } catch (KeeperException | IOException | TimeoutException | InterruptedException ex) {
                 Logger.getLogger(ConfigMonitor.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InterruptedException ex) {
-                return;
             }
         }
     }

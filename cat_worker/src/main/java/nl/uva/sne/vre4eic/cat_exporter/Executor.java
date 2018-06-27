@@ -33,7 +33,6 @@ public class Executor implements Watcher, Runnable {
             state = zk.getState();
             Thread.sleep(100);
             count++;
-            System.err.println(count);
         }
         if (!state.isConnected() && count >= 100) {
             throw new IOException("Could not cpnnect with zookeeper");
@@ -85,9 +84,21 @@ public class Executor implements Watcher, Runnable {
 //    }
     public void setConf(Map<String, byte[]> conf) throws IOException, TimeoutException {
         Logger.getLogger(Executor.class.getName()).log(Level.INFO, "Starting worker");
+        Logger.getLogger(Executor.class.getName()).log(Level.INFO, "Conf: {0}", conf.keySet());
+
+//        File configFolder = File.createTempFile("X3MLEngine_conf_", Long.toString(System.nanoTime()));
         File configFolder = new File(System.getProperty("java.io.tmpdir") + File.separator + "X3MLEngine_conf_" + Long.toString(System.nanoTime()));
         configFolder.mkdirs();
-        FileUtils.writeByteArrayToFile(new File(configFolder, "mapping"), conf.get("mapping"));
+        Logger.getLogger(Executor.class.getName()).log(Level.INFO, "configFolder: {0}", configFolder.getAbsolutePath());
+        byte[] mappingData = conf.get("mapping");
+        if (mappingData == null) {
+            throw new NullPointerException("Mapping data is null!");
+        }
+        FileUtils.writeByteArrayToFile(new File(configFolder, "mapping"), mappingData);
+        byte[] generatorData = conf.get("generator");
+        if (generatorData == null) {
+            throw new NullPointerException("Generator data is null!");
+        }
         FileUtils.writeByteArrayToFile(new File(configFolder, "generator"), conf.get("generator"));
 //        mappingFile = File.
 

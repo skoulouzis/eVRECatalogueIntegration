@@ -30,7 +30,6 @@ import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import javax.xml.parsers.DocumentBuilderFactory;
-import nl.uva.sne.vre4eic.cat_exporter.CerifConverterMain;
 import org.w3c.dom.Element;
 
 public class Worker {
@@ -56,12 +55,15 @@ public class Worker {
         this.taskQeueName = taskQeueName;
         this.rabbitMQHost = rabbitMQHost;
         this.outputRfdFolder = output;
+        Logger.getLogger(Worker.class.getName()).log(Level.INFO, "Consuming from qeue: {0}", taskQeueName);
         File[] files = confFolder.listFiles();
         for (File f : files) {
             if (f.getName().equals("mapping")) {
                 mappingsFile = f;
+                Logger.getLogger(Worker.class.getName()).log(Level.INFO, "Using mapping file: {0}. File len: {1}", new Object[]{f.getAbsolutePath(), f.length()});
             } else if (f.getName().equals("generator")) {
                 generatorPathFile = f;
+                Logger.getLogger(Worker.class.getName()).log(Level.INFO, "Using generator file: " + f.getAbsolutePath() + ". File len: " + f.length());
             }
         }
 
@@ -93,7 +95,7 @@ public class Worker {
                     String fileName = UUID.randomUUID().toString();
                     rdf.write(new PrintStream(new File(outputRfdFolder + File.separator + fileName + ".rdf")), "application/rdf+xml");
                 } catch (IOException | ParserConfigurationException | SAXException ex) {
-                    Logger.getLogger(CerifConverterMain.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
                 } finally {
                     if (channel.isOpen()) {
                         channel.basicAck(envelope.getDeliveryTag(), false);
