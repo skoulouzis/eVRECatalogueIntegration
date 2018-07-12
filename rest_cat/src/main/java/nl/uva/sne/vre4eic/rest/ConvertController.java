@@ -5,14 +5,15 @@
  */
 package nl.uva.sne.vre4eic.rest;
 
-import io.micrometer.core.annotation.Timed;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Map;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import nl.uva.sne.vre4eic.model.GraphStats;
 import nl.uva.sne.vre4eic.model.ProcessingStatus;
 import nl.uva.sne.vre4eic.service.ConvertService;
+import nl.uva.sne.vre4eic.service.StatsService;
 import org.apache.zookeeper.KeeperException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +32,9 @@ public class ConvertController {
 
     @Autowired
     private ConvertService service;
+
+    @Autowired
+    private StatsService stats;
 
 //    http://localhost:8080/rest/convert?catalogue_url=%20https://ckan-d4s.d4science.org&mapping_url=https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping62.x3ml&generator_url=https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/generator.xml
 //    http://localhost:8080/catalogue_mapper/convert?catalogue_url=%20https://ckan-d4s.d4science.org&mapping_url=https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping62.x3ml&generator_url=https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/generator.xml
@@ -51,18 +55,16 @@ public class ConvertController {
         return null;
     }
 
-    
-        @RequestMapping(value = "/get_stats", method = RequestMethod.GET, params = {"rdf_url"})
-    @GetMapping("/")
-    public @ResponseBody
-    GraphStats getConvertionLocaltions(@RequestParam(value = "rdf_url") String rdfURL) {
-        return null;
-    }
-    
+//    http://localhost:8080/rest/get_stats?rdf_url=ftp://user:12345@localhost/ckan_Mapping62.x3ml/
     @RequestMapping(value = "/get_stats", method = RequestMethod.GET, params = {"rdf_url"})
     @GetMapping("/")
     public @ResponseBody
-    GraphStats getRDFStats(@RequestParam(value = "rdf_url") String rdfURL) {
+    Map<String, String> getRDFStats(@RequestParam(value = "rdf_url") String rdfURL) {
+        try {
+            return stats.getStats(rdfURL);
+        } catch (IOException | TimeoutException | InterruptedException ex) {
+            Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return null;
     }
 }

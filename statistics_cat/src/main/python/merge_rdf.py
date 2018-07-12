@@ -4,6 +4,12 @@
 from rdflib  import Graph, RDF, BNode, URIRef, Namespace, ConjunctiveGraph, Literal
 from pathlib import Path
 import sys 
+import ftplib
+import tempfile
+import shutil
+import os
+
+
 
 def get_degrees(directory_in_str):
     stats = {}
@@ -31,16 +37,36 @@ def get_degrees(directory_in_str):
         in_degree = len(list(in_triple))
         in_degrees[node] = in_degree
     
-    stats['in_degree'] = in_degreess
+    stats['in_degree'] = in_degrees
     stats['out_degree'] = out_degrees
     
     return stats
     
     #graph.serialize(destination=output, format='xml')
 
+def get_files(host,path):
+    ftp = ftplib.FTP(host) 
+    ftp.login('user','12345') 
+    
+    filenames = ftp.nlst(path)
+    dirpath = tempfile.mkdtemp()
+        
+    for filename in filenames:
+        local_filename = os.path.join(dirpath, filename) 
+        file = open(local_filename, 'wb')
+        ftp.retrbinary('RETR '+ path +'/'+filename, file.write)
+        file.close()
+        
+    ftp.quit()
+    
+    return dirpath
+    
 
 if __name__ == "__main__":
-    stats =  get_degrees(sys.argv[1], sys.argv[2])
-    #print(' in: '+ str(in_degrees) +' out: '+ str(out_degrees)+' all:')        
+    path = get_files('localhost','ckan_Mapping62.x3ml')
+
+    stats =  get_degrees(path)
+    
+    print stats
     
     
