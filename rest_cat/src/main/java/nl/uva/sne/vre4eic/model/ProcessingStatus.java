@@ -14,10 +14,10 @@ import java.net.URL;
 public class ProcessingStatus {
 
     public ProcessingStatus() {
-        ConnectionFactory connectionFactory = new ConnectionFactory();
+//        ConnectionFactory connectionFactory = new ConnectionFactory();
 //        io.micrometer.core.instrument.MeterRegistry
 //        JmxMeterRegistry registry = new JmxMeterRegistry();
-MicrometerMetricsCollector metrics;
+//        MicrometerMetricsCollector metrics;
 //ConnectionFactory connectionFactory = new ConnectionFactory();
 //connectionFactory.setMetricsCollector(metrics);
     }

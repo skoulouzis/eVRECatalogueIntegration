@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import nl.uva.sne.vre4eic.model.GraphStats;
 import nl.uva.sne.vre4eic.model.ProcessingStatus;
 import nl.uva.sne.vre4eic.service.ConvertService;
 import org.apache.zookeeper.KeeperException;
@@ -35,7 +36,6 @@ public class ConvertController {
 //    http://localhost:8080/catalogue_mapper/convert?catalogue_url=%20https://ckan-d4s.d4science.org&mapping_url=https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping62.x3ml&generator_url=https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/generator.xml
     @RequestMapping(value = "/convert", method = RequestMethod.GET, params = {"catalogue_url", "mapping_url", "generator_url"})
     @GetMapping("/")
-    @Timed("my.awesome.timer")
     public @ResponseBody
     ProcessingStatus convert(@RequestParam(value = "catalogue_url") String catalogueURL,
             @RequestParam(value = "mapping_url") String mappingURL,
@@ -51,4 +51,10 @@ public class ConvertController {
         return null;
     }
 
+    @RequestMapping(value = "/get_stats", method = RequestMethod.GET, params = {"rdf_url"})
+    @GetMapping("/")
+    public @ResponseBody
+    GraphStats getRDFStats(@RequestParam(value = "rdf_url") String rdfURL) {
+        return null;
+    }
 }

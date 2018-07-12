@@ -7,8 +7,8 @@ package nl.uva.sne.vre4eic.model;
 
 /**
  *
- * @author alogo
+ * @author S. Koulouzis
  */
-public class ResponseEntity {
+public class GraphStats {
     
 }
