@@ -9,12 +9,14 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeoutException;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 /*
  * Copyright 2017 S. Koulouzis
@@ -90,7 +92,7 @@ public class Caller implements AutoCloseable {
         }
     }
 
-    public Map<String, String> call(String message) throws IOException, TimeoutException, InterruptedException, JSONException {
+    public Map<Object, Object> call(String message) throws IOException, TimeoutException, InterruptedException, JSONException {
         final String corrId = UUID.randomUUID().toString();
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                 .correlationId(corrId)
@@ -108,14 +110,9 @@ public class Caller implements AutoCloseable {
                 }
             }
         });
-        String resp = response.take();
-        String clean = resp;
-        if (resp.contains("'null'")) {
-            clean = resp.replaceAll("'null'", "null").replaceAll("\'", "\"").replaceAll(" ", "");
-        }
-        if (clean.contains("\"null\"")) {
-            clean = clean.replaceAll("\"null\"", "null");
-        }
-        return mapper.readValue(clean, Map.class);
+        String messageDataDecoded = new String(Base64.getDecoder().decode(response.take()));
+
+
+        return mapper.readValue(messageDataDecoded, Map.class);
     }
 }

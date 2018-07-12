@@ -23,7 +23,7 @@ public class StatsService {
 
     private final String requestQeueName = "rdf_location";
 
-    public Map<String, String> getStats(String rdf_url) throws IOException, TimeoutException, InterruptedException {
+    public Map<Object, Object> getStats(String rdf_url) throws IOException, TimeoutException, InterruptedException {
         try (Caller stats = new Caller(messageBrokerHost, requestQeueName)) {
             return stats.call(rdf_url);
         }

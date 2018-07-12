@@ -59,7 +59,7 @@ public class ConvertController {
     @RequestMapping(value = "/get_stats", method = RequestMethod.GET, params = {"rdf_url"})
     @GetMapping("/")
     public @ResponseBody
-    Map<String, String> getRDFStats(@RequestParam(value = "rdf_url") String rdfURL) {
+    Map<Object, Object> getRDFStats(@RequestParam(value = "rdf_url") String rdfURL) {
         try {
             return stats.getStats(rdfURL);
         } catch (IOException | TimeoutException | InterruptedException ex) {
