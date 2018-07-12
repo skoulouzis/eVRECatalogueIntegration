@@ -5,9 +5,7 @@ services:
         image: zookeeper
         deploy:
             restart_policy:
-                condition: on-failure 
-        #ports:
-            #- 2181:2181               
+                condition: on-failure            
                 
     rabbit:
         image: rabbitmq:3-management
@@ -16,16 +14,16 @@ services:
                 condition: on-failure      
         ports:
             - 15672:15672         
-            #- 5672:5672
+            - 5672:5672
+            - 4369:4369
+            - 5671:5671
+            -15671:15671
                                 
     rest-cat:
         image: rest-cat
         deploy:
             restart_policy:
                 condition: on-failure
-            placement:
-                constraints:
-                - node.role == manager                
         environment:
             RABBIT_HOST: rabbit
             RABBIT_PORT: 5672
@@ -52,9 +50,38 @@ services:
             RABBIT_PASSWORD: guest
             ZOOKEEPER_HOST: zookeeper
             INFLUX_URI: http://influx:8086
+            FTP_HOST: ftp
+            FTP_USER_NAME: user
+            FTP_USER_PASS: resu      
         depends_on:
             - zookeeper
             - rabbit   
+            - ftp
+             
+    cat-analyser:
+        image: cat-analyser
+        deploy:
+            restart_policy:
+                condition: on-failure                
+        environment:
+            FTP_HOST: ftp
+            FTP_USER_NAME: user
+            FTP_USER_PASS: resu      
+        depends_on:
+            - ftp              
+
+    ftp:
+        image: stilliard/pure-ftpd:hardened
+        ports:
+            - 21:21
+            - 30000-30009:30000-30009
+        environment:
+            FTP_USER_NAME: user
+            FTP_USER_PASS: resu
+            FTP_USER_HOME: /home/user
+        deploy:
+            restart_policy:
+                condition: on-failure         
             
     influx:
         image: influxdb
@@ -73,6 +100,7 @@ services:
             INFLUX_HOST: influx
             INFLUX_PORT: 8086
             INFLUX_DB: mydb
+            REPORT_INTERVAL: 2
         depends_on:
             - rabbit
             - influx    
@@ -87,15 +115,7 @@ services:
         depends_on:
             - influx                
         ports:
-            - 8888:8888      
-        deploy:
-            resources:
-                limits:
-                    cpus: '0.10'
-                    memory: 100M
-                reservations:
-                    cpus: '0.05'
-                    memory: 50M         
+            - 8888:8888         
                     
     cadvisor:
         image: google/cadvisor
@@ -112,13 +132,6 @@ services:
             - influx
         deploy:
             mode: global
-            resources:
-                limits:
-                    cpus: '0.10'
-                    memory: 50M
-                reservations:
-                    cpus: '0.05'
-                    memory: 25M
                     
     kapacitor:
         image: kapacitor
@@ -127,15 +140,7 @@ services:
         depends_on:
             - influx
         environment:      
-            KAPACITOR_INFLUXDB_0_URLS_0: http://influx:8086            
-        deploy:
-            resources:
-                limits:
-                    cpus: '0.10'
-                    memory: 100M
-                reservations:
-                    cpus: '0.05'
-                    memory: 50M                    
+            KAPACITOR_INFLUXDB_0_URLS_0: http://influx:8086                
             
                                 
 volumes:

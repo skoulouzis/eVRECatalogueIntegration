@@ -71,53 +71,63 @@ def build_influx_metrics(metrics):
 
     
     if 'message_stats' in metrics and  metrics['message_stats']:
-        if metrics['message_stats']['deliver_get_details']:
+        if 'deliver_get_details' in metrics['message_stats'] and metrics['message_stats']['deliver_get_details']:
             influx_metrics['message_stats=rate'] = metrics['message_stats']['deliver_get_details']['rate']        
-        influx_metrics['message_stats=deliver_get'] = metrics['message_stats']['deliver_get']           
+        
+        if 'deliver_get' in  metrics['message_stats']:
+            influx_metrics['message_stats=deliver_get'] = metrics['message_stats']['deliver_get']           
 
-        if metrics['message_stats']['ack_details']:
+        if 'ack_details' in metrics['message_stats'] and metrics['message_stats']['ack_details']:
             influx_metrics['message_stats=ack_details.rate'] = metrics['message_stats']['ack_details']['rate']      
     
-        influx_metrics['message_stats=ack'] = metrics['message_stats']['ack']   
+        if 'ack' in  metrics['message_stats']:
+            influx_metrics['message_stats=ack'] = metrics['message_stats']['ack']   
     
-        if metrics['message_stats']['redeliver_details']:
+        if 'message_stats' in metrics['message_stats'] and metrics['message_stats']['redeliver_details']:
             influx_metrics['message_stats=redeliver_details.rate'] = metrics['message_stats']['redeliver_details']['rate']               
     
-        influx_metrics['message_stats=redeliver'] = metrics['message_stats']['redeliver']       
+        if 'redeliver' in metrics['message_stats']:
+            influx_metrics['message_stats=redeliver'] = metrics['message_stats']['redeliver']       
     
-        if metrics['message_stats']['deliver_no_ack_details']:        
+        if 'deliver_no_ack_details' in metrics['message_stats'] and 'rate' in  metrics['message_stats']['deliver_no_ack_details'] and metrics['message_stats']['deliver_no_ack_details']:        
             influx_metrics['message_stats=deliver_no_ack_details.rate'] = metrics['message_stats']['deliver_no_ack_details']['rate']
     
-        influx_metrics['message_stats=deliver_no_ack'] = metrics['message_stats']['deliver_no_ack']
+        if 'deliver_no_ack' in metrics['message_stats']:
+            influx_metrics['message_stats=deliver_no_ack'] = metrics['message_stats']['deliver_no_ack']
 
-        if metrics['message_stats']['deliver_details']:       
+        if 'deliver_details' in metrics['message_stats'] and metrics['message_stats']['deliver_details']:       
             influx_metrics['message_stats=deliver_details.rate'] = metrics['message_stats']['deliver_details']['rate']
         
-        influx_metrics['message_stats=deliver'] = metrics['message_stats']['deliver']
+        if 'deliver' in metrics['message_stats']:
+            influx_metrics['message_stats=deliver'] = metrics['message_stats']['deliver']
     
-        if metrics['message_stats']['get_no_ack_details']:       
+        if 'get_no_ack_details' in metrics['message_stats'] and metrics['message_stats']['get_no_ack_details']:       
             influx_metrics['message_stats=get_no_ack_details.rate'] = metrics['message_stats']['get_no_ack_details']['rate']
     
-        influx_metrics['message_stats=get_no_ack'] = metrics['message_stats']['get_no_ack']    
+        if 'get_no_ack' in metrics['message_stats']:
+            influx_metrics['message_stats=get_no_ack'] = metrics['message_stats']['get_no_ack']    
     
-        if metrics['message_stats']['get_details']:  
+        if 'get_details' in metrics['message_stats'] and metrics['message_stats']['get_details']:  
             influx_metrics['message_stats=get_details.rate'] = metrics['message_stats']['get_details']['rate']
     
-        if metrics['message_stats']:  
+        if 'get' in metrics['message_stats']:  
             influx_metrics['message_stats=message_stats.get'] = metrics['message_stats']['get']
     
         if metrics['message_stats']['publish_details']:  
             influx_metrics['message_stats=publish_details.rate'] = metrics['message_stats']['publish_details']['rate']
     
-        influx_metrics['message_stats=publish'] = metrics['message_stats']['publish']
+        if 'publish' in  metrics['message_stats']:
+            influx_metrics['message_stats=publish'] = metrics['message_stats']['publish']
         
-        influx_metrics['root=messages_details.rate'] = metrics['messages_details']['rate']
+        if 'rate' in metrics['messages_details']:
+            influx_metrics['root=messages_details.rate'] = metrics['messages_details']['rate']
     
             
         if metrics['messages_ready_details']:
             influx_metrics['messages_ready_details=rate'] = metrics['messages_ready_details']['rate']
         
-        influx_metrics['reductions_details=rate'] = metrics['reductions_details']['rate']
+        if 'rate' in metrics['reductions_details']:
+            influx_metrics['reductions_details=rate'] = metrics['reductions_details']['rate']
         
         return influx_metrics
 
@@ -149,7 +159,8 @@ def get_rabbit_definitions(rabbit_base_url,RABBIT_USERNAME,RABBIT_PASSWORD):
 
 
 
-#python reportRabbitMQ2InfluxDB.py  localhost 15672 guest guest ckan_Mapping62.x3ml %2F  localhost 8086 mydb
+#python reportRabbitMQ2InfluxDB.py localhost 15672 guest guest localhost 8086 mydb 
+
 if __name__ == "__main__":
     RABBIT_HOST = sys.argv[1] 
     RABBIT_PORT = sys.argv[2]
@@ -158,6 +169,7 @@ if __name__ == "__main__":
     INFLUX_HOST = sys.argv[5]
     INFLUX_PORT = sys.argv[6]
     INFLUX_DB = sys.argv[7] 
+    interval = sys.argv[8] 
     print('RABBIT_HOST: '+RABBIT_HOST+' RABBIT_PORT: '+RABBIT_PORT+' RABBIT_USERNAME: '+RABBIT_PASSWORD+' RABBIT_VHOST: '+INFLUX_HOST+' INFLUX_PORT: '+INFLUX_DB)
         
     influx_base_url = 'http://'+INFLUX_HOST+':'+INFLUX_PORT
@@ -184,7 +196,7 @@ if __name__ == "__main__":
             print('Reporting: '+url);
             rabbit_q_name = url.rsplit('/', 1)[-1]
             report(req,INFLUX_DB,influx_base_url,rabbit_q_name)
-        time.sleep(60) 
+        time.sleep(float(interval))
     
     
     #rabbit_url = 'http://'+RABBIT_HOST+':'+RABBIT_PORT+'/api/queues/'+RABBIT_VHOST+'/'+RABBIT_QNAME

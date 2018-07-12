@@ -23,6 +23,9 @@ public class CerifConverterMain {
 
     private static String rabbitMQHost;
     private static String zookeeperHost;
+    private static String ftpHost;
+    private static String ftpUser;
+    private static String ftpPass;
 
     public static void main(String[] argv) {
         try {
@@ -34,6 +37,18 @@ public class CerifConverterMain {
             Option zookeeperHostOption = new Option("z", "zookeeper_host", true, "zookeeper host");
             zookeeperHostOption.setRequired(true);
             options.addOption(zookeeperHostOption);
+
+            Option ftpHostOption = new Option("f", "ftp_host", true, "ftp host");
+            ftpHostOption.setRequired(true);
+            options.addOption(ftpHostOption);
+
+            Option ftpUserOtion = new Option("u", "ftp_user", true, "ftp user");
+            ftpUserOtion.setRequired(false);
+            options.addOption(ftpUserOtion);
+
+            Option ftpUPassOtion = new Option("p", "ftp_pass", true, "ftp pass");
+            ftpUPassOtion.setRequired(false);
+            options.addOption(ftpUPassOtion);
 //
 //            Option mappings = new Option("m", "mappings", true, "mappings path");
 //            mappings.setRequired(true);
@@ -61,7 +76,16 @@ public class CerifConverterMain {
             zookeeperHost = cmd.getOptionValue("zookeeper_host");
             Logger.getLogger(CerifConverterMain.class.getName()).log(Level.INFO, "zookeeper host: {0}", zookeeperHost);
 
-            new Executor(rabbitMQHost, zookeeperHost, "/catmap_conf").run();
+            ftpHost = cmd.getOptionValue("ftp_host");
+            Logger.getLogger(CerifConverterMain.class.getName()).log(Level.INFO, "ftp host: {0}", ftpHost);
+
+            ftpUser = cmd.getOptionValue("ftp_user");
+            Logger.getLogger(CerifConverterMain.class.getName()).log(Level.INFO, "ftp host: {0}", ftpUser);
+
+            ftpPass = cmd.getOptionValue("ftp_pass");
+            Logger.getLogger(CerifConverterMain.class.getName()).log(Level.INFO, "ftp host: {0}", ftpPass);
+
+            new Executor(rabbitMQHost, zookeeperHost, ftpHost, ftpUser, ftpPass, "/catmap_conf").run();
 
 //            mappingsPath = cmd.getOptionValue("mappings");
 //            Logger.getLogger(CerifConverterWorker.class.getName()).log(Level.INFO, "mappings path: {0}", mappingsPath);

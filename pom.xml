@@ -11,5 +11,6 @@
   <modules>
     <module>rest_cat</module>
     <module>cat_worker</module>
+    <module>statistics_cat</module>
   </modules>
 </project>

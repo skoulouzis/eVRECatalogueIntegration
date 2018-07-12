@@ -51,6 +51,14 @@ public class ConvertController {
         return null;
     }
 
+    
+        @RequestMapping(value = "/get_stats", method = RequestMethod.GET, params = {"rdf_url"})
+    @GetMapping("/")
+    public @ResponseBody
+    GraphStats getConvertionLocaltions(@RequestParam(value = "rdf_url") String rdfURL) {
+        return null;
+    }
+    
     @RequestMapping(value = "/get_stats", method = RequestMethod.GET, params = {"rdf_url"})
     @GetMapping("/")
     public @ResponseBody

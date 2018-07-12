@@ -12,6 +12,7 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Consumer;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
+import com.rabbitmq.client.MessageProperties;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -29,7 +30,11 @@ import eu.delving.x3ml.engine.Generator;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.apache.commons.net.PrintCommandListener;
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPReply;
 import org.w3c.dom.Element;
 
 public class Worker {
@@ -39,6 +44,9 @@ public class Worker {
     private final String outputRfdFolder;
     private File mappingsFile;
     private File generatorPathFile;
+    private final String ftpHost;
+    private String ftpUser;
+    private String ftpPass;
 
 //        private enum outputFormat {
 //        RDF_XML,
@@ -51,10 +59,18 @@ public class Worker {
 //        FILE,
 //        DISABLED
 //    }
-    public Worker(String rabbitMQHost, String taskQeueName, String output, File confFolder) {
+    public Worker(String rabbitMQHost, String ftpHost, String ftpUser, String ftpPass, String taskQeueName, String output, File confFolder) throws IOException {
         this.taskQeueName = taskQeueName;
         this.rabbitMQHost = rabbitMQHost;
         this.outputRfdFolder = output;
+        if (ftpHost == null) {
+            this.ftpHost = System.getenv("FTP_HOST");
+        } else {
+            this.ftpHost = ftpHost;
+            this.ftpUser = ftpUser;
+            this.ftpPass = ftpPass;
+        }
+
         Logger.getLogger(Worker.class.getName()).log(Level.INFO, "Consuming from qeue: {0}", taskQeueName);
         File[] files = confFolder.listFiles();
         for (File f : files) {
@@ -63,7 +79,7 @@ public class Worker {
                 Logger.getLogger(Worker.class.getName()).log(Level.INFO, "Using mapping file: {0}. File len: {1}", new Object[]{f.getAbsolutePath(), f.length()});
             } else if (f.getName().equals("generator")) {
                 generatorPathFile = f;
-                Logger.getLogger(Worker.class.getName()).log(Level.INFO, "Using generator file: " + f.getAbsolutePath() + ". File len: " + f.length());
+                Logger.getLogger(Worker.class.getName()).log(Level.INFO, "Using generator file: {0}. File len: {1}", new Object[]{f.getAbsolutePath(), f.length()});
             }
         }
 
@@ -93,7 +109,42 @@ public class Worker {
                 try {
                     X3MLEngine.Output rdf = convert(message);
                     String fileName = UUID.randomUUID().toString();
-                    rdf.write(new PrintStream(new File(outputRfdFolder + File.separator + fileName + ".rdf")), "application/rdf+xml");
+                    File rdfFile = new File(outputRfdFolder + File.separator + fileName + ".rdf");
+                    rdf.write(new PrintStream(rdfFile), "application/rdf+xml");
+
+                    if (ftpHost != null) {
+                        FTPClient client = new FTPClient();
+
+                        client.connect(ftpHost);
+                        client.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out)));
+                        String ftpUserEnv = System.getenv("FTP_USER_NAME");
+                        if (ftpUserEnv != null) {
+                            ftpUser = ftpUserEnv;
+                        }
+                        String ftpPasswordEnv = System.getenv("FTP_USER_PASS");
+                        if (ftpPasswordEnv != null) {
+                            ftpPasswordEnv = ftpPass;
+                        }
+                        client.login(ftpUser, ftpPass);
+                        client.enterLocalPassiveMode();
+
+                        client.changeWorkingDirectory("/" + taskQeueName);
+//                        channel.queueDeclare("conversion_result", true, false, false, null);
+                        if (!FTPReply.isPositiveCompletion(client.getReplyCode())) {
+                            client.makeDirectory("/" + taskQeueName);
+                            client.changeWorkingDirectory("/" + taskQeueName);
+
+//                            channel.basicPublish("", "ftp://" + ftpUser + ":" + ftpPass + "@" + ftpHost,
+//                                    MessageProperties.PERSISTENT_TEXT_PLAIN,
+//                                    message.getBytes("UTF-8"));
+                        }
+
+                        FileInputStream fis = new FileInputStream(rdfFile);
+
+                        client.storeFile(fileName + ".rdf", fis);
+                        client.logout();
+                    }
+
                 } catch (IOException | ParserConfigurationException | SAXException ex) {
                     Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
                 } finally {

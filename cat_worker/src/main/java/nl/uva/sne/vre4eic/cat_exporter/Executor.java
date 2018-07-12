@@ -24,14 +24,17 @@ public class Executor implements Watcher, Runnable {
     private final ConfigMonitor dm;
     private final ZooKeeper zk;
     private final String rabbimqHost;
+    private String ftpHost;
+    private String ftpUser;
+    private String ftpPass;
 
-    public Executor(String rabbimqHost, String zookeeperHost, String znode) throws KeeperException, IOException, InterruptedException {
+    public Executor(String rabbimqHost, String zookeeperHost, String ftpHost, String ftpUser, String ftpPass, String znode) throws KeeperException, IOException, InterruptedException {
         zk = new ZooKeeper(zookeeperHost, 3000, this);
         ZooKeeper.States state = zk.getState();
         int count = 0;
         while (!state.isConnected() && count < 100) {
             state = zk.getState();
-            Thread.sleep(100);
+            Thread.sleep(1000);
             count++;
         }
         if (!state.isConnected() && count >= 100) {
@@ -39,7 +42,9 @@ public class Executor implements Watcher, Runnable {
         }
         dm = new ConfigMonitor(zk, znode, null, this);
         this.rabbimqHost = rabbimqHost;
-
+        this.ftpHost = ftpHost;
+        this.ftpPass = ftpPass;
+        this.ftpUser = ftpUser;
     }
 
     @Override
@@ -104,6 +109,6 @@ public class Executor implements Watcher, Runnable {
 
         File output = new File(System.getProperty("java.io.tmpdir") + File.separator + "cerif");
         output.mkdirs();
-        new Worker(rabbimqHost, new String(conf.get("queueName"), "UTF-8"), output.getAbsolutePath(), configFolder).consume();
+        new Worker(rabbimqHost, ftpHost, ftpUser, ftpPass, new String(conf.get("queueName"), "UTF-8"), output.getAbsolutePath(), configFolder).consume();
     }
 }
