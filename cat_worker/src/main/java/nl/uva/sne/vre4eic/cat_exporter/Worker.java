@@ -116,7 +116,7 @@ public class Worker {
                         FTPClient client = new FTPClient();
 
                         client.connect(ftpHost);
-                        client.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out)));
+//                        client.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out)));
                         String ftpUserEnv = System.getenv("FTP_USER_NAME");
                         if (ftpUserEnv != null) {
                             ftpUser = ftpUserEnv;

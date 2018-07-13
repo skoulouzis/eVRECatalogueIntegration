@@ -58,8 +58,8 @@ services:
             - rabbit   
             - ftp
              
-    cat-analyser:
-        image: cat-analyser
+    statistics-cat:
+        image: statistics-cat
         deploy:
             restart_policy:
                 condition: on-failure                
