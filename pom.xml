@@ -12,5 +12,7 @@
     <module>rest_cat</module>
     <module>cat_worker</module>
     <module>statistics_cat</module>
+    <module>CerifDataHarvester</module>
+    <module>x3ml</module>
   </modules>
 </project>
