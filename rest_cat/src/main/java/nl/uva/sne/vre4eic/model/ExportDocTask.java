@@ -5,6 +5,7 @@
  */
 package nl.uva.sne.vre4eic.model;
 
+import gr.forth.ics.isl.exporter.RDFExporter;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -14,7 +15,9 @@ import gr.forth.ics.isl.exporter.CatalogueExporter;
 import gr.forth.ics.isl.exporter.D4ScienceExporter;
 import io.micrometer.core.instrument.MeterRegistry;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collection;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeoutException;
@@ -24,6 +27,10 @@ import org.apache.commons.codec.binary.Base64;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.metrics.MetricsEndpoint;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 /**
  *
@@ -44,7 +51,7 @@ public class ExportDocTask implements Callable<String> {
     public ExportDocTask(String catalogueURL, ConnectionFactory factory, String queue) {
         this.catalogueURL = catalogueURL;
         this.factory = factory;
-        if(this.factory == null){
+        if (this.factory == null) {
             throw new NullPointerException("RabbitMQ ConnectionFactory is NULL!");
         }
         this.queue = queue;
@@ -82,8 +89,28 @@ public class ExportDocTask implements Callable<String> {
     }
 
     private CatalogueExporter getExporter(String catalogueURL) {
-        return new D4ScienceExporter(catalogueURL);
+        if (urlExists(catalogueURL + "/api/action/package_list")) {
+            return new D4ScienceExporter(catalogueURL);
+        } else {
+            return new RDFExporter(catalogueURL);
+        }    }
+
+    private boolean urlExists(String URLName) {
+
+        try {
+            HttpURLConnection.setFollowRedirects(false);
+            //        HttpURLConnection.setInstanceFollowRedirects(false)
+            HttpURLConnection con
+                    = (HttpURLConnection) new URL(URLName).openConnection();
+            con.setRequestMethod("HEAD");
+            return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
+        } catch (MalformedURLException ex) {
+            return false;
+        } catch (IOException ex) {
+            return false;
+        }
     }
+
 
     @Override
     public String call() throws Exception {
