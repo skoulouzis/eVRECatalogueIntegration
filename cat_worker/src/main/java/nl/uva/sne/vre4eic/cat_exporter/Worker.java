@@ -110,8 +110,11 @@ public class Worker {
                     X3MLEngine.Output rdf = convert(message);
                     String fileName = UUID.randomUUID().toString();
                     File rdfFile = new File(outputRfdFolder + File.separator + fileName + ".rdf");
-                    rdf.write(new PrintStream(rdfFile), "application/rdf+xml");
-
+                    try {
+                        rdf.write(new PrintStream(rdfFile), "application/rdf+xml");
+                    } catch (Throwable ex) {
+                        Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     if (ftpHost != null) {
                         FTPClient client = new FTPClient();
 
