@@ -2,7 +2,7 @@ FROM python:2.7.15-alpine3.7
 
 ADD scripts/merge_rdf.py /
 
-RUN pip install rdflib pathlib ftplib shutil json urllib base64 pika urlparse
+RUN pip install rdflib pathlib pika
 
 RUN chmod +x /merge_rdf.py
 

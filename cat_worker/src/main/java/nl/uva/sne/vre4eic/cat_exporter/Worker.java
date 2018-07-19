@@ -12,7 +12,6 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Consumer;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
-import com.rabbitmq.client.MessageProperties;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -30,9 +29,7 @@ import eu.delving.x3ml.engine.Generator;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import javax.xml.parsers.DocumentBuilderFactory;
-import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 import org.w3c.dom.Element;
@@ -112,14 +109,18 @@ public class Worker {
                     File rdfFile = new File(outputRfdFolder + File.separator + fileName + ".rdf");
                     try {
                         rdf.write(new PrintStream(rdfFile), "application/rdf+xml");
-                    } catch (Throwable ex) {
+                    } catch (Exception ex) {
                         Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
+                        System.exit(-1);
+
                     }
+                    Logger.getLogger(Worker.class.getName()).log(Level.INFO, "Saved file :{0}", rdfFile.getAbsolutePath());
                     if (ftpHost != null) {
                         FTPClient client = new FTPClient();
 
                         client.connect(ftpHost);
 //                        client.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out)));
+                        Logger.getLogger(Worker.class.getName()).log(Level.INFO, "Connected to :{0}", ftpHost);
                         String ftpUserEnv = System.getenv("FTP_USER_NAME");
                         if (ftpUserEnv != null) {
                             ftpUser = ftpUserEnv;
@@ -145,6 +146,7 @@ public class Worker {
                         FileInputStream fis = new FileInputStream(rdfFile);
 
                         client.storeFile(fileName + ".rdf", fis);
+
                         client.logout();
                     }
 

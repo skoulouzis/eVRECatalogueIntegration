@@ -109,6 +109,7 @@ public class Executor implements Watcher, Runnable {
 
         File output = new File(System.getProperty("java.io.tmpdir") + File.separator + "cerif");
         output.mkdirs();
-        new Worker(rabbimqHost, ftpHost, ftpUser, ftpPass, new String(conf.get("queueName"), "UTF-8"), output.getAbsolutePath(), configFolder).consume();
+        Worker w = new Worker(rabbimqHost, ftpHost, ftpUser, ftpPass, new String(conf.get("queueName"), "UTF-8"), output.getAbsolutePath(), configFolder);
+        w.consume();
     }
 }

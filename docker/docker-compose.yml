@@ -14,10 +14,6 @@ services:
                 condition: on-failure      
         ports:
             - 15672:15672         
-            - 5672:5672
-            - 4369:4369
-            - 5671:5671
-            -15671:15671
                                 
     rest-cat:
         image: rest-cat
@@ -66,7 +62,9 @@ services:
         environment:
             FTP_HOST: ftp
             FTP_USER_NAME: user
-            FTP_USER_PASS: resu      
+            FTP_USER_PASS: resu    
+            RABBIT_HOST: rabbit
+            QUEUE_NAME: rdf_location
         depends_on:
             - ftp              
 
@@ -91,7 +89,7 @@ services:
             - influx:/var/lib/influxdb
                     
     rabbit-reporter :
-        image: rabbit-reporter
+        image: alogo53/rabbit-metrics-reporter
         environment:
             RABBIT_HOST: rabbit
             RABBIT_PORT: 15672
@@ -100,22 +98,30 @@ services:
             INFLUX_HOST: influx
             INFLUX_PORT: 8086
             INFLUX_DB: mydb
-            REPORT_INTERVAL: 2
+            REPORT_INTERVAL: 10
         depends_on:
             - rabbit
-            - influx    
+            - influx
             
-    chronograf :
-        image: chronograf
-        command: chronograf --influxdb-url=http://influx:8086
-        environment:
-            INFLUX_HOST: influx
-            INFLUX_PORT: 8086
-            INFLUX_DB: mydb
-        depends_on:
-            - influx                
-        ports:
-            - 8888:8888         
+    #grafana:
+        #image: grafana/grafana
+        #environment:
+            #DS_NAME: InfluxDB
+            #DS_TYPE: InfluxDB
+            #DS_ACCESS: proxy
+            #DS_URL: http://influx:8086
+            #DS_DB: cadvisor
+        #ports:
+            #- 3000:3000
+        #volumes:
+            #- grafana:/var/lib/grafana
+        #depends_on:
+            #- influx
+        #deploy:
+            #replicas: 1
+        #depends_on:
+            #- influx            
+      
                     
     cadvisor:
         image: google/cadvisor
@@ -131,19 +137,12 @@ services:
         depends_on:
             - influx
         deploy:
-            mode: global
-                    
-    kapacitor:
-        image: kapacitor
-        ports:
-            - 9092:9092
-        depends_on:
-            - influx
-        environment:      
-            KAPACITOR_INFLUXDB_0_URLS_0: http://influx:8086                
+            mode: global              
             
                                 
 volumes:
   influx:
     driver: local
+  grafana:
+    driver: local    
     
