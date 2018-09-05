@@ -10,7 +10,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath ${packageClassName} -f localhost -p 12345 -r localhost -u user -z localhost</exec.args>
+                <exec.args>-classpath %classpath nl.uva.sne.vre4eic.cat_exporter.CerifConverterMain -f localhost -p 12345 -r localhost -u user -z localhost</exec.args>
                 <exec.executable>java</exec.executable>
             </properties>
         </action>
@@ -24,7 +24,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath ${packageClassName} -f localhost -p 12345 -r localhost -u user -z localhost</exec.args>
+                <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath nl.uva.sne.vre4eic.cat_exporter.CerifConverterMain -f localhost -p 12345 -r localhost -u user -z localhost</exec.args>
                 <exec.executable>java</exec.executable>
                 <jpda.listen>true</jpda.listen>
             </properties>
@@ -39,7 +39,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath ${packageClassName} -f localhost -p 12345 -r localhost -u user -z localhost</exec.args>
+                <exec.args>-classpath %classpath nl.uva.sne.vre4eic.cat_exporter.CerifConverterMain -f localhost -p 12345 -r localhost -u user -z localhost</exec.args>
                 <exec.executable>java</exec.executable>
             </properties>
         </action>

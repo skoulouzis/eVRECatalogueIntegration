@@ -27,11 +27,17 @@ import eu.delving.x3ml.X3MLEngine;
 import eu.delving.x3ml.X3MLGeneratorPolicy;
 import eu.delving.x3ml.engine.Generator;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.net.URL;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
+import org.json.JSONObject;
 import org.w3c.dom.Element;
 
 public class Worker {
@@ -39,8 +45,6 @@ public class Worker {
     private final String rabbitMQHost;
     private final String taskQeueName;
     private final String outputRfdFolder;
-    private File mappingsFile;
-    private File generatorPathFile;
     private final String ftpHost;
     private String ftpUser;
     private String ftpPass;
@@ -56,7 +60,7 @@ public class Worker {
 //        FILE,
 //        DISABLED
 //    }
-    public Worker(String rabbitMQHost, String ftpHost, String ftpUser, String ftpPass, String taskQeueName, String output, File confFolder) throws IOException {
+    public Worker(String rabbitMQHost, String ftpHost, String ftpUser, String ftpPass, String taskQeueName, String output) throws IOException {
         this.taskQeueName = taskQeueName;
         this.rabbitMQHost = rabbitMQHost;
         this.outputRfdFolder = output;
@@ -69,17 +73,6 @@ public class Worker {
         }
 
         Logger.getLogger(Worker.class.getName()).log(Level.INFO, "Consuming from qeue: {0}", taskQeueName);
-        File[] files = confFolder.listFiles();
-        for (File f : files) {
-            if (f.getName().equals("mapping")) {
-                mappingsFile = f;
-                Logger.getLogger(Worker.class.getName()).log(Level.INFO, "Using mapping file: {0}. File len: {1}", new Object[]{f.getAbsolutePath(), f.length()});
-            } else if (f.getName().equals("generator")) {
-                generatorPathFile = f;
-                Logger.getLogger(Worker.class.getName()).log(Level.INFO, "Using generator file: {0}. File len: {1}", new Object[]{f.getAbsolutePath(), f.length()});
-            }
-        }
-
     }
 
     public void consume() throws IOException, TimeoutException {
@@ -103,10 +96,29 @@ public class Worker {
 
                 byte[] decodedBytes = Base64.decodeBase64(body);
                 String message = new String(decodedBytes, "UTF-8");
+                JSONObject jObject = new JSONObject(message);
+                File mapping = null;
+                File generator = null;
+//                Logger.getLogger(Worker.class.getName()).log(Level.INFO, "message: {0}", message);
                 try {
-                    X3MLEngine.Output rdf = convert(message);
-                    String fileName = UUID.randomUUID().toString();
+                    byte[] mappingData = getBytes(new URL(jObject.getString("mappingURL")));
+                    byte[] generatorData = getBytes(new URL(jObject.getString("generatorURL")));
+
+                    mapping = File.createTempFile("mapping", ".tmp");
+                    FileUtils.writeByteArrayToFile(mapping, mappingData);
+
+                    generator = File.createTempFile("generator", ".tmp");
+                    FileUtils.writeByteArrayToFile(generator, generatorData);
+
+                    X3MLEngine.Output rdf = convert(jObject.getString("payload"), mapping, generator);
+//                    Logger.getLogger(Worker.class.getName()).log(Level.INFO, "rdf: {0}", rdf);
+
+                    String path = new URL(jObject.getString("mappingURL")).getPath();
+                    String mappingName = path.substring(path.lastIndexOf('/') + 1);
+
+                    String fileName = mappingName + "_" + UUID.randomUUID().toString();
                     File rdfFile = new File(outputRfdFolder + File.separator + fileName + ".rdf");
+                    Logger.getLogger(Worker.class.getName()).log(Level.INFO, "fileName: {0}", fileName);
                     try {
                         rdf.write(new PrintStream(rdfFile), "application/rdf+xml");
                     } catch (Exception ex) {
@@ -152,9 +164,17 @@ public class Worker {
 
                 } catch (IOException | ParserConfigurationException | SAXException ex) {
                     Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, "------------EXIT----------------");
+                    System.exit(-1);
                 } finally {
                     if (channel.isOpen()) {
                         channel.basicAck(envelope.getDeliveryTag(), false);
+                    }
+                    if (mapping != null) {
+                        mapping.delete();
+                    }
+                    if (generator != null) {
+                        generator.delete();
                     }
                 }
             }
@@ -162,7 +182,7 @@ public class Worker {
         channel.basicConsume(taskQeueName, false, consumer);
     }
 
-    private X3MLEngine.Output convert(String task) throws FileNotFoundException, ParserConfigurationException, SAXException, IOException {
+    private X3MLEngine.Output convert(String task, File mappingsFile, File generatorPathFile) throws FileNotFoundException, ParserConfigurationException, SAXException, IOException {
         final int UUID_SIZE = 2;
 
         X3MLEngine.REPORT_PROGRESS = true;
@@ -193,6 +213,20 @@ public class Worker {
 
     private X3MLEngine createEngine(File mappingsFile) throws FileNotFoundException {
         return X3MLEngine.load(new FileInputStream(mappingsFile));
+    }
+
+    private byte[] getBytes(URL url) throws IOException {
+
+        ByteArrayOutputStream data = new ByteArrayOutputStream();
+
+        try (InputStream inputStream = url.openStream()) {
+            int n = 0;
+            byte[] buffer = new byte[1024];
+            while (-1 != (n = inputStream.read(buffer))) {
+                data.write(buffer, 0, n);
+            }
+        }
+        return data.toByteArray();
     }
 
 }

@@ -5,6 +5,7 @@
  */
 package nl.uva.sne.vre4eic.cat_exporter;
 
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.cli.BasicParser;
@@ -66,6 +67,7 @@ public class CerifConverterMain {
             } catch (ParseException e) {
                 System.err.println(e.getMessage());
                 formatter.printHelp("utility-name", options);
+                Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, "------------EXIT----------------");
                 System.exit(1);
                 return;
             }
@@ -85,7 +87,14 @@ public class CerifConverterMain {
             ftpPass = cmd.getOptionValue("ftp_pass");
             Logger.getLogger(CerifConverterMain.class.getName()).log(Level.INFO, "ftp host: {0}", ftpPass);
 
-            new Executor(rabbitMQHost, zookeeperHost, ftpHost, ftpUser, ftpPass, "/catmap_conf").run();
+            Logger.getLogger("org.apache.zookeeper").setLevel(Level.WARNING);
+            Logger.getLogger("org.apache.hadoop.hbase.zookeeper").setLevel(Level.WARNING);
+            Logger.getLogger("org.apache.hadoop.hbase.client").setLevel(Level.WARNING);
+            String taskQName = "ckan2cerif";
+            File output = new File(System.getProperty("java.io.tmpdir") + File.separator + "cerif");
+            output.mkdirs();
+            new Worker(rabbitMQHost, ftpHost, ftpUser, ftpPass, taskQName, output.getAbsolutePath()).consume();
+//            new Executor(rabbitMQHost, zookeeperHost, ftpHost, ftpUser, ftpPass, "/catmap_conf").run();
 
 //            mappingsPath = cmd.getOptionValue("mappings");
 //            Logger.getLogger(CerifConverterWorker.class.getName()).log(Level.INFO, "mappings path: {0}", mappingsPath);
@@ -94,6 +103,7 @@ public class CerifConverterMain {
 //            consume();
         } catch (Throwable ex) {
             Logger.getLogger(CerifConverterMain.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, "------------EXIT----------------");
             System.exit(-1);
         }
 
