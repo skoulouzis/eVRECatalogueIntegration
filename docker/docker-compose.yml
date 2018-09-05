@@ -3,9 +3,11 @@ version: '3.1'
 services:
     zookeeper:
         image: zookeeper
+        ports: 
+            - 2181:2181
         deploy:
             restart_policy:
-                condition: on-failure            
+                condition: on-failure       
                 
     rabbit:
         image: rabbitmq:3-management
@@ -13,7 +15,8 @@ services:
             restart_policy:
                 condition: on-failure      
         ports:
-            - 15672:15672         
+            - 15672:15672    
+            - 5672:5672    
                                 
     rest-cat:
         image: rest-cat
@@ -36,9 +39,10 @@ services:
             
     cat-worker:
         image: cat-worker
-        deploy:
-            restart_policy:
-                condition: on-failure                
+        #deploy:
+            #restart_policy:
+                #condition: on-failure      
+            #replicas: 1
         environment:
             RABBIT_HOST: rabbit
             RABBIT_PORT: 5672
@@ -81,27 +85,27 @@ services:
             restart_policy:
                 condition: on-failure         
             
-    influx:
-        image: influxdb
-        environment:
-            INFLUXDB_DB: mydb
-        volumes:
-            - influx:/var/lib/influxdb
+    #influx:
+        #image: influxdb
+        #environment:
+            #INFLUXDB_DB: mydb
+        #volumes:
+            #- influx:/var/lib/influxdb
                     
-    rabbit-reporter :
-        image: alogo53/rabbit-metrics-reporter
-        environment:
-            RABBIT_HOST: rabbit
-            RABBIT_PORT: 15672
-            RABBIT_USERNAME: guest
-            RABBIT_PASSWORD: guest
-            INFLUX_HOST: influx
-            INFLUX_PORT: 8086
-            INFLUX_DB: mydb
-            REPORT_INTERVAL: 10
-        depends_on:
-            - rabbit
-            - influx
+    #rabbit-reporter :
+        #image: alogo53/rabbit-metrics-reporter
+        #environment:
+            #RABBIT_HOST: rabbit
+            #RABBIT_PORT: 15672
+            #RABBIT_USERNAME: guest
+            #RABBIT_PASSWORD: guest
+            #INFLUX_HOST: influx
+            #INFLUX_PORT: 8086
+            #INFLUX_DB: mydb
+            #REPORT_INTERVAL: 10
+        #depends_on:
+            #- rabbit
+            #- influx
             
     #grafana:
         #image: grafana/grafana
@@ -123,26 +127,27 @@ services:
             #- influx            
       
                     
-    cadvisor:
-        image: google/cadvisor
-        ports:
-            - 0.0.0.0:8080:8080
-        hostname: '{{.Node.ID}}'
-        command: -logtostderr -docker_only -storage_driver=influxdb -storage_driver_db=mydb -storage_driver_host=influx:8086
-        volumes:
-            - /:/rootfs:ro
-            - /var/run:/var/run:rw
-            - /sys:/sys:ro
-            - /var/lib/docker/:/var/lib/docker:ro
-        depends_on:
-            - influx
-        deploy:
-            mode: global              
+    #cadvisor:
+        #image: google/cadvisor
+        #ports:
+            #- 0.0.0.0:8080:8080
+        #hostname: '{{.Node.ID}}'
+        #command: -logtostderr -docker_only -storage_driver=influxdb -storage_driver_db=mydb -storage_driver_host=influx:8086
+        #volumes:
+            #- /:/rootfs:ro
+            #- /var/run:/var/run:rw
+            #- /sys:/sys:ro
+            #- /var/lib/docker/:/var/lib/docker:ro
+        #depends_on:
+            #- influx
+        #deploy:
+            #mode: global           
+              
             
                                 
 volumes:
   influx:
     driver: local
   grafana:
-    driver: local    
+    driver: local
     

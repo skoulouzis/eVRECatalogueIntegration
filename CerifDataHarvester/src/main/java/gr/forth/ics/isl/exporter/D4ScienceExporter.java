@@ -27,6 +27,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
 import org.xml.sax.InputSource;
@@ -64,8 +65,13 @@ public class D4ScienceExporter implements CatalogueExporter {
     public Collection<String> fetchAllDatasetUUIDs() throws MalformedURLException, IOException {
 //        log.info("Fetching the list of Resource IDs from the resource catalog");
         Set<String> retCollection = new HashSet<>();
-
-        HttpURLConnection conn = (HttpURLConnection) new URL(this.endpointUrl + D4ScienceResources.ALL_RESOURCES_ENDPOINT).openConnection();
+        String ckanPath = null;
+        for (String path : D4ScienceResources.ALL_RESOURCES_ENDPOINT) {
+            if (urlExists(this.endpointUrl + path)) {
+                ckanPath = path;
+            }
+        }
+        HttpURLConnection conn = (HttpURLConnection) new URL(this.endpointUrl + ckanPath).openConnection();
         StringBuilder sb;
         try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"))) {
             String line;
@@ -75,11 +81,40 @@ public class D4ScienceExporter implements CatalogueExporter {
             }
         }
         JSONObject jsonResultObject = new JSONObject(sb.toString());
-        JSONArray jsonResults = jsonResultObject.getJSONArray(D4ScienceResources.RESULT);
-        for (int i = 0; i < jsonResults.length(); i++) {
-            retCollection.add(jsonResults.getString(i));
+        JSONArray jsonResults = null;
+        try {
+
+            jsonResults = jsonResultObject.getJSONArray(D4ScienceResources.RESULT);
+        } catch (JSONException ex) {
+            jsonResults = jsonResultObject.getJSONObject(D4ScienceResources.RESULT).getJSONArray("results");
+
+        }
+        for (Object res : jsonResults) {
+            if (res instanceof String) {
+                retCollection.add((String) res);
+            } else if (res instanceof JSONObject) {
+                if (((JSONObject) res).has("id")) {
+                    retCollection.add(((JSONObject) res).getString("id"));
+                }
+
+            }
         }
         return retCollection;
+    }
+
+    private boolean urlExists(String URLName) {
+        try {
+            HttpURLConnection.setFollowRedirects(false);
+            //        HttpURLConnection.setInstanceFollowRedirects(false)
+            HttpURLConnection con
+                    = (HttpURLConnection) new URL(URLName).openConnection();
+            con.setRequestMethod("HEAD");
+            return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
+        } catch (MalformedURLException ex) {
+            return false;
+        } catch (IOException ex) {
+            return false;
+        }
     }
 
     @Override

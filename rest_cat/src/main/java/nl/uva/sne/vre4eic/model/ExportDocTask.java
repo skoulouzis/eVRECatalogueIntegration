@@ -47,14 +47,18 @@ public class ExportDocTask implements Callable<String> {
     @Autowired
     MeterRegistry meterRegistry;
     private final String queue;
+    private String mappingURL;
+    private String generatorURL;
 
-    public ExportDocTask(String catalogueURL, ConnectionFactory factory, String queue) {
+    public ExportDocTask(String catalogueURL, ConnectionFactory factory, String queue, String mappingURL, String generatorURL) {
         this.catalogueURL = catalogueURL;
         this.factory = factory;
         if (this.factory == null) {
             throw new NullPointerException("RabbitMQ ConnectionFactory is NULL!");
         }
         this.queue = queue;
+        this.mappingURL = mappingURL;
+        this.generatorURL = generatorURL;
     }
 
     private void exportDocuments(String catalogueURL) throws MalformedURLException, GenericException {
@@ -68,7 +72,13 @@ public class ExportDocTask implements Callable<String> {
                 try (Connection connection = factory.newConnection(); Channel channel = connection.createChannel()) {
                     String qName = queue;
                     channel.queueDeclare(qName, true, false, false, null);
-                    byte[] encoded = (Base64.encodeBase64(xml.getBytes()));
+
+                    JSONObject json = new JSONObject();
+                    json.put("payload", xml);
+                    json.put("mappingURL", mappingURL);
+                    json.put("generatorURL", generatorURL);
+
+                    byte[] encoded = (Base64.encodeBase64(json.toString().getBytes()));
                     String message = new String(encoded, "UTF-8");
 
                     channel.basicPublish("", qName,
@@ -93,7 +103,8 @@ public class ExportDocTask implements Callable<String> {
             return new D4ScienceExporter(catalogueURL);
         } else {
             return new RDFExporter(catalogueURL);
-        }    }
+        }
+    }
 
     private boolean urlExists(String URLName) {
 
@@ -110,7 +121,6 @@ public class ExportDocTask implements Callable<String> {
             return false;
         }
     }
-
 
     @Override
     public String call() throws Exception {

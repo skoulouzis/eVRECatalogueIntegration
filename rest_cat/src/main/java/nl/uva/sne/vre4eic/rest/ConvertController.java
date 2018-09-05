@@ -7,14 +7,10 @@ package nl.uva.sne.vre4eic.rest;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.Map;
-import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import nl.uva.sne.vre4eic.model.ProcessingStatus;
 import nl.uva.sne.vre4eic.service.ConvertService;
-import nl.uva.sne.vre4eic.service.StatsService;
-import org.apache.zookeeper.KeeperException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,9 +28,7 @@ public class ConvertController {
 
     @Autowired
     private ConvertService service;
-
-    @Autowired
-    private StatsService stats;
+//http://localhost:8080/rest/convert?catalogue_url=https://ckan-d4s.d4science.org&mapping_url=https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping115.x3ml&generator_url=https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml
 //    http://localhost:8083/catalogue_mapper/convert?catalogue_url=http://172.17.0.2:8080/Mapping120/&mapping_url=http://172.17.0.2:8080/Mapping120/Mapping120.x3ml&generator_url=http://172.17.0.2:8080/Mapping120/ENVRIplus-generator-policy___13-07-2018131200___11511.xml
 //http://localhost:8080/rest/convert?catalogue_url=http://localhost:8081/Mapping120/&mapping_url=http://localhost:8081/Mapping120/Mapping120.x3ml&generator_url=http://localhost:8081/Mapping120/ENVRIplus-generator-policy___13-07-2018131200___11511.xml
 //    http://localhost:8080/rest/convert?catalogue_url=%20https://ckan-d4s.d4science.org&mapping_url=https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping62.x3ml&generator_url=https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/generator.xml
@@ -51,22 +45,22 @@ public class ConvertController {
             return status;
         } catch (MalformedURLException ex) {
             Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException | KeeperException | InterruptedException ex) {
+        } catch (IOException | InterruptedException ex) {
             Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
 
-//    http://localhost:8080/rest/get_stats?rdf_url=ftp://user:12345@localhost/ckan_Mapping62.x3ml/
-    @RequestMapping(value = "/get_stats", method = RequestMethod.GET, params = {"rdf_url"})
-    @GetMapping("/")
-    public @ResponseBody
-    Map<Object, Object> getRDFStats(@RequestParam(value = "rdf_url") String rdfURL) {
-        try {
-            return stats.getStats(rdfURL);
-        } catch (IOException | TimeoutException | InterruptedException ex) {
-            Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
+////    http://localhost:8080/rest/get_stats?rdf_url=ftp://user:12345@localhost/ckan_Mapping62.x3ml/
+//    @RequestMapping(value = "/get_stats", method = RequestMethod.GET, params = {"rdf_url"})
+//    @GetMapping("/")
+//    public @ResponseBody
+//    Map<Object, Object> getRDFStats(@RequestParam(value = "rdf_url") String rdfURL) {
+//        try {
+//            return stats.getStats(rdfURL);
+//        } catch (IOException | TimeoutException | InterruptedException ex) {
+//            Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return null;
+//    }
 }
