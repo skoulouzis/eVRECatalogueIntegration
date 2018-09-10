@@ -1,5 +1,4 @@
-docker run --name some-zookeeper  -p 127.0.0.1:2181:2181 -d  zookeeper
 docker run --hostname my-rabbit --name some-rabbit -p 127.0.0.1:15672:15672 -p 127.0.0.1:4369:4369 -p 127.0.0.1:5671-5672:5671-5672 -p 127.0.0.1:15671:15671 -d rabbitmq:3-management
 docker run -p 127.0.0.1:8086:8086 -p 127.0.0.1:8083:8083 -v influxdb:/var/lib/influxdb influxdb
 docker run -p 8888:8888 chronograf --influxdb-url=http://localhost:8086
-docker run -d --name ftpd_server -p 21:21 -p 30000-30009:30000-30009 -e "PUBLICHOST=localhost" -e FTP_USER_HOME=/home/user -e FTP_USER_NAME=user -e FTP_USER_PASS=12345 stilliard/pure-ftpd:hardened
+docker run --name=some-webdav -d -e USERNAME=user -e PASSWORD=resu -p 80:80 idelsink/webdav

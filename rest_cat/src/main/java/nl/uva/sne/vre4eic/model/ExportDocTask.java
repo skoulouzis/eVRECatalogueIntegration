@@ -28,10 +28,6 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.metrics.MetricsEndpoint;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-
 /**
  *
  * @author S. Koulouzis
@@ -69,12 +65,14 @@ public class ExportDocTask implements Callable<String> {
             for (String resourceId : allResourceIDs) {
                 JSONObject resource = exporter.exportResource(resourceId);
                 String xml = exporter.transformToXml(resource);
+
                 try (Connection connection = factory.newConnection(); Channel channel = connection.createChannel()) {
                     String qName = queue;
                     channel.queueDeclare(qName, true, false, false, null);
 
                     JSONObject json = new JSONObject();
-                    json.put("payload", xml);
+                    json.put("xml_ckan", xml);
+                    json.put("json_ckan", resource.toString());
                     json.put("mappingURL", mappingURL);
                     json.put("generatorURL", generatorURL);
 

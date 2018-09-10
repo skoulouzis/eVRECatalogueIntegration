@@ -6,6 +6,8 @@
 package nl.uva.sne.vre4eic.cat_exporter;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.cli.BasicParser;
@@ -23,10 +25,9 @@ import org.apache.commons.cli.ParseException;
 public class CerifConverterMain {
 
     private static String rabbitMQHost;
-    private static String zookeeperHost;
-    private static String ftpHost;
-    private static String ftpUser;
-    private static String ftpPass;
+    private static String webdavHost;
+    private static String webdavUser;
+    private static String webdavPass;
 
     public static void main(String[] argv) {
         try {
@@ -35,21 +36,21 @@ public class CerifConverterMain {
             rabbitHostOption.setRequired(true);
             options.addOption(rabbitHostOption);
 
-            Option zookeeperHostOption = new Option("z", "zookeeper_host", true, "zookeeper host");
-            zookeeperHostOption.setRequired(true);
-            options.addOption(zookeeperHostOption);
+//            Option zookeeperHostOption = new Option("z", "zookeeper_host", true, "zookeeper host");
+//            zookeeperHostOption.setRequired(true);
+//            options.addOption(zookeeperHostOption);
 
-            Option ftpHostOption = new Option("f", "ftp_host", true, "ftp host");
-            ftpHostOption.setRequired(true);
-            options.addOption(ftpHostOption);
+            Option webdavHostOption = new Option("w", "webdav_host", true, "webdav host");
+            webdavHostOption.setRequired(true);
+            options.addOption(webdavHostOption);
 
-            Option ftpUserOtion = new Option("u", "ftp_user", true, "ftp user");
-            ftpUserOtion.setRequired(false);
-            options.addOption(ftpUserOtion);
+            Option webdavUserOtion = new Option("u", "webdav_user", true, "webdav user");
+            webdavUserOtion.setRequired(false);
+            options.addOption(webdavUserOtion);
 
-            Option ftpUPassOtion = new Option("p", "ftp_pass", true, "ftp pass");
-            ftpUPassOtion.setRequired(false);
-            options.addOption(ftpUPassOtion);
+            Option webdavUPassOtion = new Option("p", "webdav_pass", true, "webdav pass");
+            webdavUPassOtion.setRequired(false);
+            options.addOption(webdavUPassOtion);
 //
 //            Option mappings = new Option("m", "mappings", true, "mappings path");
 //            mappings.setRequired(true);
@@ -75,33 +76,30 @@ public class CerifConverterMain {
             rabbitMQHost = cmd.getOptionValue("rabbit_host");
             Logger.getLogger(CerifConverterMain.class.getName()).log(Level.INFO, "rabbitMQ host: {0}", rabbitMQHost);
 
-            zookeeperHost = cmd.getOptionValue("zookeeper_host");
-            Logger.getLogger(CerifConverterMain.class.getName()).log(Level.INFO, "zookeeper host: {0}", zookeeperHost);
+//            zookeeperHost = cmd.getOptionValue("zookeeper_host");
+//            Logger.getLogger(CerifConverterMain.class.getName()).log(Level.INFO, "zookeeper host: {0}", zookeeperHost);
 
-            ftpHost = cmd.getOptionValue("ftp_host");
-            Logger.getLogger(CerifConverterMain.class.getName()).log(Level.INFO, "ftp host: {0}", ftpHost);
+            webdavHost = cmd.getOptionValue("webdav_host");
+            Logger.getLogger(CerifConverterMain.class.getName()).log(Level.INFO, "webdav host: {0}", webdavHost);
 
-            ftpUser = cmd.getOptionValue("ftp_user");
-            Logger.getLogger(CerifConverterMain.class.getName()).log(Level.INFO, "ftp host: {0}", ftpUser);
+            webdavUser = cmd.getOptionValue("webdav_user");
+            Logger.getLogger(CerifConverterMain.class.getName()).log(Level.INFO, "webdav host: {0}", webdavUser);
 
-            ftpPass = cmd.getOptionValue("ftp_pass");
-            Logger.getLogger(CerifConverterMain.class.getName()).log(Level.INFO, "ftp host: {0}", ftpPass);
+            webdavPass = cmd.getOptionValue("webdav_pass");
+            Logger.getLogger(CerifConverterMain.class.getName()).log(Level.INFO, "webdav host: {0}", webdavPass);
 
-            Logger.getLogger("org.apache.zookeeper").setLevel(Level.WARNING);
-            Logger.getLogger("org.apache.hadoop.hbase.zookeeper").setLevel(Level.WARNING);
-            Logger.getLogger("org.apache.hadoop.hbase.client").setLevel(Level.WARNING);
             String taskQName = "ckan2cerif";
             File output = new File(System.getProperty("java.io.tmpdir") + File.separator + "cerif");
             output.mkdirs();
-            new Worker(rabbitMQHost, ftpHost, ftpUser, ftpPass, taskQName, output.getAbsolutePath()).consume();
-//            new Executor(rabbitMQHost, zookeeperHost, ftpHost, ftpUser, ftpPass, "/catmap_conf").run();
+            new Worker(rabbitMQHost, webdavHost, webdavUser, webdavPass, taskQName, output.getAbsolutePath()).consume();
+//            new Executor(rabbitMQHost, zookeeperHost, webdavHost, webdavUser, webdavPass, "/catmap_conf").run();
 
 //            mappingsPath = cmd.getOptionValue("mappings");
 //            Logger.getLogger(CerifConverterWorker.class.getName()).log(Level.INFO, "mappings path: {0}", mappingsPath);
 //            generatorPathPolicy = cmd.getOptionValue("generator");
 //            Logger.getLogger(CerifConverterWorker.class.getName()).log(Level.INFO, "generator policy path: {0}", generatorPathPolicy);
 //            consume();
-        } catch (Throwable ex) {
+        } catch (IOException | IllegalArgumentException | TimeoutException ex) {
             Logger.getLogger(CerifConverterMain.class.getName()).log(Level.SEVERE, null, ex);
             Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, "------------EXIT----------------");
             System.exit(-1);
