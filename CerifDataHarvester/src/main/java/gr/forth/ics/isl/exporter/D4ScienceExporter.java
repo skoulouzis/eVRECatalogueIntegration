@@ -69,6 +69,7 @@ public class D4ScienceExporter implements CatalogueExporter {
         for (String path : D4ScienceResources.ALL_RESOURCES_ENDPOINT) {
             if (urlExists(this.endpointUrl + path)) {
                 ckanPath = path;
+                break;
             }
         }
         HttpURLConnection conn = (HttpURLConnection) new URL(this.endpointUrl + ckanPath).openConnection();
