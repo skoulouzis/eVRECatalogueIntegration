@@ -7,7 +7,7 @@ public class D4ScienceResources {
 
     /* Endpoint resources */
     public static final String D4SCIENCE_CATALOG_URL = "https://ckan-d4s.d4science.org";
-    public static final String[] ALL_RESOURCES_ENDPOINT = new String[]{"/api/action/package_list", "/api/action/package_search"};
+    public static final String[] ALL_RESOURCES_ENDPOINT = new String[]{"/api/action/package_list"};
     public static final String RESOURCE_ENDPOINT = "/api/action/package_show";
     public static final String ID_PARAMETER = "id";
 
