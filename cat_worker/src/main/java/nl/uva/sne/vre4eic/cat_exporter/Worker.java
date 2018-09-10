@@ -5,6 +5,8 @@
  */
 package nl.uva.sne.vre4eic.cat_exporter;
 
+import com.github.sardine.Sardine;
+import com.github.sardine.SardineFactory;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -34,9 +36,7 @@ import java.io.PrintWriter;
 import java.net.URL;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.net.PrintCommandListener;
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPReply;
+import org.apache.commons.io.FilenameUtils;
 import org.json.JSONObject;
 import org.w3c.dom.Element;
 
@@ -45,9 +45,9 @@ public class Worker {
     private final String rabbitMQHost;
     private final String taskQeueName;
     private final String outputRfdFolder;
-    private final String ftpHost;
-    private String ftpUser;
-    private String ftpPass;
+    private final String webdavHost;
+    private String webdavUser;
+    private String webdavPass;
 
 //        private enum outputFormat {
 //        RDF_XML,
@@ -60,16 +60,16 @@ public class Worker {
 //        FILE,
 //        DISABLED
 //    }
-    public Worker(String rabbitMQHost, String ftpHost, String ftpUser, String ftpPass, String taskQeueName, String output) throws IOException {
+    public Worker(String rabbitMQHost, String webdavHost, String webdavUser, String webdavPass, String taskQeueName, String output) throws IOException {
         this.taskQeueName = taskQeueName;
         this.rabbitMQHost = rabbitMQHost;
         this.outputRfdFolder = output;
-        if (ftpHost == null) {
-            this.ftpHost = System.getenv("FTP_HOST");
+        if (webdavHost == null) {
+            this.webdavHost = System.getenv("WEBDAV_HOST");
         } else {
-            this.ftpHost = ftpHost;
-            this.ftpUser = ftpUser;
-            this.ftpPass = ftpPass;
+            this.webdavHost = webdavHost;
+            this.webdavUser = webdavUser;
+            this.webdavPass = webdavPass;
         }
 
         Logger.getLogger(Worker.class.getName()).log(Level.INFO, "Consuming from qeue: {0}", taskQeueName);
@@ -109,57 +109,51 @@ public class Worker {
 
                     generator = File.createTempFile("generator", ".tmp");
                     FileUtils.writeByteArrayToFile(generator, generatorData);
-
-                    X3MLEngine.Output rdf = convert(jObject.getString("payload"), mapping, generator);
+                    String xmlCkan = jObject.getString("xml_ckan");
+                    String jsonCkan = jObject.getString("json_ckan");
+                    X3MLEngine.Output rdf = convert(xmlCkan, mapping, generator);
 //                    Logger.getLogger(Worker.class.getName()).log(Level.INFO, "rdf: {0}", rdf);
 
                     String path = new URL(jObject.getString("mappingURL")).getPath();
-                    String mappingName = path.substring(path.lastIndexOf('/') + 1);
+                    String mappingName = FilenameUtils.removeExtension(path.substring(path.lastIndexOf('/') + 1));
 
-                    String fileName = mappingName + "_" + UUID.randomUUID().toString();
+                    String id = new JSONObject(jsonCkan).getJSONObject("result").getString("id");
+                    String fileName = mappingName + "_" + id;
                     File rdfFile = new File(outputRfdFolder + File.separator + fileName + ".rdf");
                     Logger.getLogger(Worker.class.getName()).log(Level.INFO, "fileName: {0}", fileName);
-                    try {
-                        rdf.write(new PrintStream(rdfFile), "application/rdf+xml");
-                    } catch (Exception ex) {
-                        Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
-                        System.exit(-1);
 
-                    }
+//                    rdf.write(new PrintStream(rdfFile), "application/rdf+xml");
+                    rdf.write(new PrintStream(rdfFile), "text/turtle");
+
                     Logger.getLogger(Worker.class.getName()).log(Level.INFO, "Saved file :{0}", rdfFile.getAbsolutePath());
-                    if (ftpHost != null) {
-                        FTPClient client = new FTPClient();
+                    if (webdavHost != null) {
 
-                        client.connect(ftpHost);
-//                        client.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out)));
-                        Logger.getLogger(Worker.class.getName()).log(Level.INFO, "Connected to :{0}", ftpHost);
-                        String ftpUserEnv = System.getenv("FTP_USER_NAME");
-                        if (ftpUserEnv != null) {
-                            ftpUser = ftpUserEnv;
+                        Logger.getLogger(Worker.class.getName()).log(Level.INFO, "Connected to :{0}", webdavHost);
+                        String webdavUserEnv = System.getenv("WEBDAV_USERNAME");
+                        if (webdavUserEnv != null) {
+                            webdavUser = webdavUserEnv;
                         }
-                        String ftpPasswordEnv = System.getenv("FTP_USER_PASS");
-                        if (ftpPasswordEnv != null) {
-                            ftpPasswordEnv = ftpPass;
+                        String webdavPasswordEnv = System.getenv("WEBDAV_PASSWORD");
+                        if (webdavPasswordEnv != null) {
+                            webdavPasswordEnv = webdavPass;
                         }
-                        client.login(ftpUser, ftpPass);
-                        client.enterLocalPassiveMode();
+                        try {
+                            Sardine sardine = SardineFactory.begin(webdavUser, webdavPass);
 
-                        client.changeWorkingDirectory("/" + taskQeueName);
-//                        channel.queueDeclare("conversion_result", true, false, false, null);
-                        if (!FTPReply.isPositiveCompletion(client.getReplyCode())) {
-                            client.makeDirectory("/" + taskQeueName);
-                            client.changeWorkingDirectory("/" + taskQeueName);
+                            if (sardine.exists("http://" + webdavHost + "/" + rdfFile.getName())) {
+                                sardine.delete("http://" + webdavHost + "/" + rdfFile.getName());
+                            }
 
-//                            channel.basicPublish("", "ftp://" + ftpUser + ":" + ftpPass + "@" + ftpHost,
-//                                    MessageProperties.PERSISTENT_TEXT_PLAIN,
-//                                    message.getBytes("UTF-8"));
+                            byte[] rdfData = FileUtils.readFileToByteArray(rdfFile);
+
+                            sardine.put("http://" + webdavHost + "/" + rdfFile.getName(), rdfData);
+
+                            sardine.put("http://" + webdavHost + "/" + fileName + ".xml", xmlCkan.getBytes());
+                            sardine.put("http://" + webdavHost + "/" + fileName + ".json", jsonCkan.getBytes());
+
+                        } catch (IOException ex) {
+                            Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
                         }
-
-                        FileInputStream fis = new FileInputStream(rdfFile);
-
-                        client.storeFile(fileName + ".rdf", fis);
-
-                        client.logout();
                     }
 
                 } catch (IOException | ParserConfigurationException | SAXException ex) {

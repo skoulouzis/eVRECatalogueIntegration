@@ -6,10 +6,8 @@
 package nl.uva.sne.vre4eic.service;
 
 import io.micrometer.core.instrument.MeterRegistry;
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;

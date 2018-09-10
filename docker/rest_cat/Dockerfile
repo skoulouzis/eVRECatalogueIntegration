@@ -20,9 +20,6 @@ CMD echo "spring.rabbitmq.host=$RABBIT_HOST" > catalogue_mapper/WEB-INF/classes/
     echo "management.metrics.export.influx.enabled=true" >> catalogue_mapper/WEB-INF/classes/application.properties && \
     echo "management.metrics.binders.integration.enabled=true" >> catalogue_mapper/WEB-INF/classes/application.properties && \
     echo "management.metrics.binders.uptime.enabled=true" >> catalogue_mapper/WEB-INF/classes/application.properties && \
-    echo "spring.cloud.zookeeper.connectString=$ZOOKEEPER_CONNECT_STRING" >> catalogue_mapper/WEB-INF/classes/application.properties && \
-    echo "spring.cloud.zookeeper.enabled=true" >> catalogue_mapper/WEB-INF/classes/application.properties && \
-    echo "logging.level.org.apache.zookeeper=INFO" >> catalogue_mapper/WEB-INF/classes/application.properties && \
     cat catalogue_mapper/WEB-INF/classes/application.properties && \
     catalina.sh run
     

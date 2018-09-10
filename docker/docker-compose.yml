@@ -1,13 +1,6 @@
 version: '3.1'
 
-services:
-    zookeeper:
-        image: zookeeper
-        ports: 
-            - 2181:2181
-        deploy:
-            restart_policy:
-                condition: on-failure       
+services:     
                 
     rabbit:
         image: rabbitmq:3-management
@@ -29,68 +22,60 @@ services:
             RABBIT_USERNAME: guest
             RABBIT_PASSWORD: guest
             INFLUX_URI: http://influx:8086
-            ZOOKEEPER_CONNECT_STRING: zookeeper:2181
         ports:
             - 8083:8080      
         depends_on:
-            - zookeeper
             - rabbit          
             - influx          
             
     cat-worker:
         image: cat-worker
-        #deploy:
-            #restart_policy:
-                #condition: on-failure      
-            #replicas: 1
+        deploy:
+            restart_policy:
+                condition: on-failure      
         environment:
             RABBIT_HOST: rabbit
             RABBIT_PORT: 5672
             RABBIT_USERNAME: guest
             RABBIT_PASSWORD: guest
-            ZOOKEEPER_HOST: zookeeper
             INFLUX_URI: http://influx:8086
-            FTP_HOST: ftp
-            FTP_USER_NAME: user
-            FTP_USER_PASS: resu      
+            WEBDAV_HOST: webdav
+            WEBDAV_USERNAME: user
+            WEBDAV_PASSWORD: resu      
         depends_on:
-            - zookeeper
             - rabbit   
-            - ftp
+            - webdav
              
-    statistics-cat:
-        image: statistics-cat
-        deploy:
-            restart_policy:
-                condition: on-failure                
-        environment:
-            FTP_HOST: ftp
-            FTP_USER_NAME: user
-            FTP_USER_PASS: resu    
-            RABBIT_HOST: rabbit
-            QUEUE_NAME: rdf_location
-        depends_on:
-            - ftp              
-
-    ftp:
-        image: stilliard/pure-ftpd:hardened
-        ports:
-            - 21:21
-            - 30000-30009:30000-30009
-        environment:
-            FTP_USER_NAME: user
-            FTP_USER_PASS: resu
-            FTP_USER_HOME: /home/user
-        deploy:
-            restart_policy:
-                condition: on-failure         
-            
-    #influx:
-        #image: influxdb
+    #statistics-cat:
+        #image: statistics-cat
+        #deploy:
+            #restart_policy:
+                #condition: on-failure                
         #environment:
-            #INFLUXDB_DB: mydb
-        #volumes:
-            #- influx:/var/lib/influxdb
+            #WEBDAV_HOST: webdav
+            #WEBDAV_USERNAME: user
+            #WEBDAV_PASSWORD: resu    
+            #RABBIT_HOST: rabbit
+            #QUEUE_NAME: rdf_location
+        #depends_on:
+            #- webdav              
+
+    webdav:
+        image: visity/webdav
+        ports:
+            - 80:80
+        deploy:
+            restart_policy:
+                condition: on-failure       
+        volumes:
+            - webdav:/var/www             
+            
+    influx:
+        image: influxdb
+        environment:
+            INFLUXDB_DB: mydb
+        volumes:
+            - influx:/var/lib/influxdb
                     
     #rabbit-reporter :
         #image: alogo53/rabbit-metrics-reporter
@@ -150,4 +135,6 @@ volumes:
     driver: local
   grafana:
     driver: local
+  webdav:
+    driver: local    
     

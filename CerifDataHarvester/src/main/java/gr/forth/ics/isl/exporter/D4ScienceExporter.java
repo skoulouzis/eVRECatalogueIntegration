@@ -81,7 +81,7 @@ public class D4ScienceExporter implements CatalogueExporter {
             }
         }
         JSONObject jsonResultObject = new JSONObject(sb.toString());
-        JSONArray jsonResults = null;
+        JSONArray jsonResults;
         try {
 
             jsonResults = jsonResultObject.getJSONArray(D4ScienceResources.RESULT);
@@ -119,10 +119,8 @@ public class D4ScienceExporter implements CatalogueExporter {
 
     @Override
     public JSONObject exportResource(String resourceId) throws MalformedURLException, IOException {
-//        log.info("Fetching the contents of Resource with ID " + resourceId);
 
         String resourceUrl = this.endpointUrl + D4ScienceResources.RESOURCE_ENDPOINT + "?" + D4ScienceResources.ID_PARAMETER + "=" + resourceId;
-//            log.debug("Fetching resource data from URL: " + resourceUrl);
         HttpURLConnection conn = (HttpURLConnection) new URL(resourceUrl).openConnection();
         StringBuilder sb;
         try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"))) {
