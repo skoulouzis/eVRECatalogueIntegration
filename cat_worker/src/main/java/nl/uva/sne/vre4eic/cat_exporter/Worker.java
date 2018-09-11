@@ -99,6 +99,7 @@ public class Worker {
                 JSONObject jObject = new JSONObject(message);
                 File mapping = null;
                 File generator = null;
+                String ckanRecordID = null;
 //                Logger.getLogger(Worker.class.getName()).log(Level.INFO, "message: {0}", message);
                 try {
                     byte[] mappingData = getBytes(new URL(jObject.getString("mappingURL")));
@@ -117,8 +118,8 @@ public class Worker {
                     String path = new URL(jObject.getString("mappingURL")).getPath();
                     String mappingName = FilenameUtils.removeExtension(path.substring(path.lastIndexOf('/') + 1));
 
-                    String id = new JSONObject(jsonCkan).getJSONObject("result").getString("id");
-                    String fileName = mappingName + "_" + id;
+                    ckanRecordID = new JSONObject(jsonCkan).getJSONObject("result").getString("id");
+                    String fileName = mappingName + "_" + ckanRecordID;
                     File rdfFile = new File(outputRfdFolder + File.separator + fileName + ".rdf");
                     Logger.getLogger(Worker.class.getName()).log(Level.INFO, "fileName: {0}", fileName);
 
@@ -137,29 +138,28 @@ public class Worker {
                         if (webdavPasswordEnv != null) {
                             webdavPasswordEnv = webdavPass;
                         }
-                        try {
-                            Sardine sardine = SardineFactory.begin(webdavUser, webdavPass);
 
-                            if (sardine.exists("http://" + webdavHost + "/" + rdfFile.getName())) {
-                                sardine.delete("http://" + webdavHost + "/" + rdfFile.getName());
-                            }
+                        Sardine sardine = SardineFactory.begin(webdavUser, webdavPass);
 
-                            byte[] rdfData = FileUtils.readFileToByteArray(rdfFile);
-
-                            sardine.put("http://" + webdavHost + "/" + rdfFile.getName(), rdfData);
-
-                            sardine.put("http://" + webdavHost + "/" + fileName + ".xml", xmlCkan.getBytes());
-                            sardine.put("http://" + webdavHost + "/" + fileName + ".json", jsonCkan.getBytes());
-
-                        } catch (IOException ex) {
-                            Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
+                        if (sardine.exists("http://" + webdavHost + "/" + rdfFile.getName())) {
+                            sardine.delete("http://" + webdavHost + "/" + rdfFile.getName());
                         }
+
+                        byte[] rdfData = FileUtils.readFileToByteArray(rdfFile);
+
+                        sardine.put("http://" + webdavHost + "/" + rdfFile.getName(), rdfData);
+
+                        sardine.put("http://" + webdavHost + "/" + fileName + ".xml", xmlCkan.getBytes());
+                        sardine.put("http://" + webdavHost + "/" + fileName + ".json", jsonCkan.getBytes());
+
                     }
 
                 } catch (IOException | ParserConfigurationException | SAXException ex) {
-                    Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
-                    Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, "------------EXIT----------------");
-                    System.exit(-1);
+                    if(ex instanceof org.xml.sax.SAXParseException){
+                        Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, "Failed to convert record with id: "+ckanRecordID, ex);
+                    }else{
+                         Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 } finally {
                     if (channel.isOpen()) {
                         channel.basicAck(envelope.getDeliveryTag(), false);

@@ -96,10 +96,14 @@ public class ExportDocTask implements Callable<String> {
         }
     }
 
-    private CatalogueExporter getExporter(String catalogueURL) {
+    private CatalogueExporter getExporter(String catalogueURL) throws MalformedURLException {
         if (urlExists(catalogueURL + "/api/action/package_list")) {
             return new D4ScienceExporter(catalogueURL);
-        } else {
+        }
+        if (new URL(catalogueURL).getPath().contains("/wps/WebProcessingService") || urlExists(catalogueURL + "/wps/WebProcessingService")){
+            return new WPSExporter(catalogueURL);
+        }
+        else {
             return new RDFExporter(catalogueURL);
         }
     }
