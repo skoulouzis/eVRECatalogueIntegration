@@ -76,6 +76,12 @@ public class D4scienceWPS {
     private String connectURL;
     private String securityToken;
     private static final String SECURITY_TOCKEN_NAME = "gcube-token";
+    
+
+    public static final String WPS_OPERATION_DESCRIBE_PROCESS ="DescribeProcess";
+    public static final String WPS_OPERATION_GET_CAPABILITIES ="GetCapabilities";
+    public static final String WPS_OPERATION_EXECUTE ="Execute";
+        public static final String[] WPS_OPERATION_ALL = new String[]{WPS_OPERATION_DESCRIBE_PROCESS,WPS_OPERATION_GET_CAPABILITIES,WPS_OPERATION_EXECUTE};
 
     // a Map of <url, all available process descriptions>
     private final Map<String, ProcessDescriptionsDocument> processDescriptionsCache;

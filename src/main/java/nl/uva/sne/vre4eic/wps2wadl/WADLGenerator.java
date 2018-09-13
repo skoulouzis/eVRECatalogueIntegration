@@ -7,9 +7,12 @@ package nl.uva.sne.vre4eic.wps2wadl;
 
 import java.io.StringWriter;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import net.opengis.wps.x100.ProcessDescriptionType;
 import org.jvnet.ws.wadl.Application;
 import org.jvnet.ws.wadl.Method;
 import org.jvnet.ws.wadl.Option;
@@ -23,22 +26,48 @@ import org.jvnet.ws.wadl.Resources;
  *
  * @author S. Koulouzis
  */
-public class Converter {
+public class WADLGenerator {
 
     private final URL wpsURLBase;
-    private final Iterable<Option> identifierOptions;
+    private final String lang;
 
-    public Converter(URL wpsURLBase, Iterable<Option> identifierOptions) {
+    public WADLGenerator(URL wpsURLBase, String lang) {
         this.wpsURLBase = wpsURLBase;
-        this.identifierOptions = identifierOptions;
+        this.lang = lang;
     }
 
-    public String convert() throws JAXBException {
+    public String generateExecuteWADL(ProcessDescriptionType processDescription) throws JAXBException {
+
+//        InputDescriptionType[] dataInputs = processDescription.getDataInputs().getInputArray();
+//        for(InputDescriptionType input: dataInputs){
+//
+//        }
         Application application = new Application();
         Resources resources = new Resources();
         resources.setBase(wpsURLBase.toString());
 
-        Resource getCapabilitiesResource = createWebProcessingServiceResources();
+        Resource getCapabilitiesResource = createWebProcessingServiceResources(new String[]{D4scienceWPS.WPS_OPERATION_EXECUTE});
+        resources.getResource().add(getCapabilitiesResource);
+        application.getResources().add(resources);
+
+        List<Option> identifierOptions = new ArrayList<>();
+        Option identifierOption = new Option();
+        identifierOption.setValue(processDescription.getIdentifier().getStringValue());
+        identifierOptions.add(identifierOption);
+
+        Method execute = createExecuteMethod(identifierOptions);
+        application.getResourceTypeOrMethodOrRepresentation().add(execute);
+
+        return toXML(application);
+
+    }
+
+    public String generateBaseWADL(List<Option> identifierOptions) throws JAXBException {
+        Application application = new Application();
+        Resources resources = new Resources();
+        resources.setBase(wpsURLBase.toString());
+
+        Resource getCapabilitiesResource = createWebProcessingServiceResources(D4scienceWPS.WPS_OPERATION_ALL);
         resources.getResource().add(getCapabilitiesResource);
         application.getResources().add(resources);
 
@@ -62,11 +91,11 @@ public class Converter {
         token.setStyle(ParamStyle.QUERY);
         request.getParam().add(token);
 
-        Param lang = new Param();
-        lang.setName("lang");
-        lang.setStyle(ParamStyle.QUERY);
-        lang.setFixed("en-US");
-        request.getParam().add(lang);
+        Param langParam = new Param();
+        langParam.setName("lang");
+        langParam.setStyle(ParamStyle.QUERY);
+        langParam.setFixed(lang);
+        request.getParam().add(langParam);
 
         Param service = new Param();
         service.setName("service");
@@ -95,6 +124,9 @@ public class Converter {
         request.getParam().add(requestParam);
 
         getCapabilities.setRequest(request);
+
+//        Response response = new Response();
+//        response.getStatus().add(Long.valueOf(200));
         return getCapabilities;
     }
 
@@ -124,11 +156,11 @@ public class Converter {
         return describeProcess;
     }
 
-    private Method createExecuteMethod(Iterable<Option> identifierOptions) {
+    private Method createExecuteMethod(List<Option> identifierOptions) {
         Request request = createBaseRequest();
         Method execute = new Method();
-        execute.setName("GET");
         execute.setId("Execute");
+        execute.setName("GET");
 
         Param requestParam = new Param();
         requestParam.setName("request");
@@ -139,9 +171,13 @@ public class Converter {
         Param identifier = new Param();
         identifier.setName("identifier");
         identifier.setStyle(ParamStyle.QUERY);
+        if (identifierOptions.size() == 1) {
+            identifier.setFixed(identifierOptions.get(0).getValue());
+        } else {
+            for (Option option : identifierOptions) {
+                identifier.getOption().add(option);
 
-        for (Option option : identifierOptions) {
-            identifier.getOption().add(option);
+            }
         }
         request.getParam().add(identifier);
 
@@ -154,22 +190,16 @@ public class Converter {
         return execute;
     }
 
-    private Resource createWebProcessingServiceResources() {
+    private Resource createWebProcessingServiceResources(String[] wpsOperations) {
 
         Resource webProcessingService = new Resource();
         webProcessingService.setPath("WebProcessingService");
 
-        Method getCapabilities = new Method();
-        getCapabilities.setHref("#GetCapabilities");
-        webProcessingService.getMethodOrResource().add(getCapabilities);
-
-        Method describeProcessResource = new Method();
-        describeProcessResource.setHref("#DescribeProcessResource");
-        webProcessingService.getMethodOrResource().add(describeProcessResource);
-
-        Method executeResource = new Method();
-        executeResource.setHref("#Execute");
-        webProcessingService.getMethodOrResource().add(executeResource);
+        for (String wpsOperation : wpsOperations) {
+            Method method = new Method();
+            method.setHref("#" + wpsOperation);
+            webProcessingService.getMethodOrResource().add(method);
+        }
 
         return webProcessingService;
     }
@@ -178,6 +208,9 @@ public class Converter {
         JAXBContext context = JAXBContext.newInstance(Application.class);
         Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        marshaller.setProperty("com.sun.xml.bind.xmlDeclaration", Boolean.FALSE);
+//        marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, "http://www.w3.org/2001/XMLSchema");
+
         StringWriter out = new StringWriter();
         marshaller.marshal(application, out);
         return out.toString();
