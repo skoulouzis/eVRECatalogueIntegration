@@ -7,6 +7,8 @@ package nl.uva.sne.vre4eic.rest;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import nl.uva.sne.vre4eic.model.ProcessingStatus;
@@ -35,6 +37,7 @@ public class ConvertController {
 //    http://localhost:8080/rest/convert?catalogue_url=%20https://ckan-d4s.d4science.org&mapping_url=https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping62.x3ml&generator_url=https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/generator.xml
 //    http://localhost:8080/rest/convert?catalogue_url=%20https://catalog.data.gov&mapping_url=https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping62.x3ml&generator_url=https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/generator.xml
 //    http://localhost:8080/catalogue_mapper/convert?catalogue_url=%20https://ckan-d4s.d4science.org&mapping_url=https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping62.x3ml&generator_url=https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/generator.xml
+
     @RequestMapping(value = "/convert", method = RequestMethod.GET, params = {"catalogue_url", "mapping_url", "generator_url"})
     @GetMapping("/")
     public @ResponseBody
@@ -50,6 +53,19 @@ public class ConvertController {
             Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    @RequestMapping(value = "/list_records", method = RequestMethod.GET, params = {"catalogue_url"})
+    public @ResponseBody
+    Collection<String> listRecords(@RequestParam(value = "catalogue_url") String catalogueURL) {
+        Collection<String> records = null;
+        try {
+            records = service.listRecords(catalogueURL);
+        } catch (IOException ex) {
+            Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return records;
+
     }
 
 ////    http://localhost:8080/rest/get_stats?rdf_url=ftp://user:12345@localhost/ckan_Mapping62.x3ml/

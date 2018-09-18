@@ -96,14 +96,13 @@ public class ExportDocTask implements Callable<String> {
         }
     }
 
-    private CatalogueExporter getExporter(String catalogueURL) throws MalformedURLException {
+    public CatalogueExporter getExporter(String catalogueURL) throws MalformedURLException {
         if (urlExists(catalogueURL + "/api/action/package_list")) {
             return new D4ScienceExporter(catalogueURL);
         }
-        if (new URL(catalogueURL).getPath().contains("/wps/WebProcessingService") || urlExists(catalogueURL + "/wps/WebProcessingService")){
+        if (new URL(catalogueURL).getPath().contains("/wps/WebProcessingService") || urlExists(catalogueURL + "/wps/WebProcessingService")) {
             return new WPSExporter(catalogueURL);
-        }
-        else {
+        } else {
             return new RDFExporter(catalogueURL);
         }
     }
@@ -111,12 +110,29 @@ public class ExportDocTask implements Callable<String> {
     private boolean urlExists(String URLName) {
 
         try {
-            HttpURLConnection.setFollowRedirects(false);
+            HttpURLConnection.setFollowRedirects(true);
             //        HttpURLConnection.setInstanceFollowRedirects(false)
             HttpURLConnection con
                     = (HttpURLConnection) new URL(URLName).openConnection();
+            con.setInstanceFollowRedirects(true);
             con.setRequestMethod("HEAD");
-            return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
+
+            int code = con.getResponseCode();
+            if (code != HttpURLConnection.HTTP_OK) {
+                if (code == HttpURLConnection.HTTP_MOVED_TEMP
+                        || code == HttpURLConnection.HTTP_MOVED_PERM
+                        || code == HttpURLConnection.HTTP_SEE_OTHER) {
+                    String newUrl = con.getHeaderField("Location");
+
+                    // get the cookie if need, for login
+                    String cookies = con.getHeaderField("Set-Cookie");
+                    con = (HttpURLConnection) new URL(newUrl).openConnection();
+                    con.setRequestProperty("Cookie", cookies);
+                    code = con.getResponseCode();
+                }
+            }
+
+            return (code == HttpURLConnection.HTTP_OK);
         } catch (MalformedURLException ex) {
             return false;
         } catch (IOException ex) {

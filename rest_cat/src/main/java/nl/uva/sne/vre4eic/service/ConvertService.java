@@ -10,7 +10,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
 import nl.uva.sne.vre4eic.model.ExportDocTask;
@@ -43,8 +45,8 @@ public class ConvertService {
         if (convertTask == null) {
 //            String path = new URL(mappingURL).getPath();
 //            String queueName = path.substring(path.lastIndexOf('/') + 1);
-            String queueName  = "ckan2cerif";
-            ExportDocTask task = new ExportDocTask(catalogueURL, connectionFactory.getRabbitConnectionFactory(), queueName,mappingURL,generatorURL);
+            String queueName = "ckan2cerif";
+            ExportDocTask task = new ExportDocTask(catalogueURL, connectionFactory.getRabbitConnectionFactory(), queueName, mappingURL, generatorURL);
             convertTask = exec.submit(task);
             taskMap.put(catalogueURL, convertTask);
         }
@@ -58,6 +60,11 @@ public class ConvertService {
             process.setStatus("WORKING");
             return process;
         }
+    }
+
+    public Collection<String> listRecords(String catalogueURL) throws MalformedURLException, IOException {
+        ExportDocTask task = new ExportDocTask(catalogueURL, connectionFactory.getRabbitConnectionFactory(), null, null, null);
+        return task.getExporter(catalogueURL).fetchAllDatasetUUIDs();
     }
 
 }
