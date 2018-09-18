@@ -89,7 +89,6 @@ w3-card-4 divpost" width="10%"></table>').addClass(this.tableClass)
 }
 function analyzeCatalogue() {
     var catUrl = document.getElementById("cat_url").value;
-    console.log(catUrl)
 
     var table = new Table()
     table.setHeader(data.k)
