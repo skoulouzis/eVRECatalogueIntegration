@@ -49,6 +49,15 @@ function move() {
             done = false;
             currProgress = 0;
         } else {
+            var catUrl = document.getElementById("cat_url").value;
+            const url = 'http://localhost:8080/rest/convert?catalogue_url=' + catUrl + '&mapping_url=https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping115.x3ml&generator_url=https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml';
+            request.open("GET", url);
+            request.send();
+
+            request.onload = function () {
+                json = JSON.parse(request.responseText);
+                console.log(json)
+            };
             width++;
             elem.style.width = width + '%';
             elem.innerHTML = width * 1 + '%';
