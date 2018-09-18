@@ -51,6 +51,7 @@ function move() {
         } else {
             var catUrl = document.getElementById("cat_url").value;
             const url = 'http://localhost:8080/rest/convert?catalogue_url=' + catUrl + '&mapping_url=https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping115.x3ml&generator_url=https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml';
+            const request = new XMLHttpRequest();
             request.open("GET", url);
             request.send();
 
