@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
+
+
+
     <style>
         #myProgress {
             width: 100%;
@@ -24,6 +27,7 @@
         }
     </style>
     <script src="progress.js"></script> 
+    <script src="check_input.js"></script> 
 
     <style>
         body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
@@ -37,7 +41,7 @@
         </header>
 
 
-        <div class="w3-row-padding w3-light-grey w3-padding-64 w3-container">
+        <div id="demo" class="w3-row-padding w3-light-grey w3-padding-64 w3-container" onload="checkInputs()">
             <div class="w3-content">
 
                 <div class="w3-twothird">
@@ -55,17 +59,18 @@
                         <option value="https://ckan-d4s.d4science.org/">
                         <option value="http://b2find.eudat.eu/">
                     </datalist>
-
                     <div class="table-container"></div>
+                    
                     <br>
-                    <select class="w3-wite">
+                    <select id="target" class="w3-wite" oninput='checkInputs()'>
                         <option value="0">Select Target:</option>
                         <option value="1">CERIF</option>
                         <option value="2">Other</option>
                     </select> 
                     <br>
-                    <button class="w3-button w3-black w3-padding-large w3-large w3-margin-top" 
-                            onclick="move()" id="startBtn">Start</button> 
+                    <button class="w3-button w3-black w3-padding-large w3-large 
+                            w3-margin-top"  disabled="disabled" onclick="move()" 
+                            id="startBtn">Start</button> 
                     <br>
                     <br>
                     <div id="myProgress">
