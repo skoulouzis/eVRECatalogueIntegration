@@ -5,6 +5,7 @@
  */
 package nl.uva.sne.vre4eic.rest;
 
+import com.github.sardine.DavResource;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collection;
@@ -43,9 +44,10 @@ public class ConvertController {
     public @ResponseBody
     ProcessingStatus convert(@RequestParam(value = "catalogue_url") String catalogueURL,
             @RequestParam(value = "mapping_url") String mappingURL,
-            @RequestParam(value = "generator_url") String generatorURL) {
+            @RequestParam(value = "generator_url") String generatorURL,
+            @RequestParam(value = "limit") int limit) {
         try {
-            ProcessingStatus status = service.doProcess(catalogueURL, mappingURL, generatorURL);
+            ProcessingStatus status = service.doProcess(catalogueURL, mappingURL, generatorURL,limit);
             return status;
         } catch (MalformedURLException ex) {
             Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
@@ -55,12 +57,25 @@ public class ConvertController {
         return null;
     }
 
-    @RequestMapping(value = "/list_records", method = RequestMethod.GET, params = {"catalogue_url"})
+    @RequestMapping(value = "/list_records", method = RequestMethod.GET, params = {"catalogue_url","limit"})
     public @ResponseBody
-    Collection<String> listRecords(@RequestParam(value = "catalogue_url") String catalogueURL) {
+    Collection<String> listRecords(@RequestParam(value = "catalogue_url") String catalogueURL,@RequestParam(value = "limit") int limit) {
         Collection<String> records = null;
         try {
-            records = service.listRecords(catalogueURL);
+            records = service.listRecords(catalogueURL,limit);
+        } catch (IOException ex) {
+            Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return records;
+
+    }
+
+    @RequestMapping(value = "/list_results", method = RequestMethod.GET, params = {"mapping_name"})
+    public @ResponseBody
+    Collection<DavResource> listResults(@RequestParam(value = "mapping_name") String mappingName) {
+        Collection<DavResource> records = null;
+        try {
+            records = service.listResults("http://localhost/" + mappingName);
         } catch (IOException ex) {
             Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
         }

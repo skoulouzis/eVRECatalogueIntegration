@@ -39,6 +39,7 @@ import org.xml.sax.SAXException;
 public class D4ScienceExporter implements CatalogueExporter {
 
     private final String endpointUrl;
+    private int limit = -1;
 
     public D4ScienceExporter(String endpointUrl) {
         this.endpointUrl = endpointUrl;
@@ -65,13 +66,16 @@ public class D4ScienceExporter implements CatalogueExporter {
     public Collection<String> fetchAllDatasetUUIDs() throws MalformedURLException, IOException {
 //        log.info("Fetching the list of Resource IDs from the resource catalog");
         Set<String> retCollection = new HashSet<>();
-        String ckanPath = null;
-        for (String path : D4ScienceResources.ALL_RESOURCES_ENDPOINT) {
-            if (urlExists(this.endpointUrl + path)) {
-                ckanPath = path;
-                break;
-            }
+        String ckanPath = "/api/action/package_list";
+        if (this.limit > -1) {
+            ckanPath += "?limit=" + this.limit;
         }
+//        for (String path : D4ScienceResources.ALL_RESOURCES_ENDPOINT) {
+//            if (urlExists(this.endpointUrl + path)) {
+//                ckanPath = path;
+//                break;
+//            }
+//        }
         HttpURLConnection conn = (HttpURLConnection) new URL(this.endpointUrl + ckanPath).openConnection();
         StringBuilder sb;
         try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"))) {
@@ -103,21 +107,20 @@ public class D4ScienceExporter implements CatalogueExporter {
         return retCollection;
     }
 
-    private boolean urlExists(String URLName) {
-        try {
-            HttpURLConnection.setFollowRedirects(false);
-            //        HttpURLConnection.setInstanceFollowRedirects(false)
-            HttpURLConnection con
-                    = (HttpURLConnection) new URL(URLName).openConnection();
-            con.setRequestMethod("HEAD");
-            return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
-        } catch (MalformedURLException ex) {
-            return false;
-        } catch (IOException ex) {
-            return false;
-        }
-    }
-
+//    private boolean urlExists(String URLName) {
+//        try {
+//            HttpURLConnection.setFollowRedirects(false);
+//            //        HttpURLConnection.setInstanceFollowRedirects(false)
+//            HttpURLConnection con
+//                    = (HttpURLConnection) new URL(URLName).openConnection();
+//            con.setRequestMethod("HEAD");
+//            return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
+//        } catch (MalformedURLException ex) {
+//            return false;
+//        } catch (IOException ex) {
+//            return false;
+//        }
+//    }
     @Override
     public JSONObject exportResource(String resourceId) throws MalformedURLException, IOException {
 
@@ -172,5 +175,10 @@ public class D4ScienceExporter implements CatalogueExporter {
 
     public static void main(String[] args) throws GenericException {
         new D4ScienceExporter(D4ScienceResources.D4SCIENCE_CATALOG_URL).exportAll("output");
+    }
+
+    @Override
+    public void setLimit(int limit) {
+        this.limit = limit;
     }
 }

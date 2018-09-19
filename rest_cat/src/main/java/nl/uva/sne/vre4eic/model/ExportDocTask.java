@@ -45,8 +45,9 @@ public class ExportDocTask implements Callable<String> {
     private final String queue;
     private String mappingURL;
     private String generatorURL;
+    private int limit;
 
-    public ExportDocTask(String catalogueURL, ConnectionFactory factory, String queue, String mappingURL, String generatorURL) {
+    public ExportDocTask(String catalogueURL, ConnectionFactory factory, String queue, String mappingURL, String generatorURL, int limit) {
         this.catalogueURL = catalogueURL;
         this.factory = factory;
         if (this.factory == null) {
@@ -55,13 +56,18 @@ public class ExportDocTask implements Callable<String> {
         this.queue = queue;
         this.mappingURL = mappingURL;
         this.generatorURL = generatorURL;
+        this.limit = limit;
     }
 
     private void exportDocuments(String catalogueURL) throws MalformedURLException, GenericException {
 
         try {
             CatalogueExporter exporter = getExporter(catalogueURL);
+            if (this.limit > -1) {
+                exporter.setLimit(limit);
+            }
             Collection<String> allResourceIDs = exporter.fetchAllDatasetUUIDs();
+
             for (String resourceId : allResourceIDs) {
                 JSONObject resource = exporter.exportResource(resourceId);
                 String xml = exporter.transformToXml(resource);

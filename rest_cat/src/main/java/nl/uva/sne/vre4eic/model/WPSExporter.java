@@ -40,5 +40,10 @@ public class WPSExporter implements CatalogueExporter {
     public String transformToXml(JSONObject jsonObject) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
+    @Override
+    public void setLimit(int limit) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

@@ -6,12 +6,9 @@
 package gr.forth.ics.isl.exporter;
 
 import gr.forth.ics.isl.exception.GenericException;
-import gr.forth.ics.isl.exporter.CatalogueExporter;
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -20,7 +17,6 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -104,6 +100,11 @@ public class RDFExporter implements CatalogueExporter {
         } catch (IOException ex) {
             Logger.getLogger(RDFExporter.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public void setLimit(int limit) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
