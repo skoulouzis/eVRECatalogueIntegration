@@ -141,24 +141,24 @@ public class Worker {
 
                         Sardine sardine = SardineFactory.begin(webdavUser, webdavPass);
 
-                        if (sardine.exists("http://" + webdavHost + "/" + rdfFile.getName())) {
-                            sardine.delete("http://" + webdavHost + "/" + rdfFile.getName());
+                        if (sardine.exists("http://" + webdavHost + "/" + mappingName + "/" + rdfFile.getName())) {
+                            sardine.delete("http://" + webdavHost + "/" + mappingName + "/" + rdfFile.getName());
                         }
 
                         byte[] rdfData = FileUtils.readFileToByteArray(rdfFile);
 
-                        sardine.put("http://" + webdavHost + "/" + rdfFile.getName(), rdfData);
+                        sardine.put("http://" + webdavHost + "/" + mappingName + "/" + rdfFile.getName(), rdfData);
 
-                        sardine.put("http://" + webdavHost + "/" + fileName + ".xml", xmlCkan.getBytes());
-                        sardine.put("http://" + webdavHost + "/" + fileName + ".json", jsonCkan.getBytes());
+                        sardine.put("http://" + webdavHost + "/" + mappingName + "/" + fileName + ".xml", xmlCkan.getBytes());
+                        sardine.put("http://" + webdavHost + "/" + mappingName + "/" + fileName + ".json", jsonCkan.getBytes());
 
                     }
 
                 } catch (IOException | ParserConfigurationException | SAXException ex) {
-                    if(ex instanceof org.xml.sax.SAXParseException){
-                        Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, "Failed to convert record with id: "+ckanRecordID, ex);
-                    }else{
-                         Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
+                    if (ex instanceof org.xml.sax.SAXParseException) {
+                        Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, "Failed to convert record with id: " + ckanRecordID, ex);
+                    } else {
+                        Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 } finally {
                     if (channel.isOpen()) {

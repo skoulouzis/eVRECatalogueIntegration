@@ -19,4 +19,7 @@ public interface CatalogueExporter {
     public JSONObject exportResource(String resourceId) throws MalformedURLException, IOException;
 
     public String transformToXml(JSONObject jsonObject);
+
+    public void setLimit(int limit);
+
 }

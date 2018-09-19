@@ -66,7 +66,7 @@ w3-card-4 divpost" width="10%"></table>').addClass(this.tableClass)
 //
     const request = new XMLHttpRequest();
 
-    const url = 'http://localhost:8080/rest/list_records/?catalogue_url=' + this.catalogueURL;
+    const url = 'http://localhost:8080/rest/list_records/?catalogue_url=' + this.catalogueURL+'&limit=200';
     request.open("GET", url);
     request.send();
 
