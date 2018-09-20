@@ -24,18 +24,21 @@ function move() {
     var request = new XMLHttpRequest();
     request.open('GET', convertURL, false);  // `false` makes the request synchronous
     request.send(null);
-    console.log(request.responseText);
+
 
     var resultsURL = 'http://localhost:8080/rest/list_results/?mapping_name=' + mappingName + '&limit=200';
     var request = new XMLHttpRequest();
     request.open('GET', resultsURL, false);  // `false` makes the request synchronous
     request.send(null);
+
+
+
     var numOfRes = 0;
     if (request.status === 200) {
         json = JSON.parse(request.responseText);
         numOfRes = json.length;
     }
-    console.log(numOfRes);
+
 
     var count = 0;
     function frame() {
@@ -47,7 +50,15 @@ function move() {
             document.getElementById("startBtn").disabled = false;
             done = false;
             currProgress = 0;
-            alert("The results are stored in " + window.location.protocol + '//' + window.location.hostname + '/' + mappingName);
+//            alert("The results are stored in " + window.location.protocol + '//' + window.location.hostname + '/' + mappingName);
+            rec_loc = document.getElementById("rec_loc");
+            rec_loc.href = window.location.protocol + '//' + window.location.hostname + '/' + mappingName;
+            rec_loc.style.display = "inline";
+
+
+            document.getElementById("source_rec_url").value = window.location.protocol + '//' + window.location.hostname + '/' + mappingName;
+
+
         } else {
 
             if ((count % 50) === 0 || count <= 0) {
