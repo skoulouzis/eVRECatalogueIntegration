@@ -39,9 +39,4 @@ public class AppConfig implements WebMvcConfigurer {
                     CLASSPATH_RESOURCE_LOCATIONS);
         }
     }
-//    @Override
-//    public void addViewControllers(ViewControllerRegistry registry) {
-//        registry.addViewController("/").setViewName("forward:/index.html");
-//        registry.addViewController("/").setViewName("redirect:/index.html");
-//    }
 }
