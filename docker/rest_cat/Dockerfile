@@ -1,4 +1,4 @@
-FROM tomcat:9
+FROM tomcat:8
 
 ADD catalogue_mapper-1.0-SNAPSHOT.zip /usr/local/tomcat/webapps/
 WORKDIR /usr/local/tomcat/webapps 
