@@ -69,7 +69,7 @@ function move() {
 
         } else {
 
-            if ((count % 50) === 0 || count <= 0) {
+            if ((count % 10) === 0 || count <= 0) {
                 var resultsURL = innerHTML+'/list_results/?mapping_name=' + mappingName;
                 var request = new XMLHttpRequest();
                 request.open('GET', resultsURL, false);  // `false` makes the request synchronous
