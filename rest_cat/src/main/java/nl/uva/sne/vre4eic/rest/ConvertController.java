@@ -7,6 +7,7 @@ package nl.uva.sne.vre4eic.rest;
 
 import com.github.sardine.DavResource;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.util.Collection;
 import java.util.List;
@@ -47,7 +48,7 @@ public class ConvertController {
             @RequestParam(value = "generator_url") String generatorURL,
             @RequestParam(value = "limit") int limit) {
         try {
-            ProcessingStatus status = service.doProcess(catalogueURL, mappingURL, generatorURL,limit);
+            ProcessingStatus status = service.doProcess(catalogueURL, mappingURL, generatorURL, limit);
             return status;
         } catch (MalformedURLException ex) {
             Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
@@ -57,12 +58,12 @@ public class ConvertController {
         return null;
     }
 
-    @RequestMapping(value = "/list_records", method = RequestMethod.GET, params = {"catalogue_url","limit"})
+    @RequestMapping(value = "/list_records", method = RequestMethod.GET, params = {"catalogue_url", "limit"})
     public @ResponseBody
-    Collection<String> listRecords(@RequestParam(value = "catalogue_url") String catalogueURL,@RequestParam(value = "limit") int limit) {
+    Collection<String> listRecords(@RequestParam(value = "catalogue_url") String catalogueURL, @RequestParam(value = "limit") int limit) {
         Collection<String> records = null;
         try {
-            records = service.listRecords(catalogueURL,limit);
+            records = service.listRecords(catalogueURL, limit);
         } catch (IOException ex) {
             Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -75,7 +76,10 @@ public class ConvertController {
     Collection<DavResource> listResults(@RequestParam(value = "mapping_name") String mappingName) {
         Collection<DavResource> records = null;
         try {
-            records = service.listResults("http://localhost/" + mappingName);
+            InetAddress addr;
+            addr = InetAddress.getLocalHost();
+            String hostname = addr.getHostName();
+            records = service.listResults("http://" + hostname + "/" + mappingName);
         } catch (IOException ex) {
             Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
         }
