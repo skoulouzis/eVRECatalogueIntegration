@@ -54,7 +54,7 @@ Table.prototype.build = function (container) {
 
         const request = new XMLHttpRequest();
 
-        const url = 'http://localhost:8080/rest/list_records/?catalogue_url=' + this.catalogueURL + '&limit=200';
+        const url = window.location.protocol + '//' + window.location.hostname + window.location.port+'/catalogue_mapper/list_records/?catalogue_url=' + this.catalogueURL + '&limit=200';
         request.open("GET", url);
 
         request.send();

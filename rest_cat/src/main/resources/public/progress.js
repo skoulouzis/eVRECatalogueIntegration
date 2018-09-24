@@ -5,7 +5,7 @@ function move() {
     var width = 10;
     var id = setInterval(frame, 10);
     var catalogueURL = document.getElementById("cat_url").value;
-    var url = 'http://localhost:8080/rest/list_records/?catalogue_url=' + catalogueURL + '&limit=200';
+    var url = window.location.protocol + '//' + window.location.hostname + window.location.port+'/catalogue_mapper/list_records/?catalogue_url=' + catalogueURL + '&limit=200';
 
 
     var request = new XMLHttpRequest();
@@ -20,13 +20,13 @@ function move() {
     var mappingURL = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping115.x3ml'
     var mappingName = mappingURL.substring(mappingURL.lastIndexOf("/") + 1, mappingURL.lastIndexOf("."));
     var generator_url = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml'
-    const convertURL = 'http://localhost:8080/rest/convert?catalogue_url=' + catalogueURL + '&mapping_url=' + mappingURL + '&generator_url=' + generator_url + '&limit=200';
+    const convertURL = window.location.protocol + '//' + window.location.hostname + window.location.port+'/catalogue_mapper/convert?catalogue_url=' + catalogueURL + '&mapping_url=' + mappingURL + '&generator_url=' + generator_url + '&limit=200';
     var request = new XMLHttpRequest();
     request.open('GET', convertURL, false);  // `false` makes the request synchronous
     request.send(null);
 
 
-    var resultsURL = 'http://localhost:8080/rest/list_results/?mapping_name=' + mappingName + '&limit=200';
+    var resultsURL = window.location.protocol + '//' + window.location.hostname + window.location.port+'/catalogue_mapper/list_results/?mapping_name=' + mappingName + '&limit=200';
     var request = new XMLHttpRequest();
     request.open('GET', resultsURL, false);  // `false` makes the request synchronous
     request.send(null);
@@ -62,7 +62,7 @@ function move() {
         } else {
 
             if ((count % 50) === 0 || count <= 0) {
-                var resultsURL = 'http://localhost:8080/rest/list_results/?mapping_name=' + mappingName;
+                var resultsURL = window.location.protocol + '//' + window.location.hostname + window.location.port+'/catalogue_mapper/list_results/?mapping_name=' + mappingName;
                 var request = new XMLHttpRequest();
                 request.open('GET', resultsURL, false);  // `false` makes the request synchronous
                 request.send(null);
