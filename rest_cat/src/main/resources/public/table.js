@@ -35,6 +35,10 @@ Table.prototype.setTableClass = function (tableClass) {
     return this
 }
 Table.prototype.build = function (container) {
+    var innerHTML = window.location.href.split('/');
+    innerHTML.pop();
+    innerHTML = innerHTML.join('/');
+
     if (this.catalogueURL !== null || this.catalogueURL.length > 0) {
         document.getElementById("loader").style.display = "inline";
 
@@ -54,7 +58,7 @@ Table.prototype.build = function (container) {
 
         const request = new XMLHttpRequest();
 
-        const url = 'http://localhost:8080/rest/list_records/?catalogue_url=' + this.catalogueURL + '&limit=200';
+        const url = innerHTML + '/list_records/?catalogue_url=' + this.catalogueURL + '&limit=200';
         request.open("GET", url);
 
         request.send();
