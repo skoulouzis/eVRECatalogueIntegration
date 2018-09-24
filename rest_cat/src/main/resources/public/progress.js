@@ -10,7 +10,7 @@ function move() {
     var id = setInterval(frame, 10);
     var catalogueURL = document.getElementById("cat_url").value;
      
-    var url = innerHTML+'/list_records/?catalogue_url=' + catalogueURL + '&limit=200';
+    var url = innerHTML+'/list_records/?catalogue_url=' + catalogueURL + '&limit=80';
 
 
     var request = new XMLHttpRequest();
@@ -28,13 +28,13 @@ function move() {
 
     
     var generator_url = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml'
-    const convertURL = innerHTML+'/convert?catalogue_url=' + catalogueURL + '&mapping_url=' + mappingURL + '&generator_url=' + generator_url + '&limit=200';
+    const convertURL = innerHTML+'/convert?catalogue_url=' + catalogueURL + '&mapping_url=' + mappingURL + '&generator_url=' + generator_url + '&limit=80';
     var request = new XMLHttpRequest();
     request.open('GET', convertURL, false);  // `false` makes the request synchronous
     request.send(null);
 
 
-    var resultsURL = innerHTML+'/list_results/?mapping_name=' + mappingName + '&limit=200';
+    var resultsURL = innerHTML+'/list_results/?mapping_name=' + mappingName + '&limit=80';
     var request = new XMLHttpRequest();
     request.open('GET', resultsURL, false);  // `false` makes the request synchronous
     request.send(null);
