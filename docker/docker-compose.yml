@@ -22,6 +22,7 @@ services:
             RABBIT_USERNAME: guest
             RABBIT_PASSWORD: guest
             INFLUX_URI: http://influx:8086
+            WEBDAV_HOST: webdav            
         ports:
             - 8083:8080      
         depends_on:

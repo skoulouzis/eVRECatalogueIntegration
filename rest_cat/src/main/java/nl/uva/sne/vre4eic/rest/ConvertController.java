@@ -7,8 +7,10 @@ package nl.uva.sne.vre4eic.rest;
 
 import com.github.sardine.DavResource;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
@@ -76,15 +78,56 @@ public class ConvertController {
     Collection<DavResource> listResults(@RequestParam(value = "mapping_name") String mappingName) {
         Collection<DavResource> records = null;
         try {
-            InetAddress addr;
-            addr = InetAddress.getLocalHost();
-            String hostname = addr.getHostName();
-            records = service.listResults("http://" + hostname + "/" + mappingName);
+
+            String webDAVURL = "http://" + System.getenv("WEBDAV_HOST") + "/" + mappingName;
+            if (webDAVURL == null) {
+                InetAddress addr;
+                addr = InetAddress.getLocalHost();
+                String hostname = addr.getHostName();
+                webDAVURL = "http://" + hostname + "/" + mappingName;
+                if (!urlExists(webDAVURL)) {
+                    return null;
+                }
+            }
+            Logger.getLogger(ConvertController.class.getName()).log(Level.INFO, "Webdav: {0}", webDAVURL);
+            records = service.listResults(webDAVURL);
         } catch (IOException ex) {
             Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return records;
+    }
 
+    private boolean urlExists(String URLName) {
+
+        try {
+            HttpURLConnection.setFollowRedirects(true);
+            //        HttpURLConnection.setInstanceFollowRedirects(false)
+            HttpURLConnection con
+                    = (HttpURLConnection) new URL(URLName).openConnection();
+            con.setInstanceFollowRedirects(true);
+            con.setRequestMethod("HEAD");
+
+            int code = con.getResponseCode();
+            if (code != HttpURLConnection.HTTP_OK) {
+                if (code == HttpURLConnection.HTTP_MOVED_TEMP
+                        || code == HttpURLConnection.HTTP_MOVED_PERM
+                        || code == HttpURLConnection.HTTP_SEE_OTHER) {
+                    String newUrl = con.getHeaderField("Location");
+
+                    // get the cookie if need, for login
+                    String cookies = con.getHeaderField("Set-Cookie");
+                    con = (HttpURLConnection) new URL(newUrl).openConnection();
+                    con.setRequestProperty("Cookie", cookies);
+                    code = con.getResponseCode();
+                }
+            }
+
+            return (code == HttpURLConnection.HTTP_OK);
+        } catch (MalformedURLException ex) {
+            return false;
+        } catch (IOException ex) {
+            return false;
+        }
     }
 
 ////    http://localhost:8080/rest/get_stats?rdf_url=ftp://user:12345@localhost/ckan_Mapping62.x3ml/
