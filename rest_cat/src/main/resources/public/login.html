@@ -131,15 +131,17 @@
         </style>
     </head>
     <body>
+                <header class="w3-container w3-black w3-center" style="padding:16px 2px">
+            <h1 class="w3-margin w3-large">Catalogue Integrator</h1>
+        </header>
         <div id="demo" class="w3-white w3-padding-64 w3-container w3-left">
-            <h2>Modal Login Form</h2>
-            
+
             <button class="w3-button w3-black
-                            w3-margin-top" onclick="document.getElementById('id01').style.display = 'block'" style="width:auto;">Login</button>
+                    w3-margin-top" onclick="document.getElementById('id01').style.display = 'block'" style="width:auto;">Login</button>
 
             <div id="id01" class="modal">
 
-                <form class="modal-content animate" action="/action_page.php">
+                <form class="modal-content animate" action="<c:url value='j_spring_security_check' />" method='POST'>>
                     <div class="imgcontainer">
                         <span onclick="document.getElementById('id01').style.display = 'none'" class="close" title="Close Modal">&times;</span>
                         <!--<img src="img_avatar2.png" alt="Avatar" class="avatar">-->
@@ -153,7 +155,7 @@
                         <input type="password" placeholder="Enter Password" name="psw" required>
 
                         <button class="w3-button w3-black
-                            w3-margin-top" type="submit">Login</button>
+                                w3-margin-top" type="submit">Login</button>
                         <label>
                             <input type="checkbox" checked="checked" name="remember"> Remember me
                         </label>
@@ -161,7 +163,7 @@
 
                     <div class="container" style="background-color:#f1f1f1">
                         <button class="w3-button w3-black
-                            w3-margin-top" type="button" onclick="document.getElementById('id01').style.display = 'none'" class="cancelbtn">Cancel</button>
+                                w3-margin-top" type="button" onclick="document.getElementById('id01').style.display = 'none'" class="cancelbtn">Cancel</button>
                         <span class="psw">Forgot <a href="#">password?</a></span>
                     </div>
                 </form>
@@ -181,6 +183,22 @@
                 }
             }
         </script>
+    <!-- Footer -->
+        <footer class="w3-container w3-padding-64 w3-center">  
+            <div class="w3-xlarge w3-padding-32">
+                <img src="https://teaching.science.uva.nl/wp-content/uploads/2017/12/uva-logo.png" alt="HTML5 Icon" width="70" height="75" >
+                <img src="https://www.envriplus.eu/wp-content/uploads/2015/08/ENVRI-plus_m.png" alt="HTML5 Icon" width="95" height="70" hspace="100">
+                <img src="https://www.envriplus.eu/wp-content/uploads/2017/10/Untitled-300x294.png" alt="HTML5 Icon" width="80" height="80">
+                <br>
+                <small>
 
+                    <!--<p>Contact information: <a href="mailto:someone@example.com">-->
+                    <!--someone@example.com</a>.</p>-->
+                    &copy; Copyright 2018, University of Amsterdam
+                </small>
+
+                <i class="fa fa-email w3-hover-opacity"></i>
+            </div>
+        </footer>
     </body>
 </html>

@@ -40,6 +40,7 @@ public class UserService implements UserDetailsService {
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setEnabled(true);
+        user.setPassword("$2a$10$tI4IVSts4.aspd.631X.se5BWhPh0SISVUbmtB9B600MHHsRoSdVi");
         user.setCredentialsNonExpired(true);
         Collection<String> roles = new ArrayList<>();
         roles.add("USER");

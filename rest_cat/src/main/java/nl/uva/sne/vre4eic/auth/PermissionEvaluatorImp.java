@@ -28,18 +28,18 @@ public class PermissionEvaluatorImp implements PermissionEvaluator {
 
     @Override
     public boolean hasPermission(Authentication a, Object o, Object o1) {
-        if (!a.isAuthenticated()) {
-            return false;
-        }
-        if (!(a.getPrincipal() instanceof User)) {
-            return false;
-        } else {
-            User user = (User) a.getPrincipal();
-            
-            return true;
-
-        }
-//        return false;
+//        if (!a.isAuthenticated()) {
+//            return false;
+//        }
+//        if (!(a.getPrincipal() instanceof User)) {
+//            return false;
+//        } else {
+//            User user = (User) a.getPrincipal();
+//            
+//            return true;
+//
+//        }
+        return true;
     }
 
     @Override
