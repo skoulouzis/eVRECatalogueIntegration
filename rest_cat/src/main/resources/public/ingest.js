@@ -4,6 +4,8 @@ function ingest() {
     if (source_rec_url !== null && source_rec_url.length > 0 && ingest_cat_url !== null && ingest_cat_url.length > 0) {
         var ingestBtn = document.getElementById("ingestBtn");
         ingestBtn.disabled = false;
+        var win = window.open(ingest_cat_url, '_blank');
+        win.focus();
     }
 }
 

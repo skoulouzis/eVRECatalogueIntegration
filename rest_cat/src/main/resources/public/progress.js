@@ -63,9 +63,12 @@ function move() {
             done = false;
             currProgress = 0;
 //            alert("The results are stored in " + window.location.protocol + '//' + window.location.hostname + '/' + mappingName);
-//            rec_loc = document.getElementById("rec_loc");
-//            rec_loc.href = window.location.protocol + '//' + window.location.hostname + '/' + mappingName;
-//            rec_loc.style.display = "inline";
+            var rec_loc = document.getElementById("rec_loc");
+            if (rec_loc !== null) {
+                rec_loc.href = window.location.protocol + '//' + window.location.hostname + '/' + mappingName;
+                rec_loc.style.display = "inline";
+            }
+
 
 
 //            document.getElementById("source_rec_url").value = window.location.protocol + '//' + window.location.hostname + '/' + mappingName;
