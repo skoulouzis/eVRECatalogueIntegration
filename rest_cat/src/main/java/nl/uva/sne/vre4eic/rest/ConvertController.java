@@ -79,7 +79,7 @@ public class ConvertController {
         Collection<DavResource> records = null;
         try {
             String webdavHost = System.getenv("WEBDAV_HOST");
-            String webDAVURL = null;
+            String webDAVURL;
             if (webdavHost == null) {
                 InetAddress addr;
                 addr = InetAddress.getLocalHost();
@@ -88,6 +88,8 @@ public class ConvertController {
                 if (!urlExists(webDAVURL)) {
                     return null;
                 }
+            }else{
+                webDAVURL = "http://" + webdavHost + "/" + mappingName;
             }
             Logger.getLogger(ConvertController.class.getName()).log(Level.INFO, "Webdav: {0}", webDAVURL);
             records = service.listResults(webDAVURL);
