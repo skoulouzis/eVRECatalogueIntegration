@@ -16,4 +16,5 @@ cp catalogue_mapper-1.0-SNAPSHOT.zip ../../docker/rest_cat/
 cd ../../docker/cat_worker/
 sudo docker build -t cat-worker .
 
+cd ../rest_cat/
 sudo docker build -t rest-cat .
