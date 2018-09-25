@@ -78,13 +78,13 @@ public class ConvertController {
     Collection<DavResource> listResults(@RequestParam(value = "mapping_name") String mappingName) {
         Collection<DavResource> records = null;
         try {
-
-            String webDAVURL = "http://" + System.getenv("WEBDAV_HOST") + "/" + mappingName;
-            if (webDAVURL == null) {
+            String webdavHost = System.getenv("WEBDAV_HOST");
+            String webDAVURL = null;
+            if (webdavHost == null) {
                 InetAddress addr;
                 addr = InetAddress.getLocalHost();
-                String hostname = addr.getHostName();
-                webDAVURL = "http://" + hostname + "/" + mappingName;
+                webdavHost = addr.getHostName();
+                webDAVURL = "http://" + webdavHost + "/" + mappingName;
                 if (!urlExists(webDAVURL)) {
                     return null;
                 }
