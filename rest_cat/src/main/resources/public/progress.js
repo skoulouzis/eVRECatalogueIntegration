@@ -82,7 +82,7 @@ function move() {
                     json = JSON.parse(request.responseText);
                     numOfRes = json.length;
                 }
-//                console.log(count)
+                console.log(count);
             }
             width = Math.round((((numOfRes - 1) / 3) / numOfRec) * 100);
             elem.style.width = width + '%';
