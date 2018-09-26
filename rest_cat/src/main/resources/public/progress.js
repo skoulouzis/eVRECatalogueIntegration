@@ -120,20 +120,20 @@ function download() {
 function getMappingParams() {
     var mappingSelect = document.getElementById("mappingSelect").value;
     var mappingInt = parseInt(mappingSelect)
-    var mappingURL = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping115.x3ml'
-    var generator_url = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml'
+    var mappingURL = 'https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/Mapping115.x3ml'
+    var generator_url = 'https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml'
     switch (mappingInt) {
         case 1:
-            mappingURL = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping115.x3ml'
-            generator_url = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml'
+            mappingURL = 'https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/Mapping115.x3ml'
+            generator_url = 'https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml'
             break;
         case 2:
-            mappingURL = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping120.x3ml'
-            generator_url = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/ENVRIplus-generator-policy___13-07-2018131200___11511.xml'
+            mappingURL = 'https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/Mapping120.x3ml'
+            generator_url = 'https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/ENVRIplus-generator-policy___13-07-2018131200___11511.xml'
             break;
         default:
-            mappingURL = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping115.x3ml'
-            generator_url = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml'
+            mappingURL = 'https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/Mapping115.x3ml'
+            generator_url = 'https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml'
     }
     return [mappingURL, generator_url];
 }
