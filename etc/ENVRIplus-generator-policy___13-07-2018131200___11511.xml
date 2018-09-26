@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<generator_policy>
+
+    <generator name="oil-baseClassification" prefix="base">
+        <pattern>{arg1}</pattern>
+    </generator>
+
+    <generator name="envri-rmClassification" prefix="rm">
+        <pattern>{arg1}</pattern>
+    </generator>
+
+    <generator name="SimpleLabel">
+        <pattern>{label}</pattern>
+    </generator>
+	
+	<generator name="CompositeLabel">
+        <pattern>{label} {text}</pattern>
+    </generator>
+	
+	<generator name="eurocris-LOD" prefix="vre4eic">
+        <pattern>{arg1}.{arg2}</pattern>
+    </generator>
+	
+	<generator name="SemCerifURI" prefix="vre4eic">
+		<pattern>Classification.{term}</pattern>
+	</generator>
+	<generator name="ClassSchemeURI" prefix="vre4eic">
+		<pattern>ClassScheme.{term}</pattern>
+	</generator>
+	
+	<generator name="LocalTermURI-2" prefix="vre4eic">
+        <pattern>ENVRIplus.{arg1}.{arg2}</pattern>
+    </generator>
+	<generator name="LocalTermURI-3" prefix="vre4eic">
+        <pattern>ENVRIplus.{arg1}.{arg2}.{arg3}</pattern>
+    </generator>
+	<generator name="LocalTermURI-4" prefix="vre4eic">
+        <pattern>ENVRIplus.{arg1}.{arg2}.{arg3}.{arg4}</pattern>
+    </generator>
+	
+	<generator name="CompositeLabel-4">
+        <pattern>ENVRIplus: {arg1} {arg2} {arg3} {arg4}</pattern>
+    </generator>
+	
+	<generator name="GermanDateTime">
+        <custom generatorClass="gr.forth.GermanDate">
+            <set-arg name="bound" type="constant"/>
+            <set-arg name="text"/>
+        </custom>
+    </generator>
+	<generator name="URIorUUID">
+        <custom generatorClass="gr.forth.URIorUUID">
+            <set-arg name="text"/>
+        </custom>
+    </generator>
+	<generator name="URNfromTextualContent" prefix="vre4eic">
+        <custom generatorClass="gr.forth.TextualContent">
+            <set-arg name="text" type="xpath"/>
+        </custom>
+    </generator>
+	
+	<generator name="ConcatMultipleTerms">
+		<custom generatorClass="gr.forth.ConcatMultipleTerms">
+            <set-arg name="prefix" type="constant"/>
+            <set-arg name="sameTermsDelim" type="constant"/>
+            <set-arg name="diffTermsDelim" type="constant"/>
+            <set-arg name="text1"/>
+        </custom>
+	</generator>
+
+</generator_policy>
