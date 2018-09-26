@@ -1,4 +1,7 @@
 function move() {
+    if (checkInputs()) {
+
+    }
     var innerHTML = window.location.href.split('/');
     innerHTML.pop();
     innerHTML = innerHTML.join('/');
@@ -10,6 +13,11 @@ function move() {
     var id = setInterval(frame, 10);
     var catalogueURL = document.getElementById("cat_url").value;
 
+
+    var mappingParams = getMappingParams();
+    var mappingURL = mappingParams[0];
+    var generator_url = mappingParams[1];
+      
     var url = innerHTML + '/list_records/?catalogue_url=' + catalogueURL + '&limit=80';
 
 
@@ -21,33 +29,14 @@ function move() {
         json = JSON.parse(request.responseText);
         numOfRec = json.length;
     }
-    var targetInt = document.getElementById("target").value;
-    var mappingURL = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping115.x3ml'
-    var generator_url = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml'
-//    switch (targetInt) {
-//        case 1:
-//            mappingURL = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping115.x3ml'
-//            generator_url = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml'
-//            break;
-//        case 2:
-//            mappingURL = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping120.x3ml'
-//            generator_url = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/ENVRIplus-generator-policy___13-07-2018131200___11511.xml'
-//            break;
-//        case 3:
-//            mappingURL = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping62.x3ml'
-//            generator_url = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/generator.xml'
-//            break;            
-//        default:
-//            mappingURL = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping115.x3ml'
-//            generator_url = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml'
-//    }
 
 
-    var mappingName = mappingURL.substring(mappingURL.lastIndexOf("/") + 1, mappingURL.lastIndexOf("."));
 
 
 
 
+    var mappingName = mappingURL.substring(mappingURL.lastIndexOf("/") + 1, mappingURL.lastIndexOf("."));
+    console.log(mappingName)
     const convertURL = innerHTML + '/convert?catalogue_url=' + catalogueURL + '&mapping_url=' + mappingURL + '&generator_url=' + generator_url + '&limit=80';
     var request = new XMLHttpRequest();
     request.open('GET', convertURL, false);  // `false` makes the request synchronous
@@ -59,14 +48,11 @@ function move() {
     request.open('GET', resultsURL, false);  // `false` makes the request synchronous
     request.send(null);
 
-
-
     var numOfRes = 0;
     if (request.status === 200) {
         json = JSON.parse(request.responseText);
         numOfRes = json.length;
     }
-
 
     var count = 0;
     function frame() {
@@ -121,4 +107,30 @@ function download() {
 
     var win = window.open(url, '_blank');
     win.focus();
+}
+
+
+function getMappingParams() {
+    var mappingSelect = document.getElementById("mappingSelect").value;
+    var mappingInt = parseInt(mappingSelect)
+    var mappingURL = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping115.x3ml'
+    var generator_url = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml'
+    switch (mappingInt) {
+        case 1:
+            mappingURL = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping115.x3ml'
+            generator_url = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml'
+            break;
+        case 2:
+            mappingURL = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping120.x3ml'
+            generator_url = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/ENVRIplus-generator-policy___13-07-2018131200___11511.xml'
+            break;
+        case 3:
+            mappingURL = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping62.x3ml'
+            generator_url = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/generator.xml'
+            break;
+        default:
+            mappingURL = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping115.x3ml'
+            generator_url = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml'
+    }
+    return [mappingURL, generator_url];
 }
