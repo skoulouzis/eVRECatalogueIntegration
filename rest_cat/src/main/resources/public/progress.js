@@ -91,7 +91,7 @@ function move() {
 
 
 
-//            document.getElementById("source_rec_url").value = window.location.protocol + '//' + window.location.hostname + '/' + mappingName;
+            document.getElementById("source_rec_url").value = window.location.protocol + '//' + window.location.hostname + '/' + mappingName;
             downloadBtn.disabled = false;
 
         } else {

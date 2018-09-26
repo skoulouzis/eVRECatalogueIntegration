@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>Metadata Recorder Creator</title>
         <link rel="icon" href="https://www.envriplus.eu/wp-content/uploads/2017/10/Untitled-300x294.png">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -33,11 +34,27 @@
         </style>
 
         <style>
+            #ingestProgress {
+                width: 100%;
+                background-color: #ddd;
+            }
+
+            #ingestBar {
+                width: 0%;
+                height: 30px;
+                background-color: #4CAF50;
+                text-align: center;
+                line-height: 30px;
+                color: white;
+            }
+        </style>        
+
+        <style>
             /* Center the loader */
             #loader {
                 position: absolute;
-                left: 15%;
-                top: 45%;
+                left: 43%;
+                top: 70%;
                 z-index: 1;
                 width: 150px;
                 height: 150px;
@@ -93,14 +110,17 @@
             .fa-anchor,.fa-coffee {font-size:200px}
         </style>
     </head>
-    <body style="margin:0;">
+    <body style="margin:0;">    
         <!-- Header -->
-        <div w3-include-html="header.html"></div> 
+        <header class="w3-container w3-gray w3-center" style="padding:16px 2px">
+            <h1 class="w3-margin w3-large">Metadata Recorder Creator</h1>
+            <img src="https://teaching.science.uva.nl/wp-content/uploads/2017/12/uva-logo.png" alt="HTML5 Icon" width="70" height="75" >
+            <img src="https://www.envriplus.eu/wp-content/uploads/2015/08/ENVRI-plus_m.png" alt="HTML5 Icon" width="95" height="70" hspace="100">
+            <img src="https://www.envriplus.eu/wp-content/uploads/2017/10/Untitled-300x294.png" alt="HTML5 Icon" width="80" height="80">
+        </header>
 
-        <script>
-            includeHTML();
-        </script>
-        <div id="demo" class="w3-white w3-padding-64 w3-container ">
+
+        <div id="demo" class="w3-white w3-padding-64 w3-container w3-center">
 
             <div class="w3-content">
 
@@ -109,12 +129,14 @@
                     <label for="cat_url">Catalogue URL:</label>
                     <input id="cat_url" name="cat_url" type="url"
                            list="defaultURLs" size="40">
+
                     <datalist id="defaultURLs">
                         <option value="https://ckan-d4s.d4science.org/">
                         <option value="http://b2find.eudat.eu/">
                     </datalist>
-                    <button class="w3-button w3-black
-                            w3-margin-top"  onclick="analyzeCatalogue()" 
+                    <br>
+                    <button class="w3-button w3-black w3-padding-large w3-large 
+                            w3-margin-top btn btn-success"  onclick="analyzeCatalogue()" 
                             id="analyzeBtn">Analyze</button> 
 
 
@@ -146,7 +168,7 @@
                     <button style="font-size:14px">Configure<i class="fa fa-gear" onclick="buildFileSelector()"></i></button>
                     <br>
                     <button class="w3-button w3-black w3-padding-large w3-large 
-                            w3-margin-top"  disabled="disabled" onclick="move()" 
+                            w3-margin-top btn btn-success"  disabled="disabled" onclick="move()" 
                             id="startBtn">Start</button> 
                     <br>
                     <br>
@@ -158,23 +180,15 @@
             </div>
         </div>
 
-        <div id="demo" class="w3-white w3-container  w3-padding-64">
+        <div id="demo" class="w3-white w3-container w3-padding-64 w3-center">
             <div class="w3-content">
                 <div class="w3-twothird">
                     <h3>Step 3: Access Mapped Records</h3>
                     <button id="downloadBtn" class="w3-button w3-black w3-padding-large w3-large 
-                            w3-margin-top btn btn-success" disabled="disabled" onclick="download()"> Access</button>
-
-                    <!--<a style="display: none" id="rec_loc" href="http://localhost" target="_blank">Records Location</a>-->
-                    <!--                    <button class="w3-button w3-black w3-padding-large w3-large 
-                                                w3-margin-top"  disabled="disabled" onclick="download()" 
-                                                id="downloadBtn">Access</button>                     -->
+                            w3-margin-top btn btn-success" disabled="disabled" onclick="download()">Download</button>                      
                 </div>
-
             </div>
         </div>
-
-
 
         <div id="demo" class="w3-light-grey w3-container ">
             <div class="w3-content">
@@ -196,6 +210,12 @@
                     <button class="w3-button w3-black w3-padding-large w3-large 
                             w3-margin-top btn btn-success" disabled="disabled"  onclick="ingest()" 
                             id="ingestBtn">Ingest</button> 
+                    <br> 
+                    <br>
+                    <div id="ingestProgress">
+                        <div  class="w3-black" id="ingestBar">0%</div>
+                    </div>
+                    <br>
 
                 </div>
             </div>
@@ -206,23 +226,11 @@
         <!-- Footer -->
         <footer class="w3-container w3-padding-64 w3-center">  
             <div class="w3-xlarge w3-padding-32 w3-black">
-                <!--                <img src="https://teaching.science.uva.nl/wp-content/uploads/2017/12/uva-logo.png" alt="HTML5 Icon" width="70" height="75" >
-                                <img src="https://www.envriplus.eu/wp-content/uploads/2015/08/ENVRI-plus_m.png" alt="HTML5 Icon" width="95" height="70" hspace="100">
-                                <img src="https://www.envriplus.eu/wp-content/uploads/2017/10/Untitled-300x294.png" alt="HTML5 Icon" width="80" height="80">-->
-                <br>
                 <small>
-
-                    <!--<p>Contact information: <a href="mailto:someone@example.com">-->
-                    <!--someone@example.com</a>.</p>-->
                     &copy; Copyright 2018, University of Amsterdam
                 </small>
 
                 <i class="fa fa-email w3-hover-opacity"></i>
-                <!--                                <i class="fa fa-instagram w3-hover-opacity"></i>
-                                                <i class="fa fa-snapchat w3-hover-opacity"></i>
-                                                <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-                                                <i class="fa fa-twitter w3-hover-opacity"></i>
-                                                <i class="fa fa-linkedin w3-hover-opacity"></i>-->
             </div>
         </footer>
     </body>
