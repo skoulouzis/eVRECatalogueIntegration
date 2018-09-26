@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Metadata Recorder Creator</title>
+        <title>CERIF Community Cataloger Manager</title>
         <link rel="icon" href="https://www.envriplus.eu/wp-content/uploads/2017/10/Untitled-300x294.png">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -113,7 +113,7 @@
     <body style="margin:0;">    
         <!-- Header -->
         <header class="w3-container w3-gray w3-center" style="padding:16px 2px">
-            <h1 class="w3-margin w3-large">Metadata Recorder Creator</h1>
+            <h1 class="w3-margin w3-large">CERIF Community Cataloger Manager</h1>
             <img src="https://teaching.science.uva.nl/wp-content/uploads/2017/12/uva-logo.png" alt="HTML5 Icon" width="70" height="75" >
             <img src="https://www.envriplus.eu/wp-content/uploads/2015/08/ENVRI-plus_m.png" alt="HTML5 Icon" width="95" height="70" hspace="100">
             <img src="https://www.envriplus.eu/wp-content/uploads/2017/10/Untitled-300x294.png" alt="HTML5 Icon" width="80" height="80">
@@ -165,7 +165,9 @@
                         <option value="1">CERIF</option>
                         <option value="2">Other</option>
                     </select> 
-                    <button style="font-size:14px">Configure<i class="fa fa-gear" onclick="buildFileSelector()"></i></button>
+                    <select id="mappingSelect" class="w3-wite">
+                        <option value=0>Select Mapping: </option>
+                    </select>    
                     <br>
                     <button class="w3-button w3-black w3-padding-large w3-large 
                             w3-margin-top btn btn-success"  disabled="disabled" onclick="move()" 

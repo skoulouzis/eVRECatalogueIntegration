@@ -82,20 +82,16 @@ function move() {
             document.getElementById("startBtn").disabled = false;
             done = false;
             currProgress = 0;
-//            alert("The results are stored in " + window.location.protocol + '//' + window.location.hostname + '/' + mappingName);
             var rec_loc = document.getElementById("rec_loc");
             if (rec_loc !== null) {
                 rec_loc.href = window.location.protocol + '//' + window.location.hostname + '/' + mappingName;
                 rec_loc.style.display = "inline";
             }
-
-
-
-            document.getElementById("source_rec_url").value = window.location.protocol + '//' + window.location.hostname + '/' + mappingName;
             downloadBtn.disabled = false;
+            document.getElementById("source_rec_url").value = window.location.protocol + '//' + window.location.hostname + '/' + mappingName;
+
 
         } else {
-
             if ((count % 10) === 0 || count <= 0) {
                 var resultsURL = innerHTML + '/list_results/?mapping_name=' + mappingName;
                 var request = new XMLHttpRequest();
@@ -105,7 +101,6 @@ function move() {
                     json = JSON.parse(request.responseText);
                     numOfRes = json.length;
                 }
-//                console.log(count);
             }
             width = Math.round((((numOfRes - 1) / 3) / numOfRec) * 100);
             elem.style.width = width + '%';
