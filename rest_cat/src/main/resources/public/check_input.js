@@ -18,10 +18,6 @@ function checkInputs() {
                 option.text = "Mapping120";
                 option.value = 2;
                 mappingSelect.add(option);
-                option = document.createElement("option");
-                option.text = "Mapping62";
-                option.value = 3;
-                mappingSelect.add(option);
             }
             break;
 

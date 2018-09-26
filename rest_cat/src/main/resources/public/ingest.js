@@ -23,11 +23,6 @@ function ingest() {
         json = JSON.parse(request.responseText);
         numOfRec = json.length;
     }
-
-    var mappingURL = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping115.x3ml'
-    var mappingName = mappingURL.substring(mappingURL.lastIndexOf("/") + 1, mappingURL.lastIndexOf("."));
-
-
     var numOfRes = 0;
 
     ingestBtn.disabled = false;

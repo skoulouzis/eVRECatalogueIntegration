@@ -18,6 +18,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -136,7 +137,8 @@ public class ConvertController {
                 webdavHost = addr.getHostName();
                 webDAVURL = "http://" + webdavHost + "/" + mappingName;
                 if (!urlExists(webDAVURL)) {
-                    return null;
+                    records = new ArrayList<>();
+                    return records;
                 }
             } else {
                 webDAVURL = "http://" + webdavHost + "/" + mappingName;
