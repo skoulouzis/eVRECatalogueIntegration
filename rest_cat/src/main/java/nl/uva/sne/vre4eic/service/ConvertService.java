@@ -105,6 +105,9 @@ public class ConvertService {
             String path = url.getFile().substring(0, url.getFile().lastIndexOf('/'));
             String base = url.getProtocol() + "://" + url.getHost() + path;
             File output = new File(System.getProperty("java.io.tmpdir") + File.separator + "records");
+            if(output.exists()){
+                output.delete();
+            }
             output.mkdirs();
 
             for (DavResource res : resources) {

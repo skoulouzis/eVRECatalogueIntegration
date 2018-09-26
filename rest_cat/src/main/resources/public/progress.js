@@ -17,7 +17,7 @@ function move() {
     var mappingParams = getMappingParams();
     var mappingURL = mappingParams[0];
     var generator_url = mappingParams[1];
-      
+
     var url = innerHTML + '/list_records/?catalogue_url=' + catalogueURL + '&limit=80';
 
 
@@ -74,7 +74,11 @@ function move() {
                 rec_loc.style.display = "inline";
             }
             downloadBtn.disabled = false;
-            document.getElementById("source_rec_url").value = window.location.protocol + '//' + window.location.hostname + '/' + mappingName;
+            var source_rec_url = document.getElementById("source_rec_url");
+            if (source_rec_url !== null) {
+                source_rec_url.value = window.location.protocol + '//' + window.location.hostname + '/' + mappingName;
+            }
+
 
 
         } else {
@@ -101,7 +105,10 @@ function download() {
     innerHTML.pop();
     innerHTML = innerHTML.join('/');
 
-    var mappingURL = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping115.x3ml'
+    var mappingParams = getMappingParams();
+    var mappingURL = mappingParams[0];
+    var generator_url = mappingParams[1];
+
     var mappingName = mappingURL.substring(mappingURL.lastIndexOf("/") + 1, mappingURL.lastIndexOf("."));
     var url = innerHTML + '/download/' + mappingName;
 
@@ -123,10 +130,6 @@ function getMappingParams() {
         case 2:
             mappingURL = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping120.x3ml'
             generator_url = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/ENVRIplus-generator-policy___13-07-2018131200___11511.xml'
-            break;
-        case 3:
-            mappingURL = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping62.x3ml'
-            generator_url = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/generator.xml'
             break;
         default:
             mappingURL = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping115.x3ml'
