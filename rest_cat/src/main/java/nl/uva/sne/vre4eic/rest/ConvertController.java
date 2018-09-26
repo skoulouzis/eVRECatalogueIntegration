@@ -6,19 +6,28 @@
 package nl.uva.sne.vre4eic.rest;
 
 import com.github.sardine.DavResource;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.util.Collection;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.http.HttpServletResponse;
 import nl.uva.sne.vre4eic.model.ProcessingStatus;
 import nl.uva.sne.vre4eic.service.ConvertService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -73,6 +82,47 @@ public class ConvertController {
 
     }
 
+    @RequestMapping(value = "/download/{mappingName}", method = RequestMethod.GET)
+    public void downloadFile(HttpServletResponse response, @PathVariable("mappingName") String mappingName) throws IOException {
+        String webdavHost = System.getenv("WEBDAV_HOST");
+        String webDAVURL;
+        if (webdavHost == null) {
+            InetAddress addr;
+            addr = InetAddress.getLocalHost();
+            webdavHost = addr.getHostName();
+            webDAVURL = "http://" + webdavHost + "/" + mappingName;
+        } else {
+            webDAVURL = "http://" + webdavHost + "/" + mappingName;
+        }
+        File file = new File(service.zipRecords(webDAVURL));
+
+        if (!file.exists()) {
+            String errorMessage = "Sorry. The file you are looking for does not exist";
+            System.out.println(errorMessage);
+            try (OutputStream outputStream = response.getOutputStream()) {
+                outputStream.write(errorMessage.getBytes(Charset.forName("UTF-8")));
+            }
+            return;
+        }
+        String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+        if (mimeType == null) {
+            System.out.println("mimetype is not detectable, will take default");
+            mimeType = "application/octet-stream";
+        }
+        response.setContentType(mimeType);
+
+        response.setHeader("Content-Disposition", String.format("inline; filename=\"" + file.getName() + "\""));
+
+        /* "Content-Disposition : attachment" will be directly download, may provide save as popup, based on your browser setting*/
+        //response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", file.getName()));
+        response.setContentLength((int) file.length());
+
+        InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+
+        //Copy bytes from source to destination(outputstream in this example), closes both streams.
+        FileCopyUtils.copy(inputStream, response.getOutputStream());
+    }
+
     @RequestMapping(value = "/list_results", method = RequestMethod.GET, params = {"mapping_name"})
     public @ResponseBody
     Collection<DavResource> listResults(@RequestParam(value = "mapping_name") String mappingName) {
@@ -88,7 +138,7 @@ public class ConvertController {
                 if (!urlExists(webDAVURL)) {
                     return null;
                 }
-            }else{
+            } else {
                 webDAVURL = "http://" + webdavHost + "/" + mappingName;
             }
             Logger.getLogger(ConvertController.class.getName()).log(Level.INFO, "Webdav: {0}", webDAVURL);
@@ -100,7 +150,6 @@ public class ConvertController {
     }
 
     private boolean urlExists(String URLName) {
-
         try {
             HttpURLConnection.setFollowRedirects(true);
             //        HttpURLConnection.setInstanceFollowRedirects(false)

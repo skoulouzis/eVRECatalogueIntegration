@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>MRCreator</title>
+        <title>Metadata Recorder Creator</title>
         <link rel="icon" href="https://www.envriplus.eu/wp-content/uploads/2017/10/Untitled-300x294.png">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,6 +15,7 @@
         <script src="check_input.js"></script> 
         <script src="loader.js"></script> 
         <script src="ingest.js"></script> 
+        <script src="include.js"></script> 
 
         <style>
             #myProgress {
@@ -36,8 +37,8 @@
             /* Center the loader */
             #loader {
                 position: absolute;
-                left: 15%;
-                top: 45%;
+                left: 43%;
+                top: 70%;
                 z-index: 1;
                 width: 150px;
                 height: 150px;
@@ -93,14 +94,17 @@
             .fa-anchor,.fa-coffee {font-size:200px}
         </style>
     </head>
-    <body style="margin:0;">
+    <body style="margin:0;">    
         <!-- Header -->
-        <header class="w3-container w3-black w3-center" style="padding:16px 2px">
-            <h1 class="w3-margin w3-large">MRCreator</h1>
+        <header class="w3-container w3-gray w3-center" style="padding:16px 2px">
+            <h1 class="w3-margin w3-large">Metadata Recorder Creator</h1>
+            <img src="https://teaching.science.uva.nl/wp-content/uploads/2017/12/uva-logo.png" alt="HTML5 Icon" width="70" height="75" >
+            <img src="https://www.envriplus.eu/wp-content/uploads/2015/08/ENVRI-plus_m.png" alt="HTML5 Icon" width="95" height="70" hspace="100">
+            <img src="https://www.envriplus.eu/wp-content/uploads/2017/10/Untitled-300x294.png" alt="HTML5 Icon" width="80" height="80">
         </header>
 
 
-        <div id="demo" class="w3-white w3-padding-64 w3-container ">
+        <div id="demo" class="w3-white w3-padding-64 w3-container w3-center">
 
             <div class="w3-content">
 
@@ -135,19 +139,22 @@
             </div>
         </div>
 
-        <div id="demo" class="w3-light-grey w3-padding-64 w3-container  ">
+        <div id="demo" class="w3-light-grey w3-container w3-padding-64 w3-center">
             <div class="w3-content">
                 <div class="w3-twothird">
                     <h3>Step 2: Create Mapped Records</h3>
                     <select id="target" class="w3-wite" oninput='checkInputs()'>
-                        <option value="0">Select Target:</option>
+                        <option value="0">Select Target: </option>
                         <option value="1">CERIF</option>
                         <option value="2">Other</option>
                     </select> 
-  
+                    <button style="font-size:14px">Configure<i class="fa fa-gear" onclick="buildFileSelector()"></i></button>
+                    <br>
                     <button class="w3-button w3-black w3-padding-large w3-large 
                             w3-margin-top"  disabled="disabled" onclick="move()" 
                             id="startBtn">Start</button> 
+                    <br>
+                    <br>
                     <div id="myProgress">
                         <div  class="w3-black" id="myBar">0%</div>
                     </div>
@@ -156,17 +163,13 @@
             </div>
         </div>
 
-        <div id="demo" class="w3-white w3-container  w3-padding-64">
+        <div id="demo" class="w3-white w3-container w3-padding-64 w3-center">
             <div class="w3-content">
                 <div class="w3-twothird">
+                    <br><br><br>
                     <h3>Step 3: Access Mapped Records</h3>
                     <button id="downloadBtn" class="w3-button w3-black w3-padding-large w3-large 
-                            w3-margin-top btn btn-success" disabled="disabled" onclick="download()"> Access</button>
-
-                    <!--<a style="display: none" id="rec_loc" href="http://localhost" target="_blank">Records Location</a>-->
-                    <!--                    <button class="w3-button w3-black w3-padding-large w3-large 
-                                                w3-margin-top"  disabled="disabled" onclick="download()" 
-                                                id="downloadBtn">Access</button>                     -->
+                            w3-margin-top btn btn-success" disabled="disabled" onclick="download()"> Download</button>
                 </div>
 
             </div>
@@ -174,55 +177,27 @@
 
 
 
-            <div id="demo" class="w3-light-grey w3-container ">
-                <div class="w3-content">
-                    <div class="w3-twothird">
-                        <h3>Step 4: Ingest Records To Search Engine</h3>
-    
-                        <label for="source_rec_url">Records URL:</label>
-                        <input id="source_rec_url" name="source_rec_url" type="url"
-                               list="defaulSourceRecURLs" size="40" oninput="enableBtn()">
-            
-                        <label for="ingest_cat_url">Ingest Catalogue URL:</label>
-                        <input id="ingest_cat_url" name="ingest_cat_url" type="url"
-                               list="defaulIingestURLs" size="40" oninput="enableBtn()">
-                        <datalist id="defaulIingestURLs">
-                            <option value="http://139.91.183.97:8199/">
-                        </datalist>
-    
-                        <button class="w3-button w3-black
-                                w3-margin-top" disabled="disabled"  onclick="ingest()" 
-                                id="ingestBtn">Ingest</button> 
-    
-                    </div>
-                </div>
+        <!-- Footer -->
+        <footer class="w3-container w3-padding-64 w3-center">  
+            <div class="w3-xlarge w3-padding-32 w3-black">
+
+                <br>
+                <small>
+
+                    <!--<p>Contact information: <a href="mailto:someone@example.com">-->
+                    <!--someone@example.com</a>.</p>-->
+                    &copy; Copyright 2018, University of Amsterdam
+                </small>
+
+                <i class="fa fa-email w3-hover-opacity"></i>
+                <!--                                <i class="fa fa-instagram w3-hover-opacity"></i>
+                                                <i class="fa fa-snapchat w3-hover-opacity"></i>
+                                                <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+                                                <i class="fa fa-twitter w3-hover-opacity"></i>
+                                                <i class="fa fa-linkedin w3-hover-opacity"></i>-->
             </div>
+        </footer>
+    </body>
 
-
-
-    <!-- Footer -->
-    <footer class="w3-container w3-padding-64 w3-center">  
-        <div class="w3-xlarge w3-padding-32 w3-grey">
-            <img src="https://teaching.science.uva.nl/wp-content/uploads/2017/12/uva-logo.png" alt="HTML5 Icon" width="70" height="75" >
-            <img src="https://www.envriplus.eu/wp-content/uploads/2015/08/ENVRI-plus_m.png" alt="HTML5 Icon" width="95" height="70" hspace="100">
-            <img src="https://www.envriplus.eu/wp-content/uploads/2017/10/Untitled-300x294.png" alt="HTML5 Icon" width="80" height="80">
-            <br>
-            <small>
-
-                <!--<p>Contact information: <a href="mailto:someone@example.com">-->
-                <!--someone@example.com</a>.</p>-->
-                &copy; Copyright 2018, University of Amsterdam
-            </small>
-
-            <i class="fa fa-email w3-hover-opacity"></i>
-            <!--                                <i class="fa fa-instagram w3-hover-opacity"></i>
-                                            <i class="fa fa-snapchat w3-hover-opacity"></i>
-                                            <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-                                            <i class="fa fa-twitter w3-hover-opacity"></i>
-                                            <i class="fa fa-linkedin w3-hover-opacity"></i>-->
-        </div>
-    </footer>
-</body>
-
-<script src="table.js " type="text/javascript"></script>
+    <script src="table.js " type="text/javascript"></script>
 </html>
