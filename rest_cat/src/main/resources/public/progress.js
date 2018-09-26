@@ -21,13 +21,33 @@ function move() {
         json = JSON.parse(request.responseText);
         numOfRec = json.length;
     }
-
+    var targetInt = document.getElementById("target").value;
     var mappingURL = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping115.x3ml'
+    var generator_url = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml'
+//    switch (targetInt) {
+//        case 1:
+//            mappingURL = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping115.x3ml'
+//            generator_url = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml'
+//            break;
+//        case 2:
+//            mappingURL = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping120.x3ml'
+//            generator_url = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/ENVRIplus-generator-policy___13-07-2018131200___11511.xml'
+//            break;
+//        case 3:
+//            mappingURL = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping62.x3ml'
+//            generator_url = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/generator.xml'
+//            break;            
+//        default:
+//            mappingURL = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping115.x3ml'
+//            generator_url = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml'
+//    }
+
+
     var mappingName = mappingURL.substring(mappingURL.lastIndexOf("/") + 1, mappingURL.lastIndexOf("."));
 
 
 
-    var generator_url = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml'
+
     const convertURL = innerHTML + '/convert?catalogue_url=' + catalogueURL + '&mapping_url=' + mappingURL + '&generator_url=' + generator_url + '&limit=80';
     var request = new XMLHttpRequest();
     request.open('GET', convertURL, false);  // `false` makes the request synchronous
@@ -85,7 +105,7 @@ function move() {
                     json = JSON.parse(request.responseText);
                     numOfRes = json.length;
                 }
-                console.log(count);
+//                console.log(count);
             }
             width = Math.round((((numOfRes - 1) / 3) / numOfRec) * 100);
             elem.style.width = width + '%';
@@ -96,10 +116,14 @@ function move() {
 }
 
 function download() {
+    var innerHTML = window.location.href.split('/');
+    innerHTML.pop();
+    innerHTML = innerHTML.join('/');
+
     var mappingURL = 'https://raw.githubusercontent.com/skoulouzis/CatMap/master/etc/Mapping115.x3ml'
     var mappingName = mappingURL.substring(mappingURL.lastIndexOf("/") + 1, mappingURL.lastIndexOf("."));
-    var webdav = window.location.protocol + '//' + window.location.hostname + '/' + mappingName;
+    var url = innerHTML + 'download/' + mappingName;
 
-    var win = window.open(webdav, '_blank');
+    var win = window.open(url, '_blank');
     win.focus();
 }
