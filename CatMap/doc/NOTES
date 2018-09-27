@@ -1,0 +1,4 @@
+docker run --hostname my-rabbit --name some-rabbit -p 127.0.0.1:15672:15672 -p 127.0.0.1:4369:4369 -p 127.0.0.1:5671-5672:5671-5672 -p 127.0.0.1:15671:15671 -d rabbitmq:3-management
+docker run -p 127.0.0.1:8086:8086 -p 127.0.0.1:8083:8083 -v influxdb:/var/lib/influxdb influxdb
+docker run -p 8888:8888 chronograf --influxdb-url=http://localhost:8086
+docker run --name=some-webdav -d -e USERNAME=user -e PASSWORD=resu -p 80:80 idelsink/webdav

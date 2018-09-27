@@ -1,0 +1,22 @@
+<generator_policy>
+<generator name="SimpleLabel">
+<pattern>{label}</pattern>
+</generator>
+<generator name="CompositeLabel">
+<pattern>{label} {text}</pattern>
+</generator>
+<generator name="testUri2" >
+<pattern>{hierarchy}/{text}</pattern>
+</generator>
+<generator name="testURI" >
+<pattern>{hierarchy}/{term}</pattern>
+</generator>
+<generator name="URIorUUID">
+<custom generatorClass="gr.forth.URIorUUID">
+<set-arg name="text"/>
+</custom>
+</generator>
+<generator name="URIWithPrefix" prefix="vre4eic">
+<pattern>{mapping}/{type}/{term}</pattern>
+</generator>
+</generator_policy>
