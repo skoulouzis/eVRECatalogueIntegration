@@ -1,4 +1,4 @@
-# eVRE-ENVRI_Blocks
+# eVRE-ENVRI
 This reposetory contains the follwing blocks: 
 
 * CatMap: Is a flexible catalogue integrator that can convert metadata catalogue records to other formats using the 3m mapper
