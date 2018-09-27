@@ -1,5 +1,5 @@
 # eVRE-ENVRI
-This reposetory contains the follwing blocks: 
+This reposetory contains the follwing modules: 
 
 * CatMap: Is a flexible catalogue integrator that can convert metadata catalogue records to other formats using the 3m mapper
 * WPS2WADL: A simple tool to convert WPS services to WADL
