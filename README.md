@@ -9,12 +9,19 @@ This reposetory contains the follwing blocks:
 
 ## Demo
 ### Metadata Recorder Creator
-Demonstrates the automatic the alignment of metadata of a catalogue onto CERIF. The Metadata Recorder Creator retrieves records from a catalogue endpoint and creates mapped CERIF records using conferrable mappers obtained by 3M. The records are available for downscaling.  
+Demonstrates the automatic the alignment of metadata of a catalogue onto CERIF. The Metadata Recorder Creator retrieves records from a catalogue endpoint and creates mapped CERIF records using conferrable mappers created by 3M. The records are available for downscaling.  
 
 ![Architecture1](https://raw.githubusercontent.com/QCAPI-DRIP/eVRE-ENVRI_Blocks/master/images/demo1Arch.png)
 
 A demo can be found here: http://drip.vlan400.uvalight.net:8083/catalogue_mapper/index1.html
 
+### CERIF Community Cataloge Manager
+Demonstrates how to dynamically load heterogeneous data catalogues into semantic triple stores. A catalogue endpoint is provided 
+and the MRCreator is configured using  mapping file, created by 3M. Next, a the converted records are loaded in the search engine. 
 
+![Architecture2](https://raw.githubusercontent.com/QCAPI-DRIP/eVRE-ENVRI/master/images/demo2Arch.png)
+
+Manage load of different RI catalogues
+Etc.
 * http://drip.vlan400.uvalight.net:8083/catalogue_mapper/index2.html
 
