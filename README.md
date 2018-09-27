@@ -8,7 +8,13 @@ This reposetory contains the follwing blocks:
 
 
 ## Demo
-A demo of the catalogue integrator can be found here:
+### Metadata Recorder Creator
+Demonstrates the automatic the alignment of metadata of a catalogue onto CERIF. The Metadata Recorder Creator retrieves records from a catalogue endpoint and creates mapped CERIF records using conferrable mappers obtained by 3M. The records are available for downscaling.  
+
+
+
+
+Flexibly configure mapper
 * http://drip.vlan400.uvalight.net:8083/catalogue_mapper/index1.html
 * http://drip.vlan400.uvalight.net:8083/catalogue_mapper/index2.html
 
