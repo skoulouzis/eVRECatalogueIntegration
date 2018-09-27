@@ -7,5 +7,8 @@ This reposetory contains the follwing blocks:
 * eVRETaverna: A taverna plugin to discover WADL services from the eVRE workflow catalogue adapted to also discover WPS services 
 
 
-# Demo
+## Demo
 A demo of the catalogue integrator can be found here:
+* http://drip.vlan400.uvalight.net:8083/catalogue_mapper/index1.html
+* http://drip.vlan400.uvalight.net:8083/catalogue_mapper/index2.html
+
