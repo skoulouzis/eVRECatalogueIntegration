@@ -21,7 +21,5 @@ and the MRCreator is configured using  mapping file, created by 3M. Next, a the 
 
 ![Architecture2](https://raw.githubusercontent.com/QCAPI-DRIP/eVRE-ENVRI/master/images/demo2Arch.png)
 
-Manage load of different RI catalogues
-Etc.
-* http://drip.vlan400.uvalight.net:8083/catalogue_mapper/index2.html
+A demo can be found here: http://drip.vlan400.uvalight.net:8083/catalogue_mapper/index2.html
 
