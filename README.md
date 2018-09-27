@@ -15,7 +15,6 @@ Demonstrates the automatic the alignment of metadata of a catalogue onto CERIF. 
 
 A demo can be found here: http://drip.vlan400.uvalight.net:8083/catalogue_mapper/index1.html
 
-Flexibly configure mapper
-* 
+
 * http://drip.vlan400.uvalight.net:8083/catalogue_mapper/index2.html
 
