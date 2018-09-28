@@ -23,3 +23,11 @@ and the MRCreator is configured using  mapping file, created by 3M. Next, a the 
 
 A demo can be found here: http://drip.vlan400.uvalight.net:8083/catalogue_mapper/index2.html
 
+### Provenance Context Integrator 
+Demonstrates the integration of distributed provenance information of a workflow. The 
+Provenance Context Integrator allows to load workflow execution results, Prov based provenance, service logs create CERIF based contextual description and perform simple queries
+
+![Architecture3](https://raw.githubusercontent.com/QCAPI-DRIP/eVRE-ENVRI/master/images/demo3Arch.png)
+
+A demo can be found here: http://drip.vlan400.uvalight.net:8083/catalogue_mapper/index2.html
+
