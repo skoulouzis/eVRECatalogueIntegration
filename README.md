@@ -11,11 +11,6 @@ This reposetory contains the follwing modules:
 ### Metadata Recorder Creator
 Demonstrates the automatic the alignment of metadata of a catalogue onto CERIF. The Metadata Recorder Creator retrieves records from a catalogue endpoint and creates mapped CERIF records using conferrable mappers created by 3M. The records are available for downscaling.  
 
-<div style="text-align:center" markdown="1">
-![Metadata Recorder Creator](https://raw.githubusercontent.com/QCAPI-DRIP/eVRE-ENVRI_Blocks/master/images/demo1Arch.png "Metadata Recorder Creator")
-</div>
-
-
 <img src="https://raw.githubusercontent.com/QCAPI-DRIP/eVRE-ENVRI_Blocks/master/images/demo1Arch.png" alt="Architecture1" width="50%"/>
 
 
@@ -25,7 +20,8 @@ A demo can be found here: http://drip.vlan400.uvalight.net:8083/catalogue_mapper
 Demonstrates how to dynamically load heterogeneous data catalogues into semantic triple stores. A catalogue endpoint is provided 
 and the MRCreator is configured using  mapping file, created by 3M. Next, a the converted records are loaded in the search engine. 
 
-![Architecture2](https://raw.githubusercontent.com/QCAPI-DRIP/eVRE-ENVRI/master/images/demo2Arch.png)
+
+<img src="https://raw.githubusercontent.com/QCAPI-DRIP/eVRE-ENVRI_Blocks/master/images/demo2Arch.png" alt="Architecture2" width="50%"/>
 
 A demo can be found here: http://drip.vlan400.uvalight.net:8083/catalogue_mapper/index2.html
 
@@ -33,7 +29,7 @@ A demo can be found here: http://drip.vlan400.uvalight.net:8083/catalogue_mapper
 Demonstrates the integration of distributed provenance information of a workflow. The 
 Provenance Context Integrator allows to load workflow execution results, Prov based provenance, service logs create CERIF based contextual description and perform simple queries
 
-![Architecture3](https://raw.githubusercontent.com/QCAPI-DRIP/eVRE-ENVRI/master/images/demo3Arch.png)
+<img src="https://raw.githubusercontent.com/QCAPI-DRIP/eVRE-ENVRI_Blocks/master/images/demo3Arch.png" alt="Architecture3" width="50%"/>
 
 A demo can be found here: http://drip.vlan400.uvalight.net:8083/catalogue_mapper/index3.html
 
