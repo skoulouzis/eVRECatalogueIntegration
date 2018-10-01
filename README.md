@@ -28,7 +28,7 @@ Demonstrates how to dynamically load heterogeneous data catalogues into semantic
 and the MRCreator is configured using  mapping file, created by 3M. Next, a the converted records are loaded in the search engine. 
 
 <p align="center">
-  <img width="460" height="300" src="https://raw.githubusercontent.com/QCAPI-DRIP/eVRE-ENVRI_Blocks/master/images/demo2Arch.png">
+  <img width="360" height="200" src="https://raw.githubusercontent.com/QCAPI-DRIP/eVRE-ENVRI/master/images/demo2Arch.png">
 </p>
 
 A demo can be found here: http://drip.vlan400.uvalight.net:8083/catalogue_mapper/index2.html
@@ -39,7 +39,7 @@ Provenance Context Integrator allows to load workflow execution results, Prov ba
 
 
 <p align="center">
-  <img width="460" height="300" src="https://raw.githubusercontent.com/QCAPI-DRIP/eVRE-ENVRI_Blocks/master/images/demo3Arch.png">
+  <img width="360" height="200" src="https://raw.githubusercontent.com/QCAPI-DRIP/eVRE-ENVRI/master/images/demo3Arch.png">
 </p>
 
 A demo can be found here: http://drip.vlan400.uvalight.net:8083/catalogue_mapper/index3.html
