@@ -8,6 +8,9 @@ This reposetory contains the follwing modules:
 
 
 ## Demo
+
+Scaling eVRE to multiple Research infrastructures. To achive this, first automate the alignment of metadata of a catalogue onto CERIF, next dynamically load heterogeneous data catalogues into semantic triple stores. Following that,  dynamically load OGC web services catalogue in workflow and finally contextually integrate distributed provenance information of a workflow.
+
 <p align="center">
   <img width="460" height="300" src="https://raw.githubusercontent.com/QCAPI-DRIP/eVRE-ENVRI_Blocks/master/images/EVRE-ENVRIPLUS-Demo-0928.png">
 </p>
