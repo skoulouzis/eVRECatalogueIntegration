@@ -17,7 +17,7 @@ This reposetory contains the follwing modules:
 Demonstrates the automatic the alignment of metadata of a catalogue onto CERIF. The Metadata Recorder Creator retrieves records from a catalogue endpoint and creates mapped CERIF records using conferrable mappers created by 3M. The records are available for downscaling.  
 
 <p align="center">
-  <img width="460" height="300" src="https://raw.githubusercontent.com/QCAPI-DRIP/eVRE-ENVRI/master/images/demo1Arch.png">
+  <img width="360" height="200" src="https://raw.githubusercontent.com/QCAPI-DRIP/eVRE-ENVRI/master/images/demo1Arch.png">
 </p>
 
 
