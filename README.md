@@ -1,9 +1,5 @@
 # eVRE-ENVRI
-<p align="left">
-  <img src="https://teaching.science.uva.nl/wp-content/uploads/2017/12/uva-logo.png" alt="HTML5 Icon" width="60" height="65" >
-            <img src="https://www.envriplus.eu/wp-content/uploads/2015/08/ENVRI-plus_m.png" alt="HTML5 Icon" width="85" height="60" hspace=20>
-            <img src="https://www.envriplus.eu/wp-content/uploads/2017/10/Untitled-300x294.png" alt="HTML5 Icon" width="70" height="70">
-</p>
+
 
 This reposetory contains the follwing modules: 
 
