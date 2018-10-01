@@ -1,4 +1,6 @@
 # eVRE-ENVRI
+![Logo](https://www.envriplus.eu/wp-content/uploads/2017/10/Untitled-300x294.png)
+
 This reposetory contains the follwing modules: 
 
 * CatMap: Is a flexible catalogue integrator that can convert metadata catalogue records to other formats using the 3m mapper
