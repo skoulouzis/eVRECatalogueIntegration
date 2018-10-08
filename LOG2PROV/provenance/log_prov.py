@@ -15,7 +15,6 @@ class LogProv():
             prov_namespace['type']: PROV["SoftwareAgent"], vre_namespace['hasIP']: log_dic['remote_host']
             })
         
-        
         request_entity = self._prov_doc.entity(vre_namespace['en1'], {vre_namespace['status']: log_dic['status'],vre_namespace['responseBytes']:log_dic['response_bytes_clf']})
 
         received_activity = self._prov_doc.activity(vre_namespace['ac1'], other_attributes={vre_namespace['requestURL']:log_dic['request_url'],vre_namespace['requestMethod']:log_dic['request_method'], vre_namespace['httpVersion']:log_dic['request_http_ver']})        

@@ -1,5 +1,6 @@
 from log.access_log import *
 from provenance.log_prov import *
+from provenance.log_binding import *
 import os
 
 if __name__ == "__main__":
@@ -17,7 +18,9 @@ if __name__ == "__main__":
                 access_log = AccessLog(line,'catalina')
 #                print(access_log.log_line_dict)
                 doc = LogProv(access_log.log_line_dict)
-                print(doc.prov_doc.get_provn())
+                binding = LogBinding(access_log.log_line_dict)
+#                print(dir(doc.prov_doc))
+#                print(doc.prov_doc.get_provn())
     
     
     
