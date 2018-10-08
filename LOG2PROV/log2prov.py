@@ -13,13 +13,11 @@ if __name__ == "__main__":
             with open(os.path.join(log_files_path, filename)) as f:
                 lines = f.readlines()
             for line in lines:
-                print(line)
+#                print(line)
                 access_log = AccessLog(line,'catalina')
 #                print(access_log.log_line_dict)
                 doc = LogProv(access_log.log_line_dict)
                 print(doc.prov_doc.get_provn())
-        else:
-            continue
     
     
     
