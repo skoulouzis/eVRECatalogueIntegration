@@ -1,0 +1,11 @@
+document
+    prefix prov <http://www.w3.org/ns/prov#>
+    prefix vre <https://www.vre4eic.eu/log#>
+
+    agent(vre:ag1, [ prov:type="prov:SoftwareAgent", vre:hasIP="10.255.0.2" ])
+    entity(vre:en1, [ vre:status="200", vre:responseBytes="1103475" ])
+    activity(vre:ac1, [ vre:requestURL="/cue/rest/argo/get", vre:requestMethod="GET", vre:httpVersion="1.1" ])
+    wasGeneratedBy(vre:en1, vre:ac1, 2018-09-13T12:51:13+00:0)
+    wasAttributedTo(vre:en1, vre:ag1)
+    wasAssociatedWith(vre:ac1, vre:ag1)
+endDocument
