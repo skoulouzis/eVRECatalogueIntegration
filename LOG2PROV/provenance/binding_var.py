@@ -8,26 +8,26 @@ class LogVar():
 
     
     @property
-    def binding(self):
+    def var_name(self):
         return self._var_name
 
-    @binding.setter
-    def binding(self, value):
+    @var_name.setter
+    def var_name(self, value):
         self._var_name = value
 
-    @binding.deleter
-    def binding(self):
+    @var_name.deleter
+    def var_name(self):
         del self._var_name
         
     @property
     def prov_type(self):
         return self._prov_type
 
-    @binding.setter
+    @prov_type.setter
     def prov_type(self, value):
         self._prov_type = value
 
-    @binding.deleter
+    @prov_type.deleter
     def prov_type(self):
         del self._prov_type        
         
@@ -35,11 +35,11 @@ class LogVar():
     def template_value_type(self):
         return self._template_value_type
 
-    @binding.setter
+    @template_value_type.setter
     def template_value_type(self, value):
         self._template_value_type = value
 
-    @binding.deleter
+    @template_value_type.deleter
     def template_value_type(self):
         del self._template_value_type      
         
@@ -48,10 +48,10 @@ class LogVar():
     def value(self):
         return self._value
 
-    @binding.setter
+    @value.setter
     def value(self, value):
         self._value = value
 
-    @binding.deleter
+    @value.deleter
     def value(self):
         del self._value           
