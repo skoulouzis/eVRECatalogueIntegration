@@ -1,0 +1,36 @@
+version: '3.1'
+
+services:     
+                
+    db:
+        image: tenforce/virtuoso
+        environment:
+            SPARQL_UPDATE: "true"
+            DEFAULT_GRAPH: "http://www.example.com/my-graph"
+        volumes:
+            - ./data/virtuoso:/data
+        ports:
+            - "8890:8890"
+            
+    metadata:
+        image: evre_metadata_service
+        environment:
+            TRIPLESTORE_URL: "http://139.91.183.97:9999/blazegraph"
+            TRIPLESTORE_NAMESPACE: "ekt-data"
+            VIRTUOSO_URL: "v4e-hub.isti.cnr.it"
+            VIRTUOSO_USERNAME: "dba"
+            VIRTUOSO_PASSWORD: "dba"
+            VIRTUOSO_PORT: "1111"
+            VIRTUOSO_REST_URL: "http://v4e-hub.isti.cnr.it:8890"
+            METADATA_ENDPOINT: "http://v4e-hub.isti.cnr.it:8080/EVREMetadataServices"
+            NODELINK_URL: "v4e-lab.isti.cnr.it:2181"
+            NODELINK_ENDPOINT: "http://v4e-lab.isti.cnr.it:8080/NodeService"
+            WORKFLOWS_GRAPH: "http://vre/workflows"
+            WORKFLOWS_GRAPH_LABEL: "Workflows"
+        ports:
+            - "8080:8080"            
+    
+
+volumes:
+  data:
+    driver: local    
