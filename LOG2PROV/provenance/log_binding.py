@@ -10,25 +10,25 @@ class LogBinding():
         entity_types = []
         binding_vars = []
         if('request_url_username' in log_dic and log_dic['request_url_username']):
-            binding_vars.append(LogVar('request_url_username', 'tmpl', '2dvalue_' + str(value_index) + '_0', log_dic['request_url_username']))
-            entity_types.append(EntityType('request_url_username','prov','Entity'))
+            binding_vars.append(LogVar('request_url_username', 'tmpl', '2dvalue_' + str(value_index) + '_0', '"' + log_dic['request_url_username'] + '"'))
+            entity_types.append(EntityType('request_url_username', 'prov', 'Entity'))
             
-        binding_vars.append(LogVar('agent', 'tmpl', 'value_' + str(value_index), 'vre:ag'+str(value_index)))
-        entity_types.append(EntityType('agent','prov','Entity'))
-        binding_vars.append(LogVar('ip', 'tmpl', '2dvalue_' + str(value_index) + '_0', log_dic['remote_host']))
-        entity_types.append(EntityType('ip','prov','Entity'))
-        binding_vars.append(LogVar('status', 'tmpl', '2dvalue_' + str(value_index) + '_0', log_dic['status']))
-        entity_types.append(EntityType('status','prov','Entity'))
-        binding_vars.append(LogVar('bytes', 'tmpl', '2dvalue_' + str(value_index) + '_0', log_dic['response_bytes_clf']))
-        entity_types.append(EntityType('bytes','prov','Entity'))
-        binding_vars.append(LogVar('url', 'tmpl', '2dvalue_' + str(value_index) + '_0', log_dic['request_url']))
-        entity_types.append(EntityType('url','prov','Entity'))
-        binding_vars.append(LogVar('method', 'tmpl', '2dvalue_' + str(value_index) + '_0', log_dic['request_method']))
-        entity_types.append(EntityType('method','prov','Entity'))
-        binding_vars.append(LogVar('version', 'tmpl', '2dvalue_' + str(value_index) + '_0', log_dic['request_http_ver']))
-        entity_types.append(EntityType('version','prov','Entity'))
-        binding_vars.append(LogVar('time', 'tmpl', 'value_' + str(value_index), log_dic['time_received_tz_isoformat']))
-        entity_types.append(EntityType('time','prov','Entity'))
+        binding_vars.append(LogVar('agent', 'tmpl', 'value_' + str(value_index), 'vre:ag' + str(value_index)))
+        entity_types.append(EntityType('agent', 'prov', 'Entity'))
+        binding_vars.append(LogVar('ip', 'tmpl', '2dvalue_' + str(value_index) + '_0', '"' + log_dic['remote_host'] + '"'))
+        entity_types.append(EntityType('ip', 'prov', 'Entity'))
+        binding_vars.append(LogVar('status', 'tmpl', '2dvalue_' + str(value_index) + '_0', '"' + log_dic['status'] + '"'))
+        entity_types.append(EntityType('status', 'prov', 'Entity'))
+        binding_vars.append(LogVar('bytes', 'tmpl', '2dvalue_' + str(value_index) + '_0', '"' + log_dic['response_bytes_clf'] + '"'))
+        entity_types.append(EntityType('bytes', 'prov', 'Entity'))
+        binding_vars.append(LogVar('url', 'tmpl', '2dvalue_' + str(value_index) + '_0', '"' + log_dic['request_url'] + '"'))
+        entity_types.append(EntityType('url', 'prov', 'Entity'))
+        binding_vars.append(LogVar('method', 'tmpl', '2dvalue_' + str(value_index) + '_0', '"' + log_dic['request_method'] + '"'))
+        entity_types.append(EntityType('method', 'prov', 'Entity'))
+        binding_vars.append(LogVar('version', 'tmpl', '2dvalue_' + str(value_index) + '_0', '"' + log_dic['request_http_ver'] + '"'))
+        entity_types.append(EntityType('version', 'prov', 'Entity'))
+        binding_vars.append(LogVar('time', 'tmpl', 'value_' + str(value_index), '"' + log_dic['time_received_tz_isoformat'] + '"'))
+        entity_types.append(EntityType('time', 'prov', 'Entity'))
         
         self._binding_dict['vars'] = binding_vars
         self._binding_dict['entity_types'] = entity_types
