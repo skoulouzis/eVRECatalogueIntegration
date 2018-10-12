@@ -3,7 +3,7 @@ FROM tomcat:9
 
 ARG EVRE_METADATA_SERVICES_VERSION=1.0-SNAPSHOT
 
-RUN apt-get -y update && apt-get -y update && apt-get install -y git maven
+RUN apt-get -y update && apt-get -y upgrade && apt-get install -y git maven
 WORKDIR /
 RUN git clone https://github.com/skoulouzis/EVREMetadataServices.git
 WORKDIR EVREMetadataServices
