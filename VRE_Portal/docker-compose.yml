@@ -2,35 +2,79 @@ version: '3.1'
 
 services:     
                 
-    db:
+    virtuoso:
         image: tenforce/virtuoso
         environment:
             SPARQL_UPDATE: "true"
             DEFAULT_GRAPH: "http://www.example.com/my-graph"
         volumes:
-            - ./data/virtuoso:/data
+            - virtuoso-data:/data/virtuoso
         ports:
             - "8890:8890"
+            
+    h2:
+        image: oscarfonts/h2
+        volumes:
+            - h2-data:/opt/h2-data
+        ports:
+            - "81:81"            
+            - "1521:1521"    
+            
+    mongo:
+        image: mongo
+        volumes:
+            - mongo-data:/data/db
+        ports:
+            - "127.0.0.1:27017:27017"     
+            
+    zookeeper:
+        image: zookeeper            
+            
+    vreportal:
+        image: vre_portal
+        environment:
+            SPRING_DATASOURCE_URL: "jdbc:h2:tcp://h2/~/evre;DB_CLOSE_ON_EXIT=FALSE"
+            H2MANAGER_DATASOURCE_URL: "jdbc:h2:tcp://h2/~/evre"
+            SPRING_DATASOURCE_USERNAME: "sa"
+            SPRING_DATASOURCE_PASSWORD: ""
+            SPRING_HTTP_MULTIPART_MAX_FILE_SIZE: "400Mb"
+            SPRING_HTTP_MULTIPART_MAX_REQUEST_SIZE: "400Mb"
+            SPRING_DATASOURCE_DRIVER_CLASS_NAME: "org.h2.Driver"
+            TRIPLESORE_NAMESPACE: "vre4eic"
+            SERVICE_URL: "http://metadata:8080/EVREMetadataServices"
+            SERVICE_TIMEOUT: "6"
+            SERVICE_MAX_RESULT_COUNT: "10000"
+            URI_PREFIX: "http://vreportal"
+            PORTAL_STATE: "public"
+        ports:
+            - "80:8080"
+        depends_on:
+            - h2
+            - metadata
             
     metadata:
         image: evre_metadata_service
         environment:
             TRIPLESTORE_URL: "http://139.91.183.97:9999/blazegraph"
             TRIPLESTORE_NAMESPACE: "ekt-data"
-            VIRTUOSO_URL: "v4e-hub.isti.cnr.it"
+            VIRTUOSO_URL: "virtuoso"
             VIRTUOSO_USERNAME: "dba"
             VIRTUOSO_PASSWORD: "dba"
             VIRTUOSO_PORT: "1111"
-            VIRTUOSO_REST_URL: "http://v4e-hub.isti.cnr.it:8890"
-            METADATA_ENDPOINT: "http://v4e-hub.isti.cnr.it:8080/EVREMetadataServices"
+            VIRTUOSO_REST_URL: "http://virtuoso:8890"
+            METADATA_ENDPOINT: "http://metadata:8080/EVREMetadataServices"
             NODELINK_URL: "v4e-lab.isti.cnr.it:2181"
             NODELINK_ENDPOINT: "http://v4e-lab.isti.cnr.it:8080/NodeService"
             WORKFLOWS_GRAPH: "http://vre/workflows"
             WORKFLOWS_GRAPH_LABEL: "Workflows"
         ports:
-            - "8080:8080"            
+            - "8080:8080"   
+        depends_on:
+            - virtuoso
+            
     
 
 volumes:
-  data:
-    driver: local    
+  virtuoso-data:
+  h2-data:
+  mongo-data:
