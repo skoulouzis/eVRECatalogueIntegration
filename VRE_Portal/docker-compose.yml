@@ -71,6 +71,10 @@ services:
             - "8080:8080"   
         depends_on:
             - virtuoso
+
+
+    node_service:
+        image: node_service
             
     
 
