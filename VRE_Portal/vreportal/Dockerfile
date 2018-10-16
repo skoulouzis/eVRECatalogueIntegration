@@ -27,3 +27,4 @@ CMD echo "spring.datasource.url=$SPRING_DATASOURCE_URL" > /vreportal/src/main/re
     JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 mvn "-Dexec.args=-classpath %classpath forth.ics.isl.Application --server.port=8080" -Dexec.executable=/usr/lib/jvm/java-8-openjdk-amd64/bin/java org.codehaus.mojo:exec-maven-plugin:1.2.1:exec
     
 
+# sudo docker build -t vre_portal . 

@@ -32,3 +32,5 @@ CMD echo "triplestore.url = $TRIPLESTORE_URL" > /usr/local/tomcat/webapps/EVREMe
     echo "workflows.graph.label = $WORKFLOWS_GRAPH_LABEL" >> /usr/local/tomcat/webapps/EVREMetadataServices/WEB-INF/classes/config.properties && \ 
     cat /usr/local/tomcat/webapps/EVREMetadataServices/WEB-INF/classes/config.properties && \
     catalina.sh run  
+
+#sudo docker build -t evre_metadata_service .
