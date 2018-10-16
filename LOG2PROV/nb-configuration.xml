@@ -9,6 +9,6 @@ Without this configuration present, some functionality in the IDE may be limited
     <python-data xmlns="http://nbpython.dev.java.net/ns/php-project/1">
         <application.args>-f files/localhost_access_log.2018-09-13.txt</application.args>
         <main.file>log2prov.py</main.file>
-        <platform.active>Python_3.5.2</platform.active>
+        <platform.active>Python_3.6.6</platform.active>
     </python-data>
 </project-shared-configuration>
