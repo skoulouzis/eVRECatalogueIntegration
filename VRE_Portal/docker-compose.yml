@@ -12,13 +12,13 @@ services:
         ports:
             - "8890:8890"
             
-    h2:
-        image: oscarfonts/h2
-        volumes:
-            - h2-data:/opt/h2-data
-        ports:
-            - "81:81"            
-            - "1521:1521"    
+    #h2:
+        #image: oscarfonts/h2
+        #volumes:
+            #- h2-data:/opt/h2-data
+        #ports:
+            #- "81:81"            
+            #- "1521:1521"    
             
     mongo:
         image: mongo
@@ -33,8 +33,10 @@ services:
     vreportal:
         image: vre_portal
         environment:
-            SPRING_DATASOURCE_URL: "jdbc:h2:tcp://h2/~/evre;DB_CLOSE_ON_EXIT=FALSE"
-            H2MANAGER_DATASOURCE_URL: "jdbc:h2:tcp://h2/~/evre"
+            #SPRING_DATASOURCE_URL: "jdbc:h2:tcp://h2/~/evre;DB_CLOSE_ON_EXIT=FALSE"
+            #H2MANAGER_DATASOURCE_URL: "jdbc:h2:tcp://h2/~/evre"
+            SPRING_DATASOURCE_URL: "jdbc:h2:~/evre;DB_CLOSE_ON_EXIT=FALSE"
+            H2MANAGER_DATASOURCE_URL: "jdbc:h2:~/evre"
             SPRING_DATASOURCE_USERNAME: "sa"
             SPRING_DATASOURCE_PASSWORD: ""
             SPRING_HTTP_MULTIPART_MAX_FILE_SIZE: "400Mb"
