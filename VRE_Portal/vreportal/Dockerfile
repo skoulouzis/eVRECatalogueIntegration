@@ -7,6 +7,7 @@ RUN git clone https://github.com/vre4eic/vreportal.git
 WORKDIR vreportal
 RUN JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 mvn install
 
+ADD evre.mv.db /root
 
 CMD echo "spring.datasource.url=$SPRING_DATASOURCE_URL" > /vreportal/src/main/resources/application.properties && \
     echo "H2Manager.datasource.url=$H2MANAGER_DATASOURCE_URL" >> /vreportal/src/main/resources/application.properties && \
