@@ -47,7 +47,7 @@ services:
             URI_PREFIX: "http://vreportal"
             PORTAL_STATE: "public"
         ports:
-            - "80:8080"
+            - "82:8080"
         depends_on:
             - h2
             - metadata
@@ -55,26 +55,26 @@ services:
     metadata:
         image: evre_metadata_service
         environment:
-            TRIPLESTORE_URL: "http://139.91.183.97:9999/blazegraph"
-            TRIPLESTORE_NAMESPACE: "ekt-data"
+            #TRIPLESTORE_URL: "http://139.91.183.97:9999/blazegraph"
+            #TRIPLESTORE_NAMESPACE: "ekt-data"
             VIRTUOSO_URL: "virtuoso"
             VIRTUOSO_USERNAME: "dba"
             VIRTUOSO_PASSWORD: "dba"
             VIRTUOSO_PORT: "1111"
             VIRTUOSO_REST_URL: "http://virtuoso:8890"
             METADATA_ENDPOINT: "http://metadata:8080/EVREMetadataServices"
-            NODELINK_URL: "v4e-lab.isti.cnr.it:2181"
-            NODELINK_ENDPOINT: "http://v4e-lab.isti.cnr.it:8080/NodeService"
             WORKFLOWS_GRAPH: "http://vre/workflows"
             WORKFLOWS_GRAPH_LABEL: "Workflows"
+            NODELINK_URL: "v4e-lab.isti.cnr.it:2181"
+            NODELINK_ENDPOINT: "http://v4e-lab.isti.cnr.it:8080/NodeService"
         ports:
             - "8080:8080"   
         depends_on:
             - virtuoso
 
 
-    node_service:
-        image: node_service
+    #node_service:
+        #image: node_service
             
     
 

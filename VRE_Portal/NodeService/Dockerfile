@@ -50,4 +50,6 @@ CMD echo "/evre/settings/version=$EVRE_SETTINGS_VERSION" > /usr/local/tomcat/web
     catalina.sh run  
     
     
+    
+# docker build -t node_service .    
 # docker run -e EVRE_SETTINGS_VERSION="0.3" -e EVRE_SETTINGS_AUTHENTICATION_TOKEN_TIMEOUT="60" -e EVRE_SETTINGS_AUTHENTICATION_CODE_TIMEOUT="60" -e EVRE_SERVICES_MESSAGE_BROKER="tcp://localhost:61616" -e EVRE_SERVICES_PROFILE_STORAGE_URL="localhost" -e EVRE_SERVICES_PROFILE_STORAGE_PORT="27017" -e ADMIN_USER="administrator@fakeemail.com" -e ADMIN_PASSWORD="johnjohn78" -e VERSION="0.0.3" -e LICENSE_TYPE="TBD" -e LICENSE_URL="licensedoc" -e NOTIFICATION_API_KEY="aaaaaaaaaaaaa" -e ZOOKEEPER_DEFAULT="localhost:2181" -e TOKEN_SECRET_DEFAULT="fvsecret" -e AAAI_LOGIN_DEFAULT="admin" -it node_service     
