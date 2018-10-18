@@ -12,20 +12,12 @@ services:
         ports:
             - "8890:8890"
             
-    #h2:
-        #image: oscarfonts/h2
-        #volumes:
-            #- h2-data:/opt/h2-data
-        #ports:
-            #- "81:81"            
-            #- "1521:1521"    
-            
     mongo:
         image: mongo
         volumes:
             - mongo-data:/data/db
         ports:
-            - "127.0.0.1:27017:27017"     
+            - "27017:27017"     
             
     zookeeper:
         image: zookeeper            
@@ -33,8 +25,6 @@ services:
     vreportal:
         image: vre_portal
         environment:
-            #SPRING_DATASOURCE_URL: "jdbc:h2:tcp://h2/~/evre;DB_CLOSE_ON_EXIT=FALSE"
-            #H2MANAGER_DATASOURCE_URL: "jdbc:h2:tcp://h2/~/evre"
             SPRING_DATASOURCE_URL: "jdbc:h2:~/evre;DB_CLOSE_ON_EXIT=FALSE"
             H2MANAGER_DATASOURCE_URL: "jdbc:h2:~/evre"
             SPRING_DATASOURCE_USERNAME: "sa"
@@ -59,11 +49,16 @@ services:
         environment:
             #TRIPLESTORE_URL: "http://139.91.183.97:9999/blazegraph"
             #TRIPLESTORE_NAMESPACE: "ekt-data"
-            VIRTUOSO_URL: "virtuoso"
+            #VIRTUOSO_URL: "virtuoso"
+            #VIRTUOSO_USERNAME: "dba"
+            #VIRTUOSO_PASSWORD: "dba"
+            #VIRTUOSO_PORT: "1111"
+            #VIRTUOSO_REST_URL: "http://virtuoso:8890"
+            VIRTUOSO_URL: "v4e-hub.isti.cnr.it"
             VIRTUOSO_USERNAME: "dba"
             VIRTUOSO_PASSWORD: "dba"
             VIRTUOSO_PORT: "1111"
-            VIRTUOSO_REST_URL: "http://virtuoso:8890"
+            VIRTUOSO_REST_URL: "http://v4e-hub.isti.cnr.it:8890"            
             METADATA_ENDPOINT: "http://metadata:8080/EVREMetadataServices"
             WORKFLOWS_GRAPH: "http://vre/workflows"
             WORKFLOWS_GRAPH_LABEL: "Workflows"
