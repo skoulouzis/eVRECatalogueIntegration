@@ -6,7 +6,7 @@ git clone -b taverna2 https://github.com/skoulouzis/incubator-taverna-plugin-gis
 cd incubator-taverna-plugin-gis 
 mvn install 
 
-In the ~/.taverna-core-2.5.0/plugins/plugins.xml file above the </plugins:plugins> line add :
+In the ~/.taverna-core-2.5.0/plugins/plugins.xml file above the </plugins:plugins> line add the plugin entry below. **Note that you have to replace the line file:///home/{$user}/.m2/repository/ with your actual maven reposetory path**  
 
 ```XML
  <plugin>
