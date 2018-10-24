@@ -57,8 +57,9 @@ Table.prototype.build = function (container) {
 
 
         const request = new XMLHttpRequest();
-        var limit = 80;
-        const url = innerHTML + '/list_records/?catalogue_url=' + this.catalogueURL + '&limit=' + limit;
+        var limit = document.getElementById("recLimit").value;
+//        const url = innerHTML + '/list_records/?catalogue_url=' + this.catalogueURL + '&limit=' + limit;
+        const url = innerHTML + '/list_records/?catalogue_url=' + this.catalogueURL;
         console.log(url)
         request.open("GET", url);
 

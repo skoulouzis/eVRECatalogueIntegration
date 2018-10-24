@@ -20,6 +20,7 @@ import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletResponse;
@@ -58,7 +59,7 @@ public class ConvertController {
     ProcessingStatus convert(@RequestParam(value = "catalogue_url") String catalogueURL,
             @RequestParam(value = "mapping_url") String mappingURL,
             @RequestParam(value = "generator_url") String generatorURL,
-            @RequestParam(value = "limit") int limit,
+            @RequestParam(value = "limit", required = false) int limit,
             @RequestParam(value = "export_id") String exportID) {
         try {
             ProcessingStatus status = service.doProcess(catalogueURL, mappingURL, generatorURL, limit, exportID);
@@ -71,9 +72,11 @@ public class ConvertController {
         return null;
     }
 
-    @RequestMapping(value = "/list_records", method = RequestMethod.GET, params = {"catalogue_url", "limit"})
+    @RequestMapping(value = "/list_records", method = RequestMethod.GET)
     public @ResponseBody
-    Collection<String> listRecords(@RequestParam(value = "catalogue_url") String catalogueURL, @RequestParam(value = "limit") int limit) {
+    Collection<String> listRecords(
+            @RequestParam(value = "catalogue_url") String catalogueURL,
+            @RequestParam(value = "limit", required = false) Integer limit) {
         Collection<String> records = null;
         try {
             records = service.listRecords(catalogueURL, limit);

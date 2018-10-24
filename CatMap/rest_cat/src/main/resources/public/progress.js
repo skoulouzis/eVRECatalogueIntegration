@@ -1,8 +1,6 @@
 var folderName;
 function move() {
-    if (checkInputs()) {
-
-    }
+    analyzeCatalogue()
     var innerHTML = window.location.href.split('/');
     innerHTML.pop();
     innerHTML = innerHTML.join('/');
@@ -11,7 +9,7 @@ function move() {
     var startButt = document.getElementById("startBtn");
     startButt.disabled = true;
     var width = 10;
-    var limit = 80;
+    var limit = document.getElementById("recLimit").value;
     var id = setInterval(frame, 10);
     var catalogueURL = document.getElementById("cat_url").value;
 
@@ -62,23 +60,17 @@ function move() {
         var downloadBtn = document.getElementById("downloadBtn");
         downloadBtn.disabled = true;
 
+        var exploreBtn = document.getElementById("exploreBtn");
+        exploreBtn.disabled = true;
+
 
         if (width >= 100) {
             clearInterval(id);
             document.getElementById("startBtn").disabled = false;
             done = false;
             currProgress = 0;
-            var rec_loc = document.getElementById("rec_loc");
-            if (rec_loc !== null) {
-                rec_loc.href = window.location.protocol + '//' + window.location.hostname + '/' + mappingName;
-                rec_loc.style.display = "inline";
-            }
             downloadBtn.disabled = false;
-            var source_rec_url = document.getElementById("source_rec_url");
-            if (source_rec_url !== null) {
-                source_rec_url.value = window.location.protocol + '//' + window.location.hostname + '/' + mappingName;
-            }
-
+            exploreBtn.disabled = false;
 
 
         } else {
@@ -121,6 +113,16 @@ function download() {
     var win = window.open(downloadURL, '_blank');
     win.focus();
 }
+
+
+function explore() {
+    var webdavURL = window.location.protocol + '//' + window.location.hostname + '/' + folderName;
+
+    console.log('webdavURL: ' + webdavURL)
+    var win = window.open(webdavURL, '_blank');
+    win.focus();
+}
+
 
 
 function getMappingParams() {

@@ -46,10 +46,10 @@ public class ExportDocTask implements Callable<String> {
     private final String queue;
     private String mappingURL;
     private String generatorURL;
-    private int limit;
+    private Integer limit;
     private String exportID;
 
-    public ExportDocTask(String catalogueURL, ConnectionFactory factory, String queue, String mappingURL, String generatorURL, int limit, String exportID) {
+    public ExportDocTask(String catalogueURL, ConnectionFactory factory, String queue, String mappingURL, String generatorURL, Integer limit, String exportID) {
         this.catalogueURL = catalogueURL;
         this.factory = factory;
         if (this.factory == null) {
@@ -66,7 +66,7 @@ public class ExportDocTask implements Callable<String> {
 
         try {
             CatalogueExporter exporter = getExporter(catalogueURL);
-            if (this.limit > -1) {
+            if (this.limit != null && this.limit > -1) {
                 exporter.setLimit(limit);
             }
             Collection<String> allResourceIDs = exporter.fetchAllDatasetUUIDs();
@@ -128,7 +128,7 @@ public class ExportDocTask implements Callable<String> {
                     = (HttpURLConnection) new URL(URLName).openConnection();
             con.setInstanceFollowRedirects(true);
             con.setRequestMethod("GET");
-            
+
             int code = con.getResponseCode();
             if (code != HttpURLConnection.HTTP_OK) {
                 if (code == HttpURLConnection.HTTP_MOVED_TEMP
