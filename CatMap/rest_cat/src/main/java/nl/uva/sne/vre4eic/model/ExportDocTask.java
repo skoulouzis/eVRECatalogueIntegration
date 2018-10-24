@@ -19,6 +19,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
@@ -46,8 +47,9 @@ public class ExportDocTask implements Callable<String> {
     private String mappingURL;
     private String generatorURL;
     private int limit;
+    private String exportID;
 
-    public ExportDocTask(String catalogueURL, ConnectionFactory factory, String queue, String mappingURL, String generatorURL, int limit) {
+    public ExportDocTask(String catalogueURL, ConnectionFactory factory, String queue, String mappingURL, String generatorURL, int limit, String exportID) {
         this.catalogueURL = catalogueURL;
         this.factory = factory;
         if (this.factory == null) {
@@ -57,9 +59,10 @@ public class ExportDocTask implements Callable<String> {
         this.mappingURL = mappingURL;
         this.generatorURL = generatorURL;
         this.limit = limit;
+        this.exportID = exportID;
     }
 
-    private void exportDocuments(String catalogueURL) throws MalformedURLException, GenericException {
+    private void exportDocuments(String catalogueURL, String exportID) throws MalformedURLException, GenericException {
 
         try {
             CatalogueExporter exporter = getExporter(catalogueURL);
@@ -81,6 +84,9 @@ public class ExportDocTask implements Callable<String> {
                     json.put("json_ckan", resource.toString());
                     json.put("mappingURL", mappingURL);
                     json.put("generatorURL", generatorURL);
+                    if (exportID != null) {
+                        json.put("export_id", exportID);
+                    }
 
                     byte[] encoded = (Base64.encodeBase64(json.toString().getBytes()));
                     String message = new String(encoded, "UTF-8");
@@ -103,7 +109,7 @@ public class ExportDocTask implements Callable<String> {
     }
 
     public CatalogueExporter getExporter(String catalogueURL) throws MalformedURLException {
-        if (urlExists(catalogueURL + "/api/action/package_list")) {
+        if (urlExists(catalogueURL + "/api/action/tag_show?id=")) {
             return new D4ScienceExporter(catalogueURL);
         }
         if (new URL(catalogueURL).getPath().contains("/wps/WebProcessingService") || urlExists(catalogueURL + "/wps/WebProcessingService")) {
@@ -148,7 +154,7 @@ public class ExportDocTask implements Callable<String> {
 
     @Override
     public String call() throws Exception {
-        exportDocuments(this.catalogueURL);
+        exportDocuments(this.catalogueURL, this.exportID);
         return null;
     }
 }

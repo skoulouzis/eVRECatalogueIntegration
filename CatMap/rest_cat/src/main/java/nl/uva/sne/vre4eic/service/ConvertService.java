@@ -58,21 +58,22 @@ public class ConvertService {
 
     Map<String, Future<String>> taskMap = new HashMap<>();
 
-    public ProcessingStatus doProcess(String catalogueURL, String mappingURL, String generatorURL, int limit) throws MalformedURLException, IOException, FileNotFoundException, InterruptedException {
-        Future<String> convertTask = taskMap.get(catalogueURL);
+    public ProcessingStatus doProcess(String catalogueURL, String mappingURL, String generatorURL, int limit, String exportID) throws MalformedURLException, IOException, FileNotFoundException, InterruptedException {
+        String taskID = catalogueURL+exportID;
+        Future<String> convertTask = taskMap.get(taskID);
 
         if (convertTask == null) {
 //            String path = new URL(mappingURL).getPath();
 //            String queueName = path.substring(path.lastIndexOf('/') + 1);
             String queueName = "ckan2cerif";
-            ExportDocTask task = new ExportDocTask(catalogueURL, connectionFactory.getRabbitConnectionFactory(), queueName, mappingURL, generatorURL, limit);
+            ExportDocTask task = new ExportDocTask(catalogueURL, connectionFactory.getRabbitConnectionFactory(), queueName, mappingURL, generatorURL, limit, exportID);
             convertTask = exec.submit(task);
-            taskMap.put(catalogueURL, convertTask);
+            taskMap.put(taskID, convertTask);
         }
         ProcessingStatus process = new ProcessingStatus();
         process.setCatalogueURL(new URL(catalogueURL));
         if (convertTask.isDone()) {
-            taskMap.remove(catalogueURL);
+            taskMap.remove(taskID);
             process.setStatus("FINISHED");
             return process;
         } else {
@@ -82,7 +83,7 @@ public class ConvertService {
     }
 
     public Collection<String> listRecords(String catalogueURL, int limit) throws MalformedURLException, IOException {
-        ExportDocTask task = new ExportDocTask(catalogueURL, connectionFactory.getRabbitConnectionFactory(), null, null, null, limit);
+        ExportDocTask task = new ExportDocTask(catalogueURL, connectionFactory.getRabbitConnectionFactory(), null, null, null, limit, null);
         CatalogueExporter exp;
         exp = task.getExporter(catalogueURL);
         if (limit > -1) {
@@ -102,10 +103,13 @@ public class ConvertService {
 
             List<DavResource> resources = sardine.list(webDAVURL);
             URL url = new URL(webDAVURL);
-            String path = url.getFile().substring(0, url.getFile().lastIndexOf('/'));
-            String base = url.getProtocol() + "://" + url.getHost() + path;
+            String base = url.getProtocol() + "://" + url.getHost();
+            if (url.getPort() > -1) {
+                base += ":" + url.getPort();
+            }
+
             File output = new File(System.getProperty("java.io.tmpdir") + File.separator + "records");
-            if(output.exists()){
+            if (output.exists()) {
                 output.delete();
             }
             output.mkdirs();
@@ -153,8 +157,9 @@ public class ConvertService {
 
         InputStream in = null;
         File file = null;
+        String webdavFile = webDAVURL + "/" + resource.getPath();
         try {
-            in = sardine.get(webDAVURL + "/" + resource.getPath());
+            in = sardine.get(webdavFile);
 
             file = new File(output, resource.getName());
             try (OutputStream out = new FileOutputStream(file.getAbsoluteFile())) {
