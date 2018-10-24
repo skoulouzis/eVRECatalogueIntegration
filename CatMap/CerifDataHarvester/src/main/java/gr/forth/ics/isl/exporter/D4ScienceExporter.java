@@ -1,5 +1,8 @@
 package gr.forth.ics.isl.exporter;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.LoadingCache;
+import com.google.common.cache.RemovalListener;
 import gr.forth.ics.isl.common.D4ScienceResources;
 import gr.forth.ics.isl.exception.GenericException;
 import java.io.BufferedReader;
@@ -12,8 +15,12 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -39,10 +46,15 @@ import org.xml.sax.SAXException;
 public class D4ScienceExporter implements CatalogueExporter {
 
     private final String endpointUrl;
-    private int limit = -1;
+    private Integer limit = -1;
+    private static final Map<String, Collection<String>> UUID_CACHE = new HashMap<>();
+    private static final Map<String, JSONObject> RESOURCE_CACHE = new HashMap<>();
+    private long cacheCleanupLastTime;
 
     public D4ScienceExporter(String endpointUrl) {
         this.endpointUrl = endpointUrl;
+        cacheCleanupLastTime = System.currentTimeMillis();
+
     }
 
     @Override
@@ -64,10 +76,28 @@ public class D4ScienceExporter implements CatalogueExporter {
 
     @Override
     public Collection<String> fetchAllDatasetUUIDs() throws MalformedURLException, IOException {
-//        log.info("Fetching the list of Resource IDs from the resource catalog");
-        Set<String> retCollection = new HashSet<>();
+        Collection<String> retCollection = this.getFromUUIDCache(endpointUrl);
+        if (retCollection != null && this.limit <= retCollection.size()) {
+            if (this.limit <= -1 || this.limit == retCollection.size()) {
+                return retCollection;
+            } else {
+                Collection<String> tempCollection = new HashSet<>(this.limit);
+                Iterator<String> it = retCollection.iterator();
+                int counter = 0;
+                while (it.hasNext()) {
+                    String next = it.next();
+                    tempCollection.add(next);
+                    counter++;
+                    if (counter >= this.limit) {
+                        break;
+                    }
+                }
+                return tempCollection;
+            }
+        }
+        retCollection = new HashSet<>();
         String ckanPath = "/api/action/package_list";
-        if (this.limit > -1) {
+        if (this.limit != null && this.limit > -1) {
             ckanPath += "?limit=" + this.limit;
         }
 //        for (String path : D4ScienceResources.ALL_RESOURCES_ENDPOINT) {
@@ -104,26 +134,16 @@ public class D4ScienceExporter implements CatalogueExporter {
 
             }
         }
+        this.UUID_CACHE.put(this.endpointUrl, retCollection);
         return retCollection;
     }
 
-//    private boolean urlExists(String URLName) {
-//        try {
-//            HttpURLConnection.setFollowRedirects(false);
-//            //        HttpURLConnection.setInstanceFollowRedirects(false)
-//            HttpURLConnection con
-//                    = (HttpURLConnection) new URL(URLName).openConnection();
-//            con.setRequestMethod("HEAD");
-//            return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
-//        } catch (MalformedURLException ex) {
-//            return false;
-//        } catch (IOException ex) {
-//            return false;
-//        }
-//    }
     @Override
     public JSONObject exportResource(String resourceId) throws MalformedURLException, IOException {
-
+        JSONObject jSONObject = this.getFromResourceCache(resourceId);
+        if (jSONObject != null) {
+            return jSONObject;
+        }
         String resourceUrl = this.endpointUrl + D4ScienceResources.RESOURCE_ENDPOINT + "?" + D4ScienceResources.ID_PARAMETER + "=" + resourceId;
         HttpURLConnection conn = (HttpURLConnection) new URL(resourceUrl).openConnection();
         StringBuilder sb;
@@ -134,7 +154,9 @@ public class D4ScienceExporter implements CatalogueExporter {
                 sb.append(line).append("\n");
             }
         }
-        return new JSONObject(sb.toString());
+        jSONObject = new JSONObject(sb.toString());
+        this.RESOURCE_CACHE.put(resourceId, jSONObject);
+        return jSONObject;
 
     }
 
@@ -178,7 +200,29 @@ public class D4ScienceExporter implements CatalogueExporter {
     }
 
     @Override
-    public void setLimit(int limit) {
+    public void setLimit(Integer limit) {
         this.limit = limit;
+    }
+
+    private JSONObject getFromResourceCache(String key) {
+        final long now = System.currentTimeMillis();
+        final long delta = now - cacheCleanupLastTime;
+        if (delta < 0 || delta > 15 * 60 * 1000) {
+            cacheCleanupLastTime = now;
+            this.RESOURCE_CACHE.clear();
+            return null;
+        }
+        return this.RESOURCE_CACHE.get(key);
+    }
+
+    private Collection<String> getFromUUIDCache(String key) {
+        final long now = System.currentTimeMillis();
+        final long delta = now - cacheCleanupLastTime;
+        if (delta < 0 || delta > 15 * 60 * 1000) {
+            cacheCleanupLastTime = now;
+            this.UUID_CACHE.clear();
+            return null;
+        }
+        return this.UUID_CACHE.get(key);
     }
 }
