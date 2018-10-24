@@ -82,7 +82,7 @@ public class ConvertService {
         }
     }
 
-    public Collection<String> listRecords(String catalogueURL, int limit) throws MalformedURLException, IOException {
+    public Collection<String> listRecords(String catalogueURL, int limit) throws MalformedURLException, IOException, InterruptedException {
         ExportDocTask task = new ExportDocTask(catalogueURL, connectionFactory.getRabbitConnectionFactory(), null, null, null, limit, null);
         CatalogueExporter exp;
         exp = task.getExporter(catalogueURL);

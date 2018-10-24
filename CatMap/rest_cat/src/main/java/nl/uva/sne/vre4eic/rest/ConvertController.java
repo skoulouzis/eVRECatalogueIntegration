@@ -77,7 +77,7 @@ public class ConvertController {
         Collection<String> records = null;
         try {
             records = service.listRecords(catalogueURL, limit);
-        } catch (IOException ex) {
+        } catch (IOException | InterruptedException ex) {
             Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return records;

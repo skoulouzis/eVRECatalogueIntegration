@@ -62,7 +62,7 @@ public class ExportDocTask implements Callable<String> {
         this.exportID = exportID;
     }
 
-    private void exportDocuments(String catalogueURL, String exportID) throws MalformedURLException, GenericException {
+    private void exportDocuments(String catalogueURL, String exportID) throws MalformedURLException, GenericException, InterruptedException {
 
         try {
             CatalogueExporter exporter = getExporter(catalogueURL);
@@ -108,8 +108,8 @@ public class ExportDocTask implements Callable<String> {
         }
     }
 
-    public CatalogueExporter getExporter(String catalogueURL) throws MalformedURLException {
-        if (urlExists(catalogueURL + "/api/action/tag_show?id=")) {
+    public CatalogueExporter getExporter(String catalogueURL) throws MalformedURLException, InterruptedException {
+        if (urlExists(catalogueURL + "/api/action/tag_list")) {
             return new D4ScienceExporter(catalogueURL);
         }
         if (new URL(catalogueURL).getPath().contains("/wps/WebProcessingService") || urlExists(catalogueURL + "/wps/WebProcessingService")) {
@@ -119,7 +119,7 @@ public class ExportDocTask implements Callable<String> {
         }
     }
 
-    private boolean urlExists(String URLName) {
+    private boolean urlExists(String URLName) throws InterruptedException {
 
         try {
             HttpURLConnection.setFollowRedirects(true);
@@ -127,8 +127,8 @@ public class ExportDocTask implements Callable<String> {
             HttpURLConnection con
                     = (HttpURLConnection) new URL(URLName).openConnection();
             con.setInstanceFollowRedirects(true);
-            con.setRequestMethod("HEAD");
-
+            con.setRequestMethod("GET");
+            
             int code = con.getResponseCode();
             if (code != HttpURLConnection.HTTP_OK) {
                 if (code == HttpURLConnection.HTTP_MOVED_TEMP
