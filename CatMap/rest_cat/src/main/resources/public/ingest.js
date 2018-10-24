@@ -12,7 +12,7 @@ function ingest() {
     var width = 10;
     var id = setInterval(frame, 10);
     var catalogueURL = document.getElementById("cat_url").value;
-    var limit = 80;
+    var limit = document.getElementById("recLimit").value;
     var url = innerHTML + '/list_records/?catalogue_url=' + catalogueURL + '&limit=' + limit;
 
     var request = new XMLHttpRequest();

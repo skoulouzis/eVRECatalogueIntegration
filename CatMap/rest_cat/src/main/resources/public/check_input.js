@@ -18,6 +18,8 @@ function checkInputs() {
                 option.text = "Mapping120";
                 option.value = 2;
                 mappingSelect.add(option);
+                
+                mappingSelect.selectedIndex = 1
             }
             break;
 
@@ -29,8 +31,8 @@ function checkInputs() {
             }
             break;
     }
-    var mappingSelect = document.getElementById("mappingSelect").value;
-    var mappingInt = parseInt(mappingSelect)
+    mappingSelect = document.getElementById("mappingSelect").value;
+    mappingInt = parseInt(mappingSelect)
     console.log(mappingInt);
 
 
