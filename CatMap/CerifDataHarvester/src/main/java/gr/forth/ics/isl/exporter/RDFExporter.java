@@ -103,7 +103,7 @@ public class RDFExporter implements CatalogueExporter {
     }
 
     @Override
-    public void setLimit(int limit) {
+    public void setLimit(Integer limit) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

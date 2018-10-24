@@ -20,6 +20,6 @@ public interface CatalogueExporter {
 
     public String transformToXml(JSONObject jsonObject);
 
-    public void setLimit(int limit);
+    public void setLimit(Integer limit);
 
 }
