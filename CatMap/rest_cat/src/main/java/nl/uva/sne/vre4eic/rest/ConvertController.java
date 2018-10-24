@@ -52,15 +52,16 @@ public class ConvertController {
 //    http://localhost:8080/rest/convert?catalogue_url=%20https://catalog.data.gov&mapping_url=https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/Mapping62.x3ml&generator_url=https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/generator.xml
 //    http://localhost:8080/catalogue_mapper/convert?catalogue_url=%20https://ckan-d4s.d4science.org&mapping_url=https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/Mapping62.x3ml&generator_url=https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/generator.xml
 
-    @RequestMapping(value = "/convert", method = RequestMethod.GET, params = {"catalogue_url", "mapping_url", "generator_url"})
+    @RequestMapping(value = "/convert", method = RequestMethod.GET, params = {"catalogue_url", "mapping_url", "generator_url", "export_id"})
     @GetMapping("/")
     public @ResponseBody
     ProcessingStatus convert(@RequestParam(value = "catalogue_url") String catalogueURL,
             @RequestParam(value = "mapping_url") String mappingURL,
             @RequestParam(value = "generator_url") String generatorURL,
-            @RequestParam(value = "limit") int limit) {
+            @RequestParam(value = "limit") int limit,
+            @RequestParam(value = "export_id") String exportID) {
         try {
-            ProcessingStatus status = service.doProcess(catalogueURL, mappingURL, generatorURL, limit);
+            ProcessingStatus status = service.doProcess(catalogueURL, mappingURL, generatorURL, limit, exportID);
             return status;
         } catch (MalformedURLException ex) {
             Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
@@ -83,23 +84,27 @@ public class ConvertController {
 
     }
 
-    @RequestMapping(value = "/download/{mappingName}", method = RequestMethod.GET)
-    public void downloadFile(HttpServletResponse response, @PathVariable("mappingName") String mappingName) throws IOException {
+    @RequestMapping(value = "/download/{mappingName}/{mappingID}", method = RequestMethod.GET)
+    public void downloadFile(HttpServletResponse response,
+            @PathVariable("mappingName") String mappingName,
+            @PathVariable("mappingID") String mappingID) throws IOException {
         String webdavHost = System.getenv("WEBDAV_HOST");
         String webDAVURL;
+        String folderName = mappingName + "/" + mappingID;
         if (webdavHost == null) {
             InetAddress addr;
             addr = InetAddress.getLocalHost();
             webdavHost = addr.getHostName();
-            webDAVURL = "http://" + webdavHost + "/" + mappingName;
+
+            webDAVURL = "http://" + webdavHost + "/" + folderName;
         } else {
-            webDAVURL = "http://" + webdavHost + "/" + mappingName;
+            webDAVURL = "http://" + webdavHost + "/" + folderName;
         }
         File file = new File(service.zipRecords(webDAVURL));
 
         if (!file.exists()) {
             String errorMessage = "Sorry. The file you are looking for does not exist";
-            System.out.println(errorMessage);
+            Logger.getLogger(ConvertController.class.getName()).log(Level.WARNING, "File not found: {0}", file.getAbsolutePath());
             try (OutputStream outputStream = response.getOutputStream()) {
                 outputStream.write(errorMessage.getBytes(Charset.forName("UTF-8")));
             }
@@ -107,7 +112,6 @@ public class ConvertController {
         }
         String mimeType = URLConnection.guessContentTypeFromName(file.getName());
         if (mimeType == null) {
-            System.out.println("mimetype is not detectable, will take default");
             mimeType = "application/octet-stream";
         }
         response.setContentType(mimeType);
@@ -124,9 +128,9 @@ public class ConvertController {
         FileCopyUtils.copy(inputStream, response.getOutputStream());
     }
 
-    @RequestMapping(value = "/list_results", method = RequestMethod.GET, params = {"mapping_name"})
+    @RequestMapping(value = "/list_results", method = RequestMethod.GET, params = {"folder_name"})
     public @ResponseBody
-    Collection<DavResource> listResults(@RequestParam(value = "mapping_name") String mappingName) {
+    Collection<DavResource> listResults(@RequestParam(value = "folder_name") String folderName) {
         Collection<DavResource> records = null;
         try {
             String webdavHost = System.getenv("WEBDAV_HOST");
@@ -135,13 +139,13 @@ public class ConvertController {
                 InetAddress addr;
                 addr = InetAddress.getLocalHost();
                 webdavHost = addr.getHostName();
-                webDAVURL = "http://" + webdavHost + "/" + mappingName;
+                webDAVURL = "http://" + webdavHost + "/" + folderName;
                 if (!urlExists(webDAVURL)) {
                     records = new ArrayList<>();
                     return records;
                 }
             } else {
-                webDAVURL = "http://" + webdavHost + "/" + mappingName;
+                webDAVURL = "http://" + webdavHost + "/" + folderName;
             }
             Logger.getLogger(ConvertController.class.getName()).log(Level.INFO, "Webdav: {0}", webDAVURL);
             records = service.listResults(webDAVURL);

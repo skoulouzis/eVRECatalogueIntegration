@@ -12,27 +12,27 @@ function Table() {
 
 Table.prototype.setHeader = function (keys) {
 //sets header data
-    this.header = keys
-    return this
+    this.header = keys;
+    return this;
 }
 
 Table.prototype.setData = function (data) {
 //sets the main data
-    this.data = data
-    return this
+    this.data = data;
+    return this;
 }
 
 Table.prototype.setCatalogueURL = function (catalogueURL) {
-    this.catalogueURL = catalogueURL
-    return this
+    this.catalogueURL = catalogueURL;
+    return this;
 }
 
 
 
 Table.prototype.setTableClass = function (tableClass) {
 //sets the table class name
-    this.tableClass = tableClass
-    return this
+    this.tableClass = tableClass;
+    return this;
 }
 Table.prototype.build = function (container) {
     var innerHTML = window.location.href.split('/');
@@ -57,14 +57,16 @@ Table.prototype.build = function (container) {
 
 
         const request = new XMLHttpRequest();
-
-        const url = innerHTML + '/list_records/?catalogue_url=' + this.catalogueURL + '&limit=80';
+        var limit = 80;
+        const url = innerHTML + '/list_records/?catalogue_url=' + this.catalogueURL + '&limit=' + limit;
+        console.log(url)
         request.open("GET", url);
 
         request.send();
 
         request.onload = function () {
             if (request.responseText !== null || request.responseText.length > 0) {
+                
                 json = JSON.parse(request.responseText);
                 cell1.innerHTML = "CKAN";
                 cell2.innerHTML = json.length;

@@ -18,7 +18,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.UUID;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,7 +31,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.net.URL;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.io.FileUtils;
@@ -120,6 +118,11 @@ public class Worker {
 
                     ckanRecordID = new JSONObject(jsonCkan).getJSONObject("result").getString("id");
                     String fileName = mappingName + "_" + ckanRecordID;
+                    String exportID = jObject.getString("export_id");
+                    String webdavFolder = mappingName;
+                    if (exportID != null) {
+                        webdavFolder = mappingName + "/" + exportID;
+                    }
                     File rdfFile = new File(outputRfdFolder + File.separator + fileName + ".rdf");
                     Logger.getLogger(Worker.class.getName()).log(Level.INFO, "fileName: {0}", fileName);
 
@@ -141,16 +144,16 @@ public class Worker {
 
                         Sardine sardine = SardineFactory.begin(webdavUser, webdavPass);
 
-                        if (sardine.exists("http://" + webdavHost + "/" + mappingName + "/" + rdfFile.getName())) {
-                            sardine.delete("http://" + webdavHost + "/" + mappingName + "/" + rdfFile.getName());
+                        if (sardine.exists("http://" + webdavHost + "/" + webdavFolder + "/" + rdfFile.getName())) {
+                            sardine.delete("http://" + webdavHost + "/" + webdavFolder + "/" + rdfFile.getName());
                         }
 
                         byte[] rdfData = FileUtils.readFileToByteArray(rdfFile);
 
-                        sardine.put("http://" + webdavHost + "/" + mappingName + "/" + rdfFile.getName(), rdfData);
+                        sardine.put("http://" + webdavHost + "/" + webdavFolder + "/" + rdfFile.getName(), rdfData);
 
-                        sardine.put("http://" + webdavHost + "/" + mappingName + "/" + fileName + ".xml", xmlCkan.getBytes());
-                        sardine.put("http://" + webdavHost + "/" + mappingName + "/" + fileName + ".json", jsonCkan.getBytes());
+                        sardine.put("http://" + webdavHost + "/" + webdavFolder + "/" + fileName + ".xml", xmlCkan.getBytes());
+                        sardine.put("http://" + webdavHost + "/" + webdavFolder + "/" + fileName + ".json", jsonCkan.getBytes());
 
                     }
 
