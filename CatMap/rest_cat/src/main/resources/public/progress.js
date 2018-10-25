@@ -71,6 +71,15 @@ function move() {
             currProgress = 0;
             downloadBtn.disabled = false;
             exploreBtn.disabled = false;
+            var rec_loc = document.getElementById("rec_loc");
+            if (rec_loc !== null) {
+                rec_loc.href =  window.location.protocol + '//' + window.location.hostname + '/' + folderName;
+                rec_loc.style.display = "inline";
+            }
+            var source_rec_url = document.getElementById("source_rec_url");
+            if (source_rec_url !== null) {
+                source_rec_url.value = window.location.protocol + '//' + window.location.hostname + '/' + folderName;
+            }
 
 
         } else {

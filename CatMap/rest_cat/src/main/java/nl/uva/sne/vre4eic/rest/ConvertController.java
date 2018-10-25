@@ -20,13 +20,13 @@ import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletResponse;
 import nl.uva.sne.vre4eic.model.ProcessingStatus;
 import nl.uva.sne.vre4eic.service.ConvertService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.ModelMap;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -188,6 +189,14 @@ public class ConvertController {
         } catch (IOException ex) {
             return false;
         }
+    }
+
+    @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
+    public @ResponseBody
+    String submit(@RequestParam("files") MultipartFile[] files, ModelMap modelMap) {
+        modelMap.addAttribute("files", files);
+        
+        return "done";
     }
 
 ////    http://localhost:8080/rest/get_stats?rdf_url=ftp://user:12345@localhost/ckan_Mapping62.x3ml/

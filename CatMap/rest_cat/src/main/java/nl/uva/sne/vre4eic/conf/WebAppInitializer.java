@@ -30,7 +30,8 @@ public class WebAppInitializer implements WebApplicationInitializer {
         ctx.register(ThreadConfig.class);
 //        ctx.register(SecurityConfig.class);
         ctx.setServletContext(servletContext);
-        
+        ctx.register(MultipartConfig.class);
+
         ServletRegistration.Dynamic servlet = servletContext.addServlet("dispatcher",
                 new DispatcherServlet(ctx));
         servlet.setLoadOnStartup(1);
