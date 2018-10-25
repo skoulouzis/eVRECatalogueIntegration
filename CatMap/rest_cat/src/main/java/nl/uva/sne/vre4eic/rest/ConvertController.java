@@ -191,13 +191,7 @@ public class ConvertController {
         }
     }
 
-    @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
-    public @ResponseBody
-    String submit(@RequestParam("files") MultipartFile[] files, ModelMap modelMap) {
-        modelMap.addAttribute("files", files);
-        
-        return "done";
-    }
+
 
 ////    http://localhost:8080/rest/get_stats?rdf_url=ftp://user:12345@localhost/ckan_Mapping62.x3ml/
 //    @RequestMapping(value = "/get_stats", method = RequestMethod.GET, params = {"rdf_url"})
