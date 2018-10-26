@@ -6,7 +6,7 @@ setup (
        packages=find_packages(),
 
        # Declare your packages' dependencies here, for eg:
-       install_requires=['apache-log-parser>=1.7.0','provpy>=1.1.3','prov>=1.1.3'],
+       install_requires=['apache-log-parser>=1.7.0','provpy>=1.1.3','prov>=1.1.3','pika>=0.12.0'],
 
        # Fill in these to make your Egg ready for upload to
        # PyPI
