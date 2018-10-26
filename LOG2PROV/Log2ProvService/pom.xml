@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>nl.uva.sne.vre4eic.log2prov</groupId>
-    <artifactId>Log2ProvService</artifactId>
+    <artifactId>ProvenanceIntegrationServcie</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   
     <parent>
@@ -17,15 +17,24 @@
         </dependency>
 
         <dependency>
-            <groupId>jmimemagic</groupId>
-            <artifactId>jmimemagic</artifactId>
-            <version>0.1.2</version>
+            <groupId>org.springframework.amqp</groupId>
+            <artifactId>spring-rabbit</artifactId>
         </dependency>
         
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-influx</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20180130</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 	
     <properties>
         <java.version>1.8</java.version>
-    </properties> 
-  
+    </properties>
+    <description>  PRovenance Integrator SErvice  (PRISE)</description>
 </project>
