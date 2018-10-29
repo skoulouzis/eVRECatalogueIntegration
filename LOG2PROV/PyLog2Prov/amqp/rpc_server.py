@@ -1,11 +1,8 @@
 import base64
 import json
-import logging
 import os
 import os.path
-from os.path import expanduser
 import pika
-import sys
 import tempfile
 import time
 import json
