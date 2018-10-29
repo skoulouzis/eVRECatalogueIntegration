@@ -1,10 +1,12 @@
 #!/bin/bash
 
-mvn install 
+# mvn install 
+JAVA_HOME=/usr/lib/jvm/java-8-oracle mvn install
 
 cd cat_worker/
 
-mvn clean compile assembly:single
+# mvn clean compile assembly:single
+mvn compile assembly:single
 cp target/cat_worker-1.0-SNAPSHOT-jar-with-dependencies.jar ../docker/cat_worker/
 
 
