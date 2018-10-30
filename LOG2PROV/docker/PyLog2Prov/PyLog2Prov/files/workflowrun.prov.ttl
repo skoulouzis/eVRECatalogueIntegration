@@ -1,0 +1,85 @@
+@prefix dc:  <http://purl.org/dc/elements/1.1/> .
+@prefix prov:  <http://www.w3.org/ns/prov#> .
+@prefix cnt:  <http://www.w3.org/2011/content#> .
+@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+@prefix dcmitype:  <http://purl.org/dc/dcmitype/> .
+@prefix wfprov:  <http://purl.org/wf4ever/wfprov#> .
+@prefix dcam:  <http://purl.org/dc/dcam/> .
+@prefix xml:  <http://www.w3.org/XML/1998/namespace> .
+@prefix vs:  <http://www.w3.org/2003/06/sw-vocab-status/ns#> .
+@prefix dcterms:  <http://purl.org/dc/terms/> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix wot:  <http://xmlns.com/wot/0.1/> .
+@prefix wfdesc:  <http://purl.org/wf4ever/wfdesc#> .
+@prefix dct:  <http://purl.org/dc/terms/> .
+@prefix tavernaprov:  <http://ns.taverna.org.uk/2012/tavernaprov/> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .
+@prefix scufl2:  <http://ns.taverna.org.uk/2010/scufl2#> .
+
+<http://ns.taverna.org.uk/2011/run/fe45e36c-8c6d-43c1-b601-12d251b6f42e/>
+        prov:qualifiedEnd           _:b0 ;
+        prov:endedAtTime            "2018-09-27T10:43:18.885+03:00"^^xsd:dateTime ;
+        rdf:type                    wfprov:WorkflowRun ;
+        rdfs:label                  "Workflow run of Workflow1"@en ;
+        prov:wasAssociatedWith      <#taverna-engine> ;
+        wfprov:describedByWorkflow  <http://ns.taverna.org.uk/2010/workflowBundle/3622846f-2165-4e52-82c1-2bfd4391cd40/workflow/Workflow1/> ;
+        prov:startedAtTime          "2018-09-27T10:33:53.047+03:00"^^xsd:dateTime ;
+        prov:qualifiedAssociation   _:b1 ;
+        prov:qualifiedStart         _:b2 ;
+        wfprov:wasEnactedBy         <#taverna-engine> .
+
+_:b3    prov:activity  <http://ns.taverna.org.uk/2011/run/fe45e36c-8c6d-43c1-b601-12d251b6f42e/> ;
+        rdf:type       prov:Communication .
+
+_:b4    prov:atTime  "2018-09-27T07:49:49.437Z"^^xsd:dateTime ;
+        rdf:type     prov:Start .
+
+<#taverna-prov-export>
+        prov:wasInformedBy           <http://ns.taverna.org.uk/2011/run/fe45e36c-8c6d-43c1-b601-12d251b6f42e/> ;
+        rdfs:label                   "taverna-prov export of workflow run provenance"@en ;
+        prov:qualifiedEnd            _:b5 ;
+        prov:qualifiedCommunication  _:b3 ;
+        prov:wasAssociatedWith       <#taverna-engine> ;
+        rdf:type                     prov:Activity ;
+        prov:endedAtTime             "2018-09-27T07:49:49.562Z"^^xsd:dateTime ;
+        prov:startedAtTime           "2018-09-27T07:49:49.437Z"^^xsd:dateTime ;
+        prov:qualifiedStart          _:b4 ;
+        prov:qualifiedAssociation    _:b6 .
+
+<#taverna-engine>  rdf:type  tavernaprov:TavernaEngine .
+
+_:b2    prov:atTime  "2018-09-27T10:33:53.047+03:00"^^xsd:dateTime ;
+        rdf:type     prov:Start .
+
+_:b7    prov:activity  <#taverna-prov-export> ;
+        rdf:type       prov:Generation .
+
+<>      foaf:primaryTopic         <http://ns.taverna.org.uk/2011/run/fe45e36c-8c6d-43c1-b601-12d251b6f42e/> ;
+        prov:qualifiedGeneration  _:b7 ;
+        prov:wasGeneratedBy       <#taverna-prov-export> ;
+        rdf:type                  prov:Bundle .
+
+_:b5    prov:atTime  "2018-09-27T07:49:49.562Z"^^xsd:dateTime ;
+        rdf:type     prov:End .
+
+<http://ns.taverna.org.uk/2010/workflowBundle/3622846f-2165-4e52-82c1-2bfd4391cd40/workflow/Workflow1/>
+        rdf:type  wfdesc:Workflow ;
+        rdf:type  prov:Plan .
+
+<http://ns.taverna.org.uk/2011/software/taverna-core-2.5.0>
+        rdfs:label  "Taverna Workbench Core 2.5.0"@en ;
+        rdf:type    prov:Plan .
+
+_:b1    prov:hadPlan  <http://ns.taverna.org.uk/2010/workflowBundle/3622846f-2165-4e52-82c1-2bfd4391cd40/workflow/Workflow1/> ;
+        prov:agent    <#taverna-engine> ;
+        rdf:type      prov:Association .
+
+_:b6    prov:hadPlan  <http://ns.taverna.org.uk/2011/software/taverna-core-2.5.0> ;
+        prov:agent    <#taverna-engine> ;
+        rdf:type      prov:Association .
+
+_:b0    prov:atTime  "2018-09-27T10:43:18.885+03:00"^^xsd:dateTime ;
+        rdf:type     prov:End .
