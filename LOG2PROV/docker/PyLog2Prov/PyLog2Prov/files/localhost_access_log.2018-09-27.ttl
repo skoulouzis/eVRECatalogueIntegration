@@ -1,0 +1,96 @@
+'@prefix ns1: <urn:uuid:88> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix tmpl: <http://openprovenance.org/tmpl#> .
+@prefix uuid: <urn:uuid:> .
+@prefix var: <http://openprovenance.org/var#> .
+@prefix vargen: <http://openprovenance.org/vargen#> .
+@prefix vre: <https://www.vre4eic.eu/log#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ns1:bb9f77-5b43-4f39-b04f-ef7dbc78d62f {
+    <urn:uuid:02e6f318-7b0e-4d9e-9caa-9c66fed7e3f3> a prov:Entity ;
+        prov:generatedAtTime "2018-09-27T06:01:50+00:00"^^xsd:string ;
+        prov:wasAttributedTo vre:ag1 ;
+        prov:wasGeneratedBy uuid:b23a3e3e-c42e-450d-9c2c-e8100450908a ;
+        vre:responseBytes "11217"^^xsd:string ;
+        vre:status "200"^^xsd:string .
+
+    <urn:uuid:0930c9db-c728-4446-a3a6-28805cf76211> a prov:Entity ;
+        prov:generatedAtTime "2018-09-27T07:31:43+00:00"^^xsd:string ;
+        prov:wasAttributedTo vre:ag2 ;
+        prov:wasGeneratedBy uuid:e44f0ff3-1c04-4c3a-82a9-649c81b96d83 ;
+        vre:responseBytes "1103475"^^xsd:string ;
+        vre:status "200"^^xsd:string .
+
+    <urn:uuid:9caeb5ee-1e41-44f5-87a2-dbac9eeeab89> a prov:Entity ;
+        prov:generatedAtTime "2018-09-27T01:39:54+00:00"^^xsd:string ;
+        prov:wasAttributedTo vre:ag0 ;
+        prov:wasGeneratedBy uuid:a7623bfc-06c1-44ab-8f36-91dd6976ebfc ;
+        vre:responseBytes "2473"^^xsd:string ;
+        vre:status "401"^^xsd:string .
+
+    uuid:abe35ec2-2f3a-451b-b8ca-b39e7543cc13 a prov:Entity ;
+        prov:generatedAtTime "2018-09-27T10:18:11+00:00"^^xsd:string ;
+        prov:wasAttributedTo vre:ag3 ;
+        prov:wasGeneratedBy <urn:uuid:050609be-dca4-4554-a9ae-72b8bc94c250> ;
+        vre:responseBytes "11217"^^xsd:string ;
+        vre:status "200"^^xsd:string .
+
+    uuid:ac452c29-cc4a-4966-9944-02488771f1f6 a prov:Entity ;
+        prov:generatedAtTime "2018-09-27T15:01:41+00:00"^^xsd:string ;
+        prov:wasAttributedTo vre:ag4 ;
+        prov:wasGeneratedBy <urn:uuid:92171cad-4009-4544-b935-b803d434fb26> ;
+        vre:responseBytes "963"^^xsd:string ;
+        vre:status "404"^^xsd:string .
+
+    <urn:uuid:050609be-dca4-4554-a9ae-72b8bc94c250> a prov:Activity ;
+        prov:wasAssociatedWith vre:ag3 ;
+        vre:httpVersion "1.1"^^xsd:string ;
+        vre:requestMethod "GET"^^xsd:string ;
+        vre:requestURL "/"^^xsd:string .
+
+    <urn:uuid:92171cad-4009-4544-b935-b803d434fb26> a prov:Activity ;
+        prov:wasAssociatedWith vre:ag4 ;
+        vre:httpVersion "1.0"^^xsd:string ;
+        vre:requestMethod "POST"^^xsd:string ;
+        vre:requestURL "/HNAP1/"^^xsd:string .
+
+    uuid:a7623bfc-06c1-44ab-8f36-91dd6976ebfc a prov:Activity ;
+        prov:wasAssociatedWith vre:ag0 ;
+        vre:httpVersion "1.1"^^xsd:string ;
+        vre:requestMethod "GET"^^xsd:string ;
+        vre:requestURL "/manager/html"^^xsd:string .
+
+    uuid:b23a3e3e-c42e-450d-9c2c-e8100450908a a prov:Activity ;
+        prov:wasAssociatedWith vre:ag1 ;
+        vre:httpVersion "1.1"^^xsd:string ;
+        vre:requestMethod "GET"^^xsd:string ;
+        vre:requestURL "/"^^xsd:string .
+
+    uuid:e44f0ff3-1c04-4c3a-82a9-649c81b96d83 a prov:Activity ;
+        prov:wasAssociatedWith vre:ag2 ;
+        vre:httpVersion "1.1"^^xsd:string ;
+        vre:requestMethod "GET"^^xsd:string ;
+        vre:requestURL "/cue/rest/argo/get"^^xsd:string .
+
+    vre:ag0 a prov:Agent ;
+        vre:hasIP "10.255.0.2"^^xsd:string .
+
+    vre:ag1 a prov:Agent ;
+        vre:hasIP "10.255.0.2"^^xsd:string .
+
+    vre:ag2 a prov:Agent ;
+        vre:hasIP "10.255.0.2"^^xsd:string .
+
+    vre:ag3 a prov:Agent ;
+        vre:hasIP "10.255.0.2"^^xsd:string .
+
+    vre:ag4 a prov:Agent ;
+        vre:hasIP "10.255.0.2"^^xsd:string .
+}
+
+'
+

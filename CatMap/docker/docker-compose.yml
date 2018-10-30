@@ -6,7 +6,7 @@ services:
         image: rabbitmq:3-management
         deploy:
             restart_policy:
-                condition: on-failure
+                condition: on-failure      
                                 
     rest-cat:
         image: rest-cat
