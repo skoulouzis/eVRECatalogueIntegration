@@ -60,6 +60,28 @@
             <version>20.0</version>
             <type>jar</type>
         </dependency>
+        
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+            <version>2.9.7</version>
+        </dependency>
+        
+       
+        <dependency>
+            <groupId>org.geotools.xsd</groupId>
+            <artifactId>gt-xsd-core</artifactId>
+            <version>21-SNAPSHOT</version>
+        </dependency>
+
+        
+        <dependency>
+            <groupId>org.geotools.xsd</groupId>
+            <artifactId>gt-xsd-csw</artifactId>
+            <version>21-SNAPSHOT</version>
+        </dependency>
+  
     </dependencies>
     
     <build>
@@ -117,4 +139,26 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     <name>CerifDataHarvester</name>
+    
+    
+    
+    <repositories>
+        <repository>
+            <id>boundless</id>
+            <name>Boundless Release Repository</name>
+            <url>https://repo.boundlessgeo.com/release/</url>
+        </repository>
+        
+        <repository>
+            <id>boundless-snapshot</id>
+            <name>Boundless Snapshot Repository</name>
+            <url>https://repo.boundlessgeo.com/snapshot/</url>
+        </repository>
+        
+        
+    </repositories>
+        
+        
+    
+  
 </project>

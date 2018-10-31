@@ -1,8 +1,5 @@
 package gr.forth.ics.isl.exporter;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.LoadingCache;
-import com.google.common.cache.RemovalListener;
 import gr.forth.ics.isl.common.D4ScienceResources;
 import gr.forth.ics.isl.exception.GenericException;
 import java.io.BufferedReader;
@@ -19,8 +16,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -54,7 +49,6 @@ public class D4ScienceExporter implements CatalogueExporter {
     public D4ScienceExporter(String endpointUrl) {
         this.endpointUrl = endpointUrl;
         cacheCleanupLastTime = System.currentTimeMillis();
-
     }
 
     @Override
@@ -100,12 +94,6 @@ public class D4ScienceExporter implements CatalogueExporter {
         if (this.limit != null && this.limit > -1) {
             ckanPath += "?limit=" + this.limit;
         }
-//        for (String path : D4ScienceResources.ALL_RESOURCES_ENDPOINT) {
-//            if (urlExists(this.endpointUrl + path)) {
-//                ckanPath = path;
-//                break;
-//            }
-//        }
         HttpURLConnection conn = (HttpURLConnection) new URL(this.endpointUrl + ckanPath).openConnection();
         StringBuilder sb;
         try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"))) {
@@ -157,7 +145,6 @@ public class D4ScienceExporter implements CatalogueExporter {
         jSONObject = new JSONObject(sb.toString());
         this.RESOURCE_CACHE.put(resourceId, jSONObject);
         return jSONObject;
-
     }
 
     @Override
@@ -207,7 +194,7 @@ public class D4ScienceExporter implements CatalogueExporter {
     private JSONObject getFromResourceCache(String key) {
         final long now = System.currentTimeMillis();
         final long delta = now - cacheCleanupLastTime;
-        if (delta < 0 || delta > 15 * 60 * 1000) {
+        if (delta < 0 || delta > 120 * 60 * 1000) {
             cacheCleanupLastTime = now;
             this.RESOURCE_CACHE.clear();
             return null;
