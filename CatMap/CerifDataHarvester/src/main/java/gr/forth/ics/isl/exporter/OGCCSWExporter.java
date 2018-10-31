@@ -63,14 +63,14 @@ public class OGCCSWExporter implements CatalogueExporter {
             DocumentBuilderFactory fac = DocumentBuilderFactory.newInstance();
             fac.setNamespaceAware(true);
             Document doc = fac.newDocumentBuilder().parse(is);
-//
-//            System.err.println(doc);
-//
+
             Node recordsResponseNode = getNode(doc.getFirstChild(), "GetRecordsResponse");
-            List<Node> briefRecordNodes = getGetBriefRecordNodes(recordsResponseNode);
-            for (Node briefRecordNode : briefRecordNodes) {
-                System.err.println(briefRecordNode.getFirstChild().getLocalName());
-            }
+
+            Node searchResults = getNode(recordsResponseNode.getFirstChild(), "SearchResults");
+            List<Node> briefRecordNodes = getGetBriefRecordNodes(searchResults);
+//            for (Node briefRecordNode : briefRecordNodes) {
+//                System.err.println(briefRecordNode.getFirstChild().getLocalName());
+//            }
 
 //
 //            StringBuilder sb;
@@ -98,18 +98,7 @@ public class OGCCSWExporter implements CatalogueExporter {
         if (node.getNodeType() == Node.ELEMENT_NODE && node.getLocalName().equals(nodeName)) {
             return node;
         } else {
-            return getGetRecordsResponseNode(node.getNextSibling());
-        }
-    }
-
-    private Node getGetRecordsResponseNode(Node node) {
-        if (node == null) {
-            return null;
-        }
-        if (node.getNodeType() == Node.ELEMENT_NODE && node.getLocalName().equals("GetRecordsResponse")) {
-            return node;
-        } else {
-            return getGetRecordsResponseNode(node.getNextSibling());
+            return getNode(node.getNextSibling(), nodeName);
         }
     }
 
@@ -120,7 +109,8 @@ public class OGCCSWExporter implements CatalogueExporter {
             if (node != null) {
                 Node briefRecordNode = getNode(node, "BriefRecord");
                 if (briefRecordNode != null) {
-                    System.err.println(briefRecordNode.getLocalName());
+//                    Node id = getNode(briefRecordNode.getFirstChild(), "identifier");
+//                    System.err.println(id.getLocalName() + " " + id.getTextContent());
                 }
             }
 
