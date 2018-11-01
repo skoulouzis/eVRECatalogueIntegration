@@ -2,6 +2,15 @@ function checkInputs() {
     var catalogueURL = document.getElementById("cat_url").value;
     var targetSelect = document.getElementById("target").value;
 
+    var innerHTML = window.location.href.split('/');
+    innerHTML.pop();
+    innerHTML = innerHTML.join('/');
+
+    var resultsURL = innerHTML + '/catalogue_type/' + catalogueURL;
+    var request = new XMLHttpRequest();
+    request.open('GET', resultsURL, false);  // `false` makes the request synchronous
+    request.send(null);
+    catType = request.responseText;
     var startButt = document.getElementById("startBtn");
     startButt.disabled = true;
 
@@ -18,8 +27,8 @@ function checkInputs() {
                 option.text = "Mapping120";
                 option.value = 2;
                 mappingSelect.add(option);
-                
-                mappingSelect.selectedIndex = 1
+
+                mappingSelect.selectedIndex = 1;
             }
             break;
 
