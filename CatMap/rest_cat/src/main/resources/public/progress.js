@@ -1,6 +1,6 @@
 var folderName;
 function move() {
-    analyzeCatalogue()
+    analyzeCatalogue();
     var innerHTML = window.location.href.split('/');
     innerHTML.pop();
     innerHTML = innerHTML.join('/');

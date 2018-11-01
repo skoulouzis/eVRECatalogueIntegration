@@ -9,6 +9,7 @@ import com.github.sardine.DavResource;
 import com.github.sardine.Sardine;
 import com.github.sardine.SardineFactory;
 import gr.forth.ics.isl.exporter.CatalogueExporter;
+import gr.forth.ics.isl.exporter.D4ScienceExporter;
 import io.micrometer.core.instrument.MeterRegistry;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -59,7 +60,7 @@ public class ConvertService {
     Map<String, Future<String>> taskMap = new HashMap<>();
 
     public ProcessingStatus doProcess(String catalogueURL, String mappingURL, String generatorURL, int limit, String exportID) throws MalformedURLException, IOException, FileNotFoundException, InterruptedException {
-        String taskID = catalogueURL+exportID;
+        String taskID = catalogueURL + exportID;
         Future<String> convertTask = taskMap.get(taskID);
 
         if (convertTask == null) {
@@ -86,7 +87,7 @@ public class ConvertService {
         ExportDocTask task = new ExportDocTask(catalogueURL, connectionFactory.getRabbitConnectionFactory(), null, null, null, limit, null);
         CatalogueExporter exp;
         exp = task.getExporter(catalogueURL);
-        if (limit!=null && limit > -1) {
+        if (limit != null && limit > -1) {
             exp.setLimit(limit);
         }
         return exp.fetchAllDatasetUUIDs();
@@ -180,6 +181,16 @@ public class ConvertService {
             }
         }
         return file;
+    }
+
+    public String getCatalogueType(String catalogueURL) throws MalformedURLException, InterruptedException {
+        CatalogueExporter exporter = new ExportDocTask(catalogueURL, connectionFactory.getRabbitConnectionFactory(), null, null, null, null, null).getExporter(catalogueURL);
+        if (exporter instanceof D4ScienceExporter) {
+            return "CKAN";
+        } else if (exporter instanceof D4ScienceExporter) {
+            return "CSW";
+        }
+        return null;
     }
 
 }
