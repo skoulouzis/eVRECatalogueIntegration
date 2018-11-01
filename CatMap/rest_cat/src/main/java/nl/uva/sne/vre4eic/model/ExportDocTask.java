@@ -15,6 +15,7 @@ import gr.forth.ics.isl.exporter.CatalogueExporter;
 import gr.forth.ics.isl.exporter.D4ScienceExporter;
 import io.micrometer.core.instrument.MeterRegistry;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -23,10 +24,17 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.codec.binary.Base64;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.metrics.MetricsEndpoint;
+import org.w3c.dom.Document;
 
 /**
  *
@@ -61,7 +69,7 @@ public class ExportDocTask implements Callable<String> {
         this.exportID = exportID;
     }
 
-    private void exportDocuments(String catalogueURL, String exportID) throws MalformedURLException, GenericException, InterruptedException {
+    private void exportDocuments(String catalogueURL, String exportID) throws MalformedURLException, GenericException, InterruptedException, TransformerConfigurationException, TransformerException {
 
         try {
             CatalogueExporter exporter = getExporter(catalogueURL);
@@ -69,10 +77,21 @@ public class ExportDocTask implements Callable<String> {
                 exporter.setLimit(limit);
             }
             Collection<String> allResourceIDs = exporter.fetchAllDatasetUUIDs();
-
+            String xml = null;
             for (String resourceId : allResourceIDs) {
-                JSONObject resource = exporter.exportResource(resourceId);
-                String xml = exporter.transformToXml(resource);
+                Object resource = exporter.exportResource(resourceId);
+                if (resource instanceof JSONObject) {
+                    xml = exporter.transformToXml((JSONObject) resource);
+                } else if (resource instanceof Document) {
+                    DOMSource domSource = new DOMSource(((Document) resource));
+                    StringWriter writer = new StringWriter();
+                    StreamResult result = new StreamResult(writer);
+                    TransformerFactory tf = TransformerFactory.newInstance();
+                    Transformer transformer = tf.newTransformer();
+                    transformer.transform(domSource, result);
+                    xml = writer.toString();
+
+                }
 
                 try (Connection connection = factory.newConnection(); Channel channel = connection.createChannel()) {
                     String qName = queue;

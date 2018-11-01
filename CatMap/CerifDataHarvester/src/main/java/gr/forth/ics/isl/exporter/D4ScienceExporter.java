@@ -122,7 +122,7 @@ public class D4ScienceExporter implements CatalogueExporter {
 
             }
         }
-        this.UUID_CACHE.put(this.endpointUrl, retCollection);
+        UUID_CACHE.put(this.endpointUrl, retCollection);
         return retCollection;
     }
 
@@ -143,7 +143,7 @@ public class D4ScienceExporter implements CatalogueExporter {
             }
         }
         jSONObject = new JSONObject(sb.toString());
-        this.RESOURCE_CACHE.put(resourceId, jSONObject);
+        RESOURCE_CACHE.put(resourceId, jSONObject);
         return jSONObject;
     }
 
@@ -196,10 +196,10 @@ public class D4ScienceExporter implements CatalogueExporter {
         final long delta = now - cacheCleanupLastTime;
         if (delta < 0 || delta > 120 * 60 * 1000) {
             cacheCleanupLastTime = now;
-            this.RESOURCE_CACHE.clear();
+            RESOURCE_CACHE.clear();
             return null;
         }
-        return this.RESOURCE_CACHE.get(key);
+        return RESOURCE_CACHE.get(key);
     }
 
     private Collection<String> getFromUUIDCache(String key) {
