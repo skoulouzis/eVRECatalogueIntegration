@@ -16,7 +16,7 @@ public interface CatalogueExporter {
 
     public Collection<String> fetchAllDatasetUUIDs() throws MalformedURLException, IOException;
 
-    public JSONObject exportResource(String resourceId) throws MalformedURLException, IOException;
+    public Object exportResource(String resourceId) throws MalformedURLException, IOException;
 
     public String transformToXml(JSONObject jsonObject);
 
