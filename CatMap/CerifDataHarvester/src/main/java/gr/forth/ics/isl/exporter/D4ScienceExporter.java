@@ -207,9 +207,9 @@ public class D4ScienceExporter implements CatalogueExporter {
         final long delta = now - cacheCleanupLastTime;
         if (delta < 0 || delta > 15 * 60 * 1000) {
             cacheCleanupLastTime = now;
-            this.UUID_CACHE.clear();
+            UUID_CACHE.clear();
             return null;
         }
-        return this.UUID_CACHE.get(key);
+        return UUID_CACHE.get(key);
     }
 }

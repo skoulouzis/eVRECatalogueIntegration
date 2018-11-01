@@ -13,6 +13,7 @@ import com.rabbitmq.client.MessageProperties;
 import gr.forth.ics.isl.exception.GenericException;
 import gr.forth.ics.isl.exporter.CatalogueExporter;
 import gr.forth.ics.isl.exporter.D4ScienceExporter;
+import gr.forth.ics.isl.exporter.OGCCSWExporter;
 import io.micrometer.core.instrument.MeterRegistry;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -132,6 +133,9 @@ public class ExportDocTask implements Callable<String> {
         }
         if (new URL(catalogueURL).getPath().contains("/wps/WebProcessingService") || urlExists(catalogueURL + "/wps/WebProcessingService")) {
             return new WPSExporter(catalogueURL);
+        }
+        if (new URL(catalogueURL).getPath().contains("/csw?service=CSW") || urlExists(catalogueURL + "csw-iagos?service=CSW")) {
+            return new OGCCSWExporter(catalogueURL);
         } else {
             return new RDFExporter(catalogueURL);
         }
