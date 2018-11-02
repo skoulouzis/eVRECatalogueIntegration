@@ -66,7 +66,7 @@ public class ConvertService {
         if (convertTask == null) {
 //            String path = new URL(mappingURL).getPath();
 //            String queueName = path.substring(path.lastIndexOf('/') + 1);
-            String queueName = "ckan2cerif";
+            String queueName = "metadata_records";
             ExportDocTask task = new ExportDocTask(catalogueURL, connectionFactory.getRabbitConnectionFactory(), queueName, mappingURL, generatorURL, limit, exportID);
             convertTask = exec.submit(task);
             taskMap.put(taskID, convertTask);

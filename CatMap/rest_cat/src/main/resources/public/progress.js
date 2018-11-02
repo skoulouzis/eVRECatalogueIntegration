@@ -73,7 +73,7 @@ function move() {
             exploreBtn.disabled = false;
             var rec_loc = document.getElementById("rec_loc");
             if (rec_loc !== null) {
-                rec_loc.href =  window.location.protocol + '//' + window.location.hostname + '/' + folderName;
+                rec_loc.href = window.location.protocol + '//' + window.location.hostname + '/' + folderName;
                 rec_loc.style.display = "inline";
             }
             var source_rec_url = document.getElementById("source_rec_url");
@@ -127,7 +127,7 @@ function download() {
 function explore() {
     var webdavURL = window.location.protocol + '//' + window.location.hostname + '/' + folderName;
 
-    console.log('webdavURL: ' + webdavURL)
+    console.log('webdavURL: ' + webdavURL);
     var win = window.open(webdavURL, '_blank');
     win.focus();
 }
@@ -136,21 +136,25 @@ function explore() {
 
 function getMappingParams() {
     var mappingSelect = document.getElementById("mappingSelect").value;
-    var mappingInt = parseInt(mappingSelect)
-    var mappingURL = 'https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/Mapping115.x3ml'
-    var generator_url = 'https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml'
+    var mappingInt = parseInt(mappingSelect);
+    var mappingURL = 'https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/Mapping115.x3ml';
+    var generator_url = 'https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml';
     switch (mappingInt) {
         case 1:
-            mappingURL = 'https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/Mapping115.x3ml'
-            generator_url = 'https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml'
+            mappingURL = 'https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/Mapping115.x3ml';
+            generator_url = 'https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml';
             break;
         case 2:
-            mappingURL = 'https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/Mapping120.x3ml'
-            generator_url = 'https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/ENVRIplus-generator-policy___13-07-2018131200___11511.xml'
+            mappingURL = 'https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/Mapping120.x3ml';
+            generator_url = 'https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/ENVRIplus-generator-policy___13-07-2018131200___11511.xml';
+            break;
+        case 3:
+            mappingURL = 'https://raw.githubusercontent.com/QCAPI-DRIP/eVRE-ENVRI/master/CatMap/etc/Mapping61.x3ml';
+            generator_url = 'https://raw.githubusercontent.com/QCAPI-DRIP/eVRE-ENVRI/master/CatMap/etc/CERIF-generator-policy-v6___13-09-2018153322___5976.xml';
             break;
         default:
-            mappingURL = 'https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/Mapping115.x3ml'
-            generator_url = 'https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml'
+            mappingURL = 'https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/Mapping115.x3ml';
+            generator_url = 'https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml';
     }
     return [mappingURL, generator_url];
 }
