@@ -9,7 +9,6 @@ import com.github.sardine.DavResource;
 import com.github.sardine.Sardine;
 import com.github.sardine.SardineFactory;
 import gr.forth.ics.isl.exporter.CatalogueExporter;
-import gr.forth.ics.isl.exporter.D4ScienceExporter;
 import io.micrometer.core.instrument.MeterRegistry;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -36,6 +35,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import nl.uva.sne.vre4eic.model.ExportDocTask;
 import nl.uva.sne.vre4eic.model.ProcessingStatus;
+import nl.uva.sne.vre4eic.util.Util;
 import org.apache.commons.compress.utils.IOUtils;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -184,12 +184,13 @@ public class ConvertService {
     }
 
     public String getCatalogueType(String catalogueURL) throws MalformedURLException, InterruptedException {
-        CatalogueExporter exporter = new ExportDocTask(catalogueURL, connectionFactory.getRabbitConnectionFactory(), null, null, null, null, null).getExporter(catalogueURL);
-        if (exporter instanceof D4ScienceExporter) {
+        if (Util.isCKAN(catalogueURL)) {
             return "CKAN";
-        } else if (exporter instanceof D4ScienceExporter) {
+        }
+        if (Util.isCSW(catalogueURL)) {
             return "CSW";
         }
+
         return null;
     }
 

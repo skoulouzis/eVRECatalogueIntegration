@@ -189,9 +189,9 @@ public class ConvertController {
         }
     }
 
-    @RequestMapping(value = "/catalogue_type", method = RequestMethod.GET, params = {"catalogue_URL"})
+    @RequestMapping(value = "/catalogue_type", method = RequestMethod.GET, params = {"catalogue_url"})
     public @ResponseBody
-    String getCatalogueType(@RequestParam(value = "catalogue_URL") String catalogueURL) {
+    String getCatalogueType(@RequestParam(value = "catalogue_url") String catalogueURL) {
         try {
             return service.getCatalogueType(catalogueURL);
         } catch (MalformedURLException | InterruptedException ex) {

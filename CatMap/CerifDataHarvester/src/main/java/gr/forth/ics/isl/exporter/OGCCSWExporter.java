@@ -6,6 +6,7 @@
 package gr.forth.ics.isl.exporter;
 
 import gr.forth.ics.isl.exception.GenericException;
+import gr.forth.ics.isl.util.XML;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -114,12 +115,12 @@ public class OGCCSWExporter implements CatalogueExporter {
 
                 Document doc = fac.newDocumentBuilder().parse(is);
 
-                Node recordsResponseNode = getNode(doc.getFirstChild(), "GetRecordsResponse");
+                Node recordsResponseNode = XML.getNode(doc.getFirstChild(), "GetRecordsResponse");
                 if (recordsResponseNode == null) {
                     break;
                 }
 
-                Node searchResults = getNode(recordsResponseNode.getFirstChild(), "SearchResults");
+                Node searchResults = XML.getNode(recordsResponseNode.getFirstChild(), "SearchResults");
                 NamedNodeMap attributes = searchResults.getAttributes();
 
                 nextRecord = Integer.valueOf(attributes.getNamedItem("nextRecord").getNodeValue());
@@ -145,17 +146,6 @@ public class OGCCSWExporter implements CatalogueExporter {
         return null;
     }
 
-    private Node getNode(Node node, String nodeName) {
-        if (node == null) {
-            return null;
-        }
-        if (node.getNodeType() == Node.ELEMENT_NODE && node.getLocalName().equals(nodeName)) {
-            return node;
-        } else {
-            return getNode(node.getNextSibling(), nodeName);
-        }
-    }
-
     private List<Document> getRecords(Node recordsResponseNode) throws ParserConfigurationException {
         NodeList nodes = recordsResponseNode.getChildNodes();
         List<Document> metadataNodes = new ArrayList<>();
@@ -178,8 +168,8 @@ public class OGCCSWExporter implements CatalogueExporter {
     }
 
     private String getResourceID(Node node) {
-        Node fileIdentifierNode = getNode(node.getFirstChild(), "fileIdentifier");
-        Node characterString = getNode(fileIdentifierNode.getFirstChild(), "CharacterString");
+        Node fileIdentifierNode = XML.getNode(node.getFirstChild(), "fileIdentifier");
+        Node characterString = XML.getNode(fileIdentifierNode.getFirstChild(), "CharacterString");
         return characterString.getTextContent();
     }
 
