@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import nl.uva.sne.vre4eic.model.ProcessingStatus;
 import nl.uva.sne.vre4eic.service.ConvertService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,7 +53,9 @@ public class ConvertController {
 //    http://localhost:8080/rest/convert?catalogue_url=%20https://catalog.data.gov&mapping_url=https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/Mapping62.x3ml&generator_url=https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/generator.xml
 //    http://localhost:8080/catalogue_mapper/convert?catalogue_url=%20https://ckan-d4s.d4science.org&mapping_url=https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/Mapping62.x3ml&generator_url=https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/generator.xml
 
-    @RequestMapping(value = "/convert", method = RequestMethod.GET, params = {"catalogue_url", "mapping_url", "generator_url", "export_id"})
+    @RequestMapping(value = "/convert", method = RequestMethod.GET,
+            params = {"catalogue_url", "mapping_url", "generator_url", "export_id"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     @GetMapping("/")
     public @ResponseBody
     ProcessingStatus convert(@RequestParam(value = "catalogue_url") String catalogueURL,
@@ -71,7 +74,8 @@ public class ConvertController {
         return null;
     }
 
-    @RequestMapping(value = "/list_records", method = RequestMethod.GET)
+    @RequestMapping(value = "/list_records", method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public @ResponseBody
     Collection<String> listRecords(
             @RequestParam(value = "catalogue_url") String catalogueURL,
@@ -86,7 +90,8 @@ public class ConvertController {
 
     }
 
-    @RequestMapping(value = "/download/{mappingName}/{mappingID}", method = RequestMethod.GET)
+    @RequestMapping(value = "/download/{mappingName}/{mappingID}", method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public void downloadFile(HttpServletResponse response,
             @PathVariable("mappingName") String mappingName,
             @PathVariable("mappingID") String mappingID) throws IOException {
@@ -130,7 +135,8 @@ public class ConvertController {
         FileCopyUtils.copy(inputStream, response.getOutputStream());
     }
 
-    @RequestMapping(value = "/list_results", method = RequestMethod.GET, params = {"folder_name"})
+    @RequestMapping(value = "/list_results", method = RequestMethod.GET,
+            params = {"folder_name"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public @ResponseBody
     Collection<DavResource> listResults(@RequestParam(value = "folder_name") String folderName) {
         Collection<DavResource> records = null;
@@ -192,6 +198,9 @@ public class ConvertController {
     @RequestMapping(value = "/catalogue_type", method = RequestMethod.GET, params = {"catalogue_url"})
     public @ResponseBody
     String getCatalogueType(@RequestParam(value = "catalogue_url") String catalogueURL) {
+        if (catalogueURL.length() <= 1) {
+            return null;
+        }
         try {
             return service.getCatalogueType(catalogueURL);
         } catch (MalformedURLException | InterruptedException ex) {

@@ -88,7 +88,7 @@ public class CerifConverterMain {
             webdavPass = cmd.getOptionValue("webdav_pass");
             Logger.getLogger(CerifConverterMain.class.getName()).log(Level.INFO, "webdav host: {0}", webdavPass);
 
-            String taskQName = "ckan2cerif";
+            String taskQName = "metadata_records";
             File output = new File(System.getProperty("java.io.tmpdir") + File.separator + "cerif");
             output.mkdirs();
             new Worker(rabbitMQHost, webdavHost, webdavUser, webdavPass, taskQName, output.getAbsolutePath()).consume();
