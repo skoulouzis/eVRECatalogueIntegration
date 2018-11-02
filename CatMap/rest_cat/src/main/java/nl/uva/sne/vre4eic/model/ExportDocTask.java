@@ -17,9 +17,7 @@ import gr.forth.ics.isl.exporter.OGCCSWExporter;
 import io.micrometer.core.instrument.MeterRegistry;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Collection;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeoutException;
@@ -31,6 +29,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import static nl.uva.sne.vre4eic.util.Util.isCKAN;
+import static nl.uva.sne.vre4eic.util.Util.isCSW;
 import org.apache.commons.codec.binary.Base64;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,17 +52,14 @@ public class ExportDocTask implements Callable<String> {
     @Autowired
     MeterRegistry meterRegistry;
     private final String queue;
-    private String mappingURL;
-    private String generatorURL;
-    private Integer limit;
-    private String exportID;
+    private final String mappingURL;
+    private final String generatorURL;
+    private final Integer limit;
+    private final String exportID;
 
     public ExportDocTask(String catalogueURL, ConnectionFactory factory, String queue, String mappingURL, String generatorURL, Integer limit, String exportID) {
         this.catalogueURL = catalogueURL;
         this.factory = factory;
-        if (this.factory == null) {
-            throw new NullPointerException("RabbitMQ ConnectionFactory is NULL!");
-        }
         this.queue = queue;
         this.mappingURL = mappingURL;
         this.generatorURL = generatorURL;
@@ -128,55 +125,23 @@ public class ExportDocTask implements Callable<String> {
     }
 
     public CatalogueExporter getExporter(String catalogueURL) throws MalformedURLException, InterruptedException {
-        if (urlExists(catalogueURL + "/api/action/tag_list")) {
+        if (isCKAN(catalogueURL)) {
             return new D4ScienceExporter(catalogueURL);
         }
-        if (new URL(catalogueURL).getPath().contains("/wps/WebProcessingService") || urlExists(catalogueURL + "/wps/WebProcessingService")) {
-            return new WPSExporter(catalogueURL);
-        }
-        if (new URL(catalogueURL).getPath().contains("/csw?service=CSW") || urlExists(catalogueURL + "csw-iagos?service=CSW")) {
+        if (isCSW(catalogueURL + "/csw?REQUEST=GetCapabilities&SERVICE=CSW&VERSION=2.0.2&constraintLanguage=CQL_TEXT&constraint_language_version=1.1.0")) {
             return new OGCCSWExporter(catalogueURL);
         } else {
             return new RDFExporter(catalogueURL);
         }
     }
 
-    private boolean urlExists(String URLName) throws InterruptedException {
-
-        try {
-            HttpURLConnection.setFollowRedirects(true);
-            //        HttpURLConnection.setInstanceFollowRedirects(false)
-            HttpURLConnection con
-                    = (HttpURLConnection) new URL(URLName).openConnection();
-            con.setInstanceFollowRedirects(true);
-            con.setRequestMethod("GET");
-
-            int code = con.getResponseCode();
-            if (code != HttpURLConnection.HTTP_OK) {
-                if (code == HttpURLConnection.HTTP_MOVED_TEMP
-                        || code == HttpURLConnection.HTTP_MOVED_PERM
-                        || code == HttpURLConnection.HTTP_SEE_OTHER) {
-                    String newUrl = con.getHeaderField("Location");
-
-                    // get the cookie if need, for login
-                    String cookies = con.getHeaderField("Set-Cookie");
-                    con = (HttpURLConnection) new URL(newUrl).openConnection();
-                    con.setRequestProperty("Cookie", cookies);
-                    code = con.getResponseCode();
-                }
-            }
-
-            return (code == HttpURLConnection.HTTP_OK);
-        } catch (MalformedURLException ex) {
-            return false;
-        } catch (IOException ex) {
-            return false;
-        }
-    }
+   
 
     @Override
     public String call() throws Exception {
         exportDocuments(this.catalogueURL, this.exportID);
         return null;
     }
+
+   
 }
