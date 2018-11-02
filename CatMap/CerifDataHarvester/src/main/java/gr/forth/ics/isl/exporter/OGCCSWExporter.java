@@ -87,8 +87,8 @@ public class OGCCSWExporter implements CatalogueExporter {
             int maxRecords = 10;
             int totalReturned = 0;
 
-            Integer nextRecord = 0;
-            Integer numberOfRecordsMatched = 0;
+            Integer nextRecord;
+            Integer numberOfRecordsMatched;
             Integer numberOfRecordsReturned = 0;
             recordIDs = new ArrayList<>();
             totalReturned += numberOfRecordsReturned;
@@ -130,7 +130,7 @@ public class OGCCSWExporter implements CatalogueExporter {
 
                 List<Document> metadataDocs = getRecords(searchResults);
                 for (Document metadataDoc : metadataDocs) {
-                    String id = getResourceID(metadataDoc.getFirstChild());
+                    String id = XML.getResourceID(metadataDoc.getFirstChild());
                     recordIDs.add(id);
                 }
                 startPosition = nextRecord;
@@ -146,7 +146,7 @@ public class OGCCSWExporter implements CatalogueExporter {
         return null;
     }
 
-    private List<Document> getRecords(Node recordsResponseNode) throws ParserConfigurationException {
+    private List<Document> getRecords(Node recordsResponseNode) throws ParserConfigurationException, SAXException, IOException {
         NodeList nodes = recordsResponseNode.getChildNodes();
         List<Document> metadataNodes = new ArrayList<>();
         for (int i = 0; i < nodes.getLength(); i++) {
@@ -158,19 +158,13 @@ public class OGCCSWExporter implements CatalogueExporter {
                 Document newDocument = builder.newDocument();
                 Node importedNode = newDocument.importNode(node, true);
                 newDocument.appendChild(importedNode);
-                String id = getResourceID(node);
+                String id = XML.getResourceID(node);
 
                 RESOURCE_CACHE.put(id, newDocument);
                 metadataNodes.add(newDocument);
             }
         }
         return metadataNodes;
-    }
-
-    private String getResourceID(Node node) {
-        Node fileIdentifierNode = XML.getNode(node.getFirstChild(), "fileIdentifier");
-        Node characterString = XML.getNode(fileIdentifierNode.getFirstChild(), "CharacterString");
-        return characterString.getTextContent();
     }
 
     @Override
