@@ -108,15 +108,14 @@ public class Worker {
 
                     generator = File.createTempFile("generator", ".tmp");
                     FileUtils.writeByteArrayToFile(generator, generatorData);
-                    String xmlCkan = jObject.getString("xml_ckan");
-                    String jsonCkan = jObject.getString("json_ckan");
+                    String xmlCkan = jObject.getString("metadata_record");
+                    ckanRecordID = jObject.getString("record_id");
                     X3MLEngine.Output rdf = convert(xmlCkan, mapping, generator);
 //                    Logger.getLogger(Worker.class.getName()).log(Level.INFO, "rdf: {0}", rdf);
 
                     String path = new URL(jObject.getString("mappingURL")).getPath();
                     String mappingName = FilenameUtils.removeExtension(path.substring(path.lastIndexOf('/') + 1));
 
-                    ckanRecordID = new JSONObject(jsonCkan).getJSONObject("result").getString("id");
                     String fileName = mappingName + "_" + ckanRecordID;
                     String exportID = jObject.getString("export_id");
                     String webdavFolder = mappingName;
@@ -153,7 +152,7 @@ public class Worker {
                         sardine.put("http://" + webdavHost + "/" + webdavFolder + "/" + rdfFile.getName(), rdfData);
 
                         sardine.put("http://" + webdavHost + "/" + webdavFolder + "/" + fileName + ".xml", xmlCkan.getBytes());
-                        sardine.put("http://" + webdavHost + "/" + webdavFolder + "/" + fileName + ".json", jsonCkan.getBytes());
+//                        sardine.put("http://" + webdavHost + "/" + webdavFolder + "/" + fileName + ".json", jsonCkan.getBytes());
 
                     }
 

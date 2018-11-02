@@ -14,6 +14,7 @@ import gr.forth.ics.isl.exception.GenericException;
 import gr.forth.ics.isl.exporter.CatalogueExporter;
 import gr.forth.ics.isl.exporter.D4ScienceExporter;
 import gr.forth.ics.isl.exporter.OGCCSWExporter;
+import gr.forth.ics.isl.util.XML;
 import io.micrometer.core.instrument.MeterRegistry;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -23,6 +24,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -36,6 +38,8 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.metrics.MetricsEndpoint;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -67,7 +71,7 @@ public class ExportDocTask implements Callable<String> {
         this.exportID = exportID;
     }
 
-    private void exportDocuments(String catalogueURL, String exportID) throws MalformedURLException, GenericException, InterruptedException, TransformerConfigurationException, TransformerException {
+    private void exportDocuments(String catalogueURL, String exportID) throws MalformedURLException, GenericException, InterruptedException, TransformerConfigurationException, TransformerException, ParserConfigurationException, SAXException {
 
         try {
             CatalogueExporter exporter = getExporter(catalogueURL);
@@ -88,7 +92,6 @@ public class ExportDocTask implements Callable<String> {
                     Transformer transformer = tf.newTransformer();
                     transformer.transform(domSource, result);
                     xml = writer.toString();
-
                 }
 
                 try (Connection connection = factory.newConnection(); Channel channel = connection.createChannel()) {
@@ -96,8 +99,10 @@ public class ExportDocTask implements Callable<String> {
                     channel.queueDeclare(qName, true, false, false, null);
 
                     JSONObject json = new JSONObject();
-                    json.put("xml_ckan", xml);
-                    json.put("json_ckan", resource.toString());
+                    json.put("metadata_record", xml);
+                    String id = XML.getResourceID(xml);
+
+                    json.put("record_id", id);
                     json.put("mappingURL", mappingURL);
                     json.put("generatorURL", generatorURL);
                     if (exportID != null) {
@@ -135,13 +140,10 @@ public class ExportDocTask implements Callable<String> {
         }
     }
 
-   
-
     @Override
     public String call() throws Exception {
         exportDocuments(this.catalogueURL, this.exportID);
         return null;
     }
 
-   
 }
