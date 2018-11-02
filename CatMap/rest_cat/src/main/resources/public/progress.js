@@ -18,7 +18,7 @@ function move() {
     var mappingURL = mappingParams[0];
     var generator_url = mappingParams[1];
 
-    var url = innerHTML + '/list_records/?catalogue_url=' + catalogueURL + '&limit=' + limit;
+    var url = innerHTML + '/list_records/?catalogue_url=' + catalogueURL;
 
 
     var request = new XMLHttpRequest();
@@ -41,7 +41,7 @@ function move() {
     request.send(null);
 
 
-    var resultsURL = innerHTML + '/list_results/?folder_name=' + folderName + '&limit=' + limit;
+    var resultsURL = innerHTML + '/list_results/?folder_name=' + folderName;
     var request = new XMLHttpRequest();
     request.open('GET', resultsURL, false);  // `false` makes the request synchronous
     request.send(null);
@@ -87,7 +87,7 @@ function move() {
 //                var resultsURL = innerHTML + '/list_results/?mapping_name=' + mappingName;
                 console.log(resultsURL)
                 var request = new XMLHttpRequest();
-                request.open('GET', resultsURL, false);  // `false` makes the request synchronous
+                request.open('GET', resultsURL, false); 
                 request.send(null);
                 if (request.status === 200) {
                     json = JSON.parse(request.responseText);
@@ -95,14 +95,14 @@ function move() {
                 }
             }
 
-            width = Math.round((((numOfRes - 1) / 3) / numOfRec) * 100);
+            width = Math.round((((numOfRes - 1) / 2) / numOfRec) * 100);
             elem.style.width = width + '%';
             elem.innerHTML = width * 1 + '%';
             count++;
-//            console.log('numOfRes: ' + numOfRes)
-//            console.log('count: ' + count)
-//            console.log('width: ' + width)
-//            console.log('numOfRec: ' + numOfRec)
+            console.log('numOfRes: ' + numOfRes)
+            console.log('count: ' + count)
+            console.log('width: ' + width)
+            console.log('numOfRec: ' + numOfRec)
         }
     }
 }

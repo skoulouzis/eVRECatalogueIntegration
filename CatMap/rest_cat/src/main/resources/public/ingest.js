@@ -13,7 +13,7 @@ function ingest() {
     var id = setInterval(frame, 10);
     var catalogueURL = document.getElementById("cat_url").value;
     var limit = document.getElementById("recLimit").value;
-    var url = innerHTML + '/list_records/?catalogue_url=' + catalogueURL + '&limit=' + limit;
+    var url = innerHTML + '/list_records/?catalogue_url=' + catalogueURL;
 
     var request = new XMLHttpRequest();
     request.open('GET', url, false);  // `false` makes the request synchronous
