@@ -18,13 +18,13 @@ function move() {
     var mappingURL = mappingParams[0];
     var generator_url = mappingParams[1];
 
-    var url = innerHTML + '/list_records/?catalogue_url=' + catalogueURL;
+    var url = innerHTML + '/list_records/?catalogue_url=' + catalogueURL + '&limit=' + limit;
 
 
     var request = new XMLHttpRequest();
-    request.open('GET', url, false);  // `false` makes the request synchronous
+    request.open('GET', url, false);
     request.send(null);
-    var numOfRec = 0;
+    var numOfRec = limit;
     if (request.status === 200) {
         json = JSON.parse(request.responseText);
         numOfRec = json.length;
@@ -33,7 +33,7 @@ function move() {
     var exportId = createGuid();
     var mappingName = mappingURL.substring(mappingURL.lastIndexOf("/") + 1, mappingURL.lastIndexOf("."));
     folderName = mappingName + '/' + exportId;
-    console.log(folderName)
+    console.log(folderName);
     const convertURL = innerHTML + '/convert?catalogue_url=' + catalogueURL +
             '&mapping_url=' + mappingURL + '&generator_url=' + generator_url + '&limit=' + limit + '&export_id=' + exportId;
     var request = new XMLHttpRequest();
@@ -83,11 +83,11 @@ function move() {
 
 
         } else {
-            if ((count % 10) === 0 || count <= 0) {
+            if ((count % 20) === 0 || count <= 0) {
 //                var resultsURL = innerHTML + '/list_results/?mapping_name=' + mappingName;
                 console.log(resultsURL)
                 var request = new XMLHttpRequest();
-                request.open('GET', resultsURL, false); 
+                request.open('GET', resultsURL, false);
                 request.send(null);
                 if (request.status === 200) {
                     json = JSON.parse(request.responseText);
@@ -96,6 +96,9 @@ function move() {
             }
 
             width = Math.round((((numOfRes - 1) / 2) / numOfRec) * 100);
+            if (width < 0) {
+                width = 0;
+            }
             elem.style.width = width + '%';
             elem.innerHTML = width * 1 + '%';
             count++;
