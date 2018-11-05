@@ -122,7 +122,7 @@ public class Worker {
                     if (exportID != null) {
                         webdavFolder = mappingName + "/" + exportID;
                     }
-                    File rdfFile = new File(outputRfdFolder + File.separator + fileName + ".rdf");
+                    File rdfFile = new File(outputRfdFolder + File.separator + fileName + ".ttl");
                     Logger.getLogger(Worker.class.getName()).log(Level.INFO, "fileName: {0}", fileName);
 
 //                    rdf.write(new PrintStream(rdfFile), "application/rdf+xml");

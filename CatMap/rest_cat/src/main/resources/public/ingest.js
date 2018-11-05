@@ -13,10 +13,10 @@ function ingest() {
     var id = setInterval(frame, 10);
     var catalogueURL = document.getElementById("cat_url").value;
     var limit = document.getElementById("recLimit").value;
-    var url = innerHTML + '/list_records/?catalogue_url=' + catalogueURL;
+    var url = innerHTML + '/list_records/?catalogue_url=' + catalogueURL + '&limit=' + limit;
 
     var request = new XMLHttpRequest();
-    request.open('GET', url, false);  // `false` makes the request synchronous
+    request.open('GET', url, false);  
     request.send(null);
     var numOfRec = 0;
     if (request.status === 200) {
@@ -40,7 +40,7 @@ function ingest() {
             win.focus();
         } else {
             numOfRes++;
-            width = Math.round((((numOfRes - 1) / 3) / numOfRec) * 100);
+            width = Math.round((((numOfRes - 1) / 2) / numOfRec) * 100);
             elem.style.width = width + '%';
             elem.innerHTML = width * 1 + '%';
             count++;
