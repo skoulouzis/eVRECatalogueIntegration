@@ -36,6 +36,7 @@ function move() {
     console.log(folderName);
     const convertURL = innerHTML + '/convert?catalogue_url=' + catalogueURL +
             '&mapping_url=' + mappingURL + '&generator_url=' + generator_url + '&limit=' + limit + '&export_id=' + exportId;
+    console.log("convertURL: "+convertURL)
     var request = new XMLHttpRequest();
     request.open('GET', convertURL, false);  // `false` makes the request synchronous
     request.send(null);
@@ -102,10 +103,10 @@ function move() {
             elem.style.width = width + '%';
             elem.innerHTML = width * 1 + '%';
             count++;
-            console.log('numOfRes: ' + numOfRes)
-            console.log('count: ' + count)
-            console.log('width: ' + width)
-            console.log('numOfRec: ' + numOfRec)
+//            console.log('numOfRes: ' + numOfRes)
+//            console.log('count: ' + count)
+//            console.log('width: ' + width)
+//            console.log('numOfRec: ' + numOfRec)
         }
     }
 }
