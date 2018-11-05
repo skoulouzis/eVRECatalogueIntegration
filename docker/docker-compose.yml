@@ -1,0 +1,193 @@
+version: '3.1'
+
+services:     
+                                
+    rest-cat:
+        image: rest-cat
+        deploy:
+            restart_policy:
+                condition: on-failure
+        environment:
+            RABBIT_HOST: "rabbit"
+            RABBIT_PORT: "5672"
+            RABBIT_USERNAME: "guest"
+            RABBIT_PASSWORD: "guest"
+            INFLUX_URI: "http://influx:8086"
+            WEBDAV_HOST: "webdav"
+        ports:
+            - "8083:8080"
+        depends_on:
+            - rabbit          
+            - influx
+            - cat-worker
+            
+    cat-worker:
+        image: cat-worker
+        deploy:
+            restart_policy:
+                condition: on-failure      
+        environment:
+            RABBIT_HOST: "rabbit"
+            RABBIT_PORT: "5672"
+            RABBIT_USERNAME: "guest"
+            RABBIT_PASSWORD: "guest"
+            INFLUX_URI: "http://influx:8086"
+            WEBDAV_HOST: "webdav"
+            WEBDAV_USERNAME: "user"
+            WEBDAV_PASSWORD: "resu"
+        depends_on:
+            - rabbit   
+            - webdav
+            
+    prise:
+        image: prise
+        environment:
+            RABBIT_HOST: "rabbit"
+            RABBIT_PORT: "5672"
+            RABBIT_USERNAME: "guest"
+            RABBIT_PASSWORD: "guest"
+            INFLUX_URI: "http://influx:8086"
+        ports:
+            - "8084:8080"
+        depends_on:
+            - rabbit   
+            - pylog2prov
+            
+            
+    pylog2prov:
+        image: pylog2prov
+        environment:
+            RABBIT_HOST: "rabbit"
+            RABBIT_PORT: "5672"
+            RABBIT_USERNAME: "guest"
+            RABBIT_PASSWORD: "guest"
+        depends_on:
+            - rabbit               
+             
+    #statistics-cat:
+        #image: statistics-cat
+        #deploy:
+            #restart_policy:
+                #condition: on-failure                
+        #environment:
+            #WEBDAV_HOST: webdav
+            #WEBDAV_USERNAME: user
+            #WEBDAV_PASSWORD: resu    
+            #RABBIT_HOST: rabbit
+            #QUEUE_NAME: rdf_location
+        #depends_on:
+            #- webdav              
+
+    rabbit:
+        image: rabbitmq:3-management
+        deploy:
+            restart_policy:
+                condition: on-failure    
+                
+    webdav:
+        image: visity/webdav
+        ports:
+            - "80:80"
+        deploy:
+            restart_policy:
+                condition: on-failure       
+        volumes:
+            - webdav:/var/www             
+            
+    influx:
+        image: influxdb
+        environment:
+            INFLUXDB_DB: "mydb"
+            INFLUXDB_USER: "eVRE_USER"
+            INFLUXDB_USER_PASSWORD: "eVRE_PASSWORD"
+        volumes:
+            - influx:/var/lib/influxdb
+                    
+    rabbit-reporter :
+        image: alogo53/rabbit-metrics-reporter
+        environment:
+            RABBIT_HOST: "rabbit"
+            RABBIT_PORT: "15672"
+            RABBIT_USERNAME: "guest"
+            RABBIT_PASSWORD: "guest"
+            INFLUX_HOST: "influx"
+            INFLUX_PORT: "8086"
+            INFLUX_DB: "mydb"
+            REPORT_INTERVAL: "20"
+        depends_on:
+            - rabbit
+            - influx
+            
+    grafana:
+        image: grafana/grafana
+        environment:
+            DS_NAME: "InfluxDB"
+            DS_TYPE: "InfluxDB"
+            DS_ACCESS: "proxy"
+            DS_URL: "http://influx:8086"
+            DS_DB: "mydb"
+        ports:
+            - "3000:3000"
+        volumes:
+            - grafana:/var/lib/grafana
+        depends_on:
+            - influx
+        deploy:
+            replicas: 1
+            
+    chronograf:
+        image: chronograf
+        ports:
+            - "8888:8888"
+        command: chronograf --influxdb-url=http://influx:8086
+        depends_on:
+            - influx
+
+    #kapacitor:
+        #image: kapacitor
+        #environment:
+            #KAPACITOR_HOSTNAME: kapacitor
+            #KAPACITOR_INFLUXDB_0_URLS_0: http://influxdb:8086
+        #volumes:
+            #- ./data/kapacitor:/var/lib/kapacitor
+        #depends_on:
+            #- influx
+        #ports:
+            #- 9092:9092
+      
+                    
+    cadvisor:
+        image: google/cadvisor
+        #ports:
+            #- 0.0.0.0:8080:8080
+        hostname: '{{.Node.ID}}'
+        command: -logtostderr -docker_only -storage_driver=influxdb -storage_driver_db=mydb -storage_driver_host=influx:8086
+        volumes:
+            - /:/rootfs:ro
+            - /var/run:/var/run:rw
+            - /sys:/sys:ro
+            - /var/lib/docker/:/var/lib/docker:ro
+        depends_on:
+            - influx
+        deploy:
+            mode: global
+            
+    fuseki:
+        image: blankdots/jena-fuseki
+        environment:
+            ADMIN_PASSWORD: "admin"
+        ports:
+            - "3030:3030"
+        volumes:
+            - fuseki:/data/fuseki/fuseki_DB
+              
+            
+                                
+volumes:
+  influx:
+    driver: local
+  grafana:
+    driver: local
+  webdav:
+    driver: local    
+    
