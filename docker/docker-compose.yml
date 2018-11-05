@@ -113,35 +113,35 @@ services:
             INFLUX_HOST: "influx"
             INFLUX_PORT: "8086"
             INFLUX_DB: "mydb"
-            REPORT_INTERVAL: "20"
+            REPORT_INTERVAL: "30"
         depends_on:
             - rabbit
             - influx
             
-    grafana:
-        image: grafana/grafana
-        environment:
-            DS_NAME: "InfluxDB"
-            DS_TYPE: "InfluxDB"
-            DS_ACCESS: "proxy"
-            DS_URL: "http://influx:8086"
-            DS_DB: "mydb"
-        ports:
-            - "3000:3000"
-        volumes:
-            - grafana:/var/lib/grafana
-        depends_on:
-            - influx
-        deploy:
-            replicas: 1
+    #grafana:
+        #image: grafana/grafana
+        #environment:
+            #DS_NAME: "InfluxDB"
+            #DS_TYPE: "InfluxDB"
+            #DS_ACCESS: "proxy"
+            #DS_URL: "http://influx:8086"
+            #DS_DB: "mydb"
+        #ports:
+            #- "3000:3000"
+        #volumes:
+            #- grafana:/var/lib/grafana
+        #depends_on:
+            #- influx
+        #deploy:
+            #replicas: 1
             
-    chronograf:
-        image: chronograf
-        ports:
-            - "8888:8888"
-        command: chronograf --influxdb-url=http://influx:8086
-        depends_on:
-            - influx
+    #chronograf:
+        #image: chronograf
+        #ports:
+            #- "8888:8888"
+        #command: chronograf --influxdb-url=http://influx:8086
+        #depends_on:
+            #- influx
 
     #kapacitor:
         #image: kapacitor
@@ -185,9 +185,8 @@ services:
                                 
 volumes:
   influx:
-    driver: local
   grafana:
-    driver: local
   webdav:
-    driver: local    
+  fuseki:
+        
     
