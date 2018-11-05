@@ -52,5 +52,5 @@ Provenance Context Integrator allows to load workflow execution results, Prov ba
   <img width="360" height="200" src="https://raw.githubusercontent.com/QCAPI-DRIP/eVRE-ENVRI/master/images/demo3Arch.png">
 </p>
 
-A demo can be found here: http://drip.vlan400.uvalight.net:8083/catalogue_mapper/index3.html
+A demo can be found here: http://drip.vlan400.uvalight.net:8084/index3.html
 
