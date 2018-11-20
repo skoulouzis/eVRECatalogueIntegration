@@ -68,6 +68,18 @@ services:
         volumes:
             - webdav:/var/www             
             
+    jena-fuseki: 
+        image: stain/jena-fuseki
+        ports:
+            - 3030:3030 
+        deploy:
+            restart_policy:
+                condition: on-failure  
+        environment:
+            ADMIN_PASSWORD: "admin"
+        volumes:
+            - fuseki-data:/fuseki           
+            
     influx:
         image: influxdb
         environment:
@@ -150,9 +162,7 @@ services:
                                 
 volumes:
   influx:
-    driver: local
   grafana:
-    driver: local
   webdav:
-    driver: local    
+  fuseki-data:
     

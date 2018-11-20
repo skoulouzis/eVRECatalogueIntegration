@@ -15,11 +15,13 @@ import gr.forth.ics.isl.exporter.CatalogueExporter;
 import gr.forth.ics.isl.exporter.D4ScienceExporter;
 import gr.forth.ics.isl.exporter.OGCCSWExporter;
 import gr.forth.ics.isl.util.XML;
+import io.micrometer.core.instrument.Meter;
 import io.micrometer.core.instrument.MeterRegistry;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
@@ -36,9 +38,7 @@ import static nl.uva.sne.vre4eic.util.Util.isCSW;
 import org.apache.commons.codec.binary.Base64;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.metrics.MetricsEndpoint;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 /**
@@ -50,9 +50,8 @@ public class ExportDocTask implements Callable<String> {
     private final String catalogueURL;
     private final ConnectionFactory factory;
 
-    @Autowired
-    MetricsEndpoint endpoint;
-
+//    @Autowired
+//    MetricsEndpoint endpoint;
     @Autowired
     MeterRegistry meterRegistry;
     private final String queue;
@@ -60,6 +59,7 @@ public class ExportDocTask implements Callable<String> {
     private final String generatorURL;
     private final Integer limit;
     private final String exportID;
+//    private final Counter recordsCounter;
 
     public ExportDocTask(String catalogueURL, ConnectionFactory factory, String queue, String mappingURL, String generatorURL, Integer limit, String exportID) {
         this.catalogueURL = catalogueURL;
@@ -69,6 +69,8 @@ public class ExportDocTask implements Callable<String> {
         this.generatorURL = generatorURL;
         this.limit = limit;
         this.exportID = exportID;
+
+//        this.recordsCounter = meterRegistry.counter("export.task.num", exportID, "records");
     }
 
     private void exportDocuments(String catalogueURL, String exportID) throws MalformedURLException, GenericException, InterruptedException, TransformerConfigurationException, TransformerException, ParserConfigurationException, SAXException {
@@ -119,7 +121,7 @@ public class ExportDocTask implements Callable<String> {
                 } catch (TimeoutException ex) {
                     Logger.getLogger(ExportDocTask.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
+//                this.recordsCounter.increment();
             }
 
 //            Set<String> names = endpoint.listNames().getNames();
@@ -142,7 +144,11 @@ public class ExportDocTask implements Callable<String> {
 
     @Override
     public String call() throws Exception {
+//        List<Meter> m = meterRegistry.getMeters();
+//        System.err.println(m);
+//        Timer.Sample sample = Timer.start(this.meterRegistry);
         exportDocuments(this.catalogueURL, this.exportID);
+//        sample.stop(this.meterRegistry.timer("export.task.timer." + exportID, "response", "FINISHED"));
         return null;
     }
 

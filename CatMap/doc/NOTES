@@ -2,3 +2,7 @@ docker run -it -p 15672:15672 -p 4369:4369 -p 5671-5672:5671-5672 -p 15671:15671
 docker run -p 127.0.0.1:8086:8086 -p 127.0.0.1:8083:8083 -v influxdb:/var/lib/influxdb influxdb
 docker run -p 8888:8888 chronograf --influxdb-url=http://localhost:8086
 docker run -it -p 80:80 visity/webdav
+
+
+
+curl -X POST -H 'Content-Type:text/turtle' -H 'Authorization: Basic YWRtaW46taW4=' -H 'Host: localhost' -d @Mapping115_b2a19c73-be27-42a6-b4e1-332349b781c0.ttl  http://fuseki:3030/db/data

@@ -10,6 +10,7 @@ import com.github.sardine.Sardine;
 import com.github.sardine.SardineFactory;
 import gr.forth.ics.isl.exporter.CatalogueExporter;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -39,8 +40,25 @@ import nl.uva.sne.vre4eic.util.Util;
 import org.apache.commons.compress.utils.IOUtils;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.metrics.MetricsEndpoint;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ByteArrayOutputStream;
+
+import org.apache.jena.query.DatasetAccessor;
+import org.apache.jena.query.DatasetAccessorFactory;
+import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.ResultSetFormatter;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.RDFNode;
 
 @Service
 public class ConvertService {
@@ -51,15 +69,15 @@ public class ConvertService {
     @Autowired
     CachingConnectionFactory connectionFactory;
 
-//    @Autowired
-//    MetricsEndpoint endpoint;
+    @Autowired
+    MetricsEndpoint endpoint;
 //
     @Autowired
     MeterRegistry meterRegistry;
 
     Map<String, Future<String>> taskMap = new HashMap<>();
 
-    public ProcessingStatus doProcess(String catalogueURL, String mappingURL, String generatorURL, int limit, String exportID) throws MalformedURLException, IOException, FileNotFoundException, InterruptedException {
+    public ProcessingStatus doProcess(String catalogueURL, String mappingURL, String generatorURL, int limit, String exportID) throws MalformedURLException, IOException, FileNotFoundException, InterruptedException, Exception {
         String taskID = catalogueURL + exportID;
         Future<String> convertTask = taskMap.get(taskID);
 
@@ -70,6 +88,9 @@ public class ConvertService {
             ExportDocTask task = new ExportDocTask(catalogueURL, connectionFactory.getRabbitConnectionFactory(), queueName, mappingURL, generatorURL, limit, exportID);
             convertTask = exec.submit(task);
             taskMap.put(taskID, convertTask);
+
+            Timer timer = meterRegistry.timer("export.doc.task.start");
+            timer.recordCallable(task);
         }
         ProcessingStatus process = new ProcessingStatus();
         process.setCatalogueURL(new URL(catalogueURL));
@@ -192,6 +213,41 @@ public class ConvertService {
         }
 
         return null;
+    }
+
+    public void ingest(String webDAVURL, String ingestCatURL) throws IOException {
+        Sardine sardine = SardineFactory.begin();
+
+        List<DavResource> resources = sardine.list(webDAVURL);
+        URL url = new URL(webDAVURL);
+        String base = url.getProtocol() + "://" + url.getHost();
+        if (url.getPort() > -1) {
+            base += ":" + url.getPort();
+        }
+
+        for (DavResource res : resources) {
+            if (!res.isDirectory()) {
+                try (InputStream ins = getWebDavInputStream(res, sardine, base)) {
+                    uploadRDF(ins, webDAVURL, base);
+                }
+            }
+        }
+    }
+
+    public void uploadRDF(InputStream rdfIns, String serviceURI, String datasetName)
+            throws IOException {
+
+        Model m = ModelFactory.createDefaultModel();
+
+        m.read(rdfIns, null, "text/turtle");
+
+        DatasetAccessor accessor = DatasetAccessorFactory.createHTTP(serviceURI + datasetName + "/data");
+        accessor.add(m);
+    }
+
+    private InputStream getWebDavInputStream(DavResource resource, Sardine sardine, String webDAVURL) throws IOException {
+        String webdavFile = webDAVURL + "/" + resource.getPath();
+        return sardine.get(webdavFile);
     }
 
 }
