@@ -6,6 +6,7 @@
 package nl.uva.sne.vre4eic.rest;
 
 import com.github.sardine.DavResource;
+import io.micrometer.core.annotation.Timed;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,6 +42,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author S. Koulouzis
  */
 @RestController
+@Timed
 public class ConvertController {
 
     @Autowired
@@ -69,6 +71,8 @@ public class ConvertController {
         } catch (MalformedURLException ex) {
             Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException | InterruptedException ex) {
+            Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
             Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -209,6 +213,15 @@ public class ConvertController {
         return null;
     }
 
+    @RequestMapping(value = "/ingest_records", method = RequestMethod.GET, params = {"source_rec_url", "ingest_cat_url"})
+    public void ingestRecords(@RequestParam(value = "source_rec_url") String sourceRecURL, @RequestParam(value = "ingest_cat_url") String ingestCatURL) {
+        try {
+            service.ingest(sourceRecURL, ingestCatURL);
+        } catch (IOException ex) {
+            Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 ////    http://localhost:8080/rest/get_stats?rdf_url=ftp://user:12345@localhost/ckan_Mapping62.x3ml/
 //    @RequestMapping(value = "/get_stats", method = RequestMethod.GET, params = {"rdf_url"})
 //    @GetMapping("/")
@@ -220,5 +233,5 @@ public class ConvertController {
 //            Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 //        return null;
-//    }
+//    }    
 }

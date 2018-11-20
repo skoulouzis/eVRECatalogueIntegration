@@ -6,8 +6,6 @@
 package nl.uva.sne.vre4eic.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.impl.MicrometerMetricsCollector;
 import java.net.URL;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
