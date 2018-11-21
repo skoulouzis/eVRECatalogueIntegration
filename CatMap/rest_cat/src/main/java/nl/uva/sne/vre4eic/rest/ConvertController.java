@@ -91,7 +91,6 @@ public class ConvertController {
             Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return records;
-
     }
 
     @RequestMapping(value = "/download/{mappingName}/{mappingID}", method = RequestMethod.GET,
@@ -213,13 +212,29 @@ public class ConvertController {
         return null;
     }
 
+//    http://localhost:8080/rest/ingest_records/?source_rec_url=http://localhost/Mapping115/3955e877-1d73-45fd-94ea-54b495465573/&ingest_cat_url=http://localhost:3030
     @RequestMapping(value = "/ingest_records", method = RequestMethod.GET, params = {"source_rec_url", "ingest_cat_url"})
-    public void ingestRecords(@RequestParam(value = "source_rec_url") String sourceRecURL, @RequestParam(value = "ingest_cat_url") String ingestCatURL) {
+    public void ingestRecords(@RequestParam(value = "source_rec_url") String sourceRecURL,
+            @RequestParam(value = "ingest_cat_url") String ingestCatURL,
+            @RequestParam(value = "dataset_name") String datasetName) {
         try {
-            service.ingest(sourceRecURL, ingestCatURL);
+            service.ingest(sourceRecURL, ingestCatURL, datasetName);
         } catch (IOException ex) {
             Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+//    http://localhost:8080/rest/count_rdf_records/?catalogue_url=http://localhost:3030
+    @RequestMapping(value = "/count_rdf_records", method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public @ResponseBody
+    Integer countRDFRecords(
+            @RequestParam(value = "catalogue_url") String catalogueURL,
+            @RequestParam(value = "dataset_name") String datasetName) {
+
+        Integer recordsNum = service.countRDFRecords(catalogueURL, datasetName);
+
+        return recordsNum;
     }
 
 ////    http://localhost:8080/rest/get_stats?rdf_url=ftp://user:12345@localhost/ckan_Mapping62.x3ml/

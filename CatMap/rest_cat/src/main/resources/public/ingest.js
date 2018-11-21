@@ -1,3 +1,4 @@
+var folderName;
 function ingest() {
     var source_rec_url = document.getElementById("source_rec_url").value;
     var ingest_cat_url = document.getElementById("ingest_cat_url").value;
@@ -11,20 +12,42 @@ function ingest() {
     var ingestBtn = document.getElementById("ingestBtn");
     var width = 10;
     var id = setInterval(frame, 10);
-    
-    
-    var limit = document.getElementById("recLimit").value;
-    var url = innerHTML + '/ingest_records/?source_rec_url=' + source_rec_url + '&ingest_cat_url=' + ingest_cat_url;
 
-    var request = new XMLHttpRequest();
-    request.open('GET', url, false);  
-    request.send(null);
+
+    var folderName = new URL(source_rec_url).pathname;
+    var resultsURL = innerHTML + '/list_results/?folder_name=' + folderName;
+//    console.log(resultsURL);
+    var listResultsRequest = new XMLHttpRequest();
+    listResultsRequest.open('GET', resultsURL, false);  // `false` makes the request synchronous
+    listResultsRequest.send(null);
     var numOfRec = 0;
-    if (request.status === 200) {
-        json = JSON.parse(request.responseText);
+    if (listResultsRequest.status === 200) {
+        json = JSON.parse(listResultsRequest.responseText);
         numOfRec = json.length;
     }
+
+
+    var datasetName = "envri";
+    var ingestRecordsURL = innerHTML + '/ingest_records/?source_rec_url=' + source_rec_url + '&ingest_cat_url=' + ingest_cat_url + '&dataset_name=' + datasetName;
+    console.log(ingestRecordsURL);
+    var ingestRecordsRequest = new XMLHttpRequest();
+    ingestRecordsRequest.open('GET', ingestRecordsURL, false);
+    ingestRecordsRequest.send(null);
+
+
+    var countRDFRecordsURL = innerHTML + '/count_rdf_records/?catalogue_url=' + ingest_cat_url;
+    console.log(countRDFRecordsURL);
+    var countRDFRecordsRequest = new XMLHttpRequest();
+    countRDFRecordsRequest.open('GET', countRDFRecordsURL, false);  // `false` makes the request synchronous
+    countRDFRecordsRequest.send(null);
+
     var numOfRes = 0;
+    if (countRDFRecordsRequest.status === 200) {
+        json = JSON.parse(countRDFRecordsRequest.responseText);
+        numOfRes = parseInt(json);
+        console.log(numOfRes);
+    }
+
 
     ingestBtn.disabled = false;
     var count = 0;
