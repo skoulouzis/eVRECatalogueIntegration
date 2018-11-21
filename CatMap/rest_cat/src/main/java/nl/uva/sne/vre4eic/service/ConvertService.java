@@ -51,14 +51,19 @@ import java.io.ByteArrayOutputStream;
 
 import org.apache.jena.query.DatasetAccessor;
 import org.apache.jena.query.DatasetAccessorFactory;
+import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.query.ResultSetFormatter;
+import org.apache.jena.query.Syntax;
+import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.Resource;
 
 @Service
 public class ConvertService {
@@ -215,7 +220,7 @@ public class ConvertService {
         return null;
     }
 
-    public void ingest(String webDAVURL, String ingestCatURL) throws IOException {
+    public void ingest(String webDAVURL, String ingestCatURL,String datasetName) throws IOException {
         Sardine sardine = SardineFactory.begin();
 
         List<DavResource> resources = sardine.list(webDAVURL);
@@ -224,11 +229,11 @@ public class ConvertService {
         if (url.getPort() > -1) {
             base += ":" + url.getPort();
         }
-
+        
         for (DavResource res : resources) {
-            if (!res.isDirectory()) {
+            if (!res.isDirectory() && res.getName().endsWith("ttl")) {
                 try (InputStream ins = getWebDavInputStream(res, sardine, base)) {
-                    uploadRDF(ins, webDAVURL, base);
+                    uploadRDF(ins, ingestCatURL, datasetName);
                 }
             }
         }
@@ -240,7 +245,9 @@ public class ConvertService {
         Model m = ModelFactory.createDefaultModel();
 
         m.read(rdfIns, null, "text/turtle");
-
+        if (!serviceURI.endsWith("/")) {
+            serviceURI += "/";
+        }
         DatasetAccessor accessor = DatasetAccessorFactory.createHTTP(serviceURI + datasetName + "/data");
         accessor.add(m);
     }
@@ -248,6 +255,19 @@ public class ConvertService {
     private InputStream getWebDavInputStream(DavResource resource, Sardine sardine, String webDAVURL) throws IOException {
         String webdavFile = webDAVURL + "/" + resource.getPath();
         return sardine.get(webdavFile);
+    }
+
+    public Integer countRDFRecords(String catalogueURL, String datasetName) {
+        String query = "SELECT (COUNT(*) AS ?count) WHERE { ?subject ?predicate ?object}";
+        if (!catalogueURL.endsWith("/")) {
+            catalogueURL += "/";
+        }
+        ResultSet rs = QueryExecutionFactory.sparqlService(catalogueURL + datasetName + "/query", query).execSelect();
+
+        QuerySolution r = rs.next();
+        Literal countLiteral = ((Literal) r.get("count"));
+        return countLiteral.getInt();
+
     }
 
 }
