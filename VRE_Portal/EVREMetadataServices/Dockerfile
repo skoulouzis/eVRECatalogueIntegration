@@ -1,11 +1,11 @@
-FROM tomcat:8
+FROM tomcat:9
 
 
 ARG EVRE_METADATA_SERVICES_VERSION=1.0-SNAPSHOT
 
 RUN apt-get -y update && apt-get -y upgrade && apt-get install -y git maven openjdk-8-jdk
 WORKDIR /
-# RUN git clone https://github.com/skoulouzis/EVREMetadataServices.git
+RUN git clone https://github.com/skoulouzis/EVREMetadataServices.git
 
 RUN mkdir -p /EVREMetadataServices/target
 RUN mkdir -p /EVREMetadataServices/libs
@@ -21,16 +21,16 @@ ADD libs/BlazegraphOps-1.0-SNAPSHOT.jar libs
 ADD libs/NodeService-0.0.3-SNAPSHOT-classes.jar libs
 ADD libs/VirtuosoOpsImpl-1.0-SNAPSHOT.jar libs
 # ADD libs/jta-1.0.1b.jar libs
-ADD EVREMetadataServices-1.0-SNAPSHOT /EVREMetadataServices/target/EVREMetadataServices-1.0-SNAPSHOT
+# ADD EVREMetadataServices-1.0-SNAPSHOT /EVREMetadataServices/target/EVREMetadataServices-1.0-SNAPSHOT
 
 RUN mvn install:install-file -Dfile=libs/BlazegraphOps-1.0-SNAPSHOT.jar -DgroupId=forth.ics -DartifactId=BlazegraphOps -Dversion=1.0-SNAPSHOT -Dpackaging=jar && mvn install:install-file -Dfile=libs/NodeService-0.0.3-SNAPSHOT-classes.jar -DgroupId=eu.vre4eic.evre -DartifactId=NodeService -Dversion=0.0.3-SNAPSHOT -Dpackaging=jar && mvn install:install-file -Dfile=libs/VirtuosoOpsImpl-1.0-SNAPSHOT.jar -DgroupId=forth.ics -DartifactId=VirtuosoOpsImpl -Dversion=1.0-SNAPSHOT -Dpackaging=jar &&  mvn install:install-file -Dfile="libs\virtjdbc4.jar" -DartifactId=virtjdbc4 -DgroupId=gr.forth.ics -Dversion=7-20140918 -Dpackaging=jar && mvn install:install-file -Dfile="libs\virtjdbc3.jar" -DartifactId=virtjdbc3 -DgroupId=gr.forth.ics -Dversion=7-20140918 -Dpackaging=jar && mvn install:install-file -Dfile="libs\virt_sesame2.jar" -DartifactId=virtsesame -DgroupId=gr.forth.ics -Dversion=2.0 -Dpackaging=jar && mvn install:install-file -Dfile="libs\virt_jena.jar" -DartifactId=virtjena -DgroupId=gr.forth.ics -Dversion=7-20140918 -Dpackaging=jar 
-# RUN mvn install:install-file -Dfile=libs/jta-1.0.1b.jar -DgroupId=javax.transaction -DartifactId=jta -Dversion=1.0.1B -Dpackaging=jar 
+RUN mvn install:install-file -Dfile=libs/jta-1.0.1b.jar -DgroupId=javax.transaction -DartifactId=jta -Dversion=1.0.1B -Dpackaging=jar 
 
 
 
 
 WORKDIR /EVREMetadataServices
-# RUN JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 mvn install
+RUN JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 mvn install
 
 RUN cp -r target/EVREMetadataServices-$EVRE_METADATA_SERVICES_VERSION /usr/local/tomcat/webapps/EVREMetadataServices
 
