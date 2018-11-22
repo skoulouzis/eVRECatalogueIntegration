@@ -15,7 +15,7 @@ ADD libs/virtjdbc3.jar libs
 ADD libs/virtjdbc4.jar libs
 ADD libs/virt_jena.jar libs
 ADD libs/virt_sesame2.jar libs
-ADD libs/BlazegraphOps-1.0-SNAPSHOT.jar
+ADD libs/BlazegraphOps-1.0-SNAPSHOT.jar libs
 # ADD libs/jta-1.0.1b.jar libs
 
 RUN mvn install:install-file -Dfile=libs/BlazegraphOps-1.0-SNAPSHOT.jar -DgroupId=forth.ics -DartifactId=BlazegraphOps -Dversion=1.0-SNAPSHOT -Dpackaging=jar && mvn install:install-file -Dfile=libs/NodeService-0.0.3-SNAPSHOT-classes.jar -DgroupId=eu.vre4eic.evre -DartifactId=NodeService -Dversion=0.0.3-SNAPSHOT -Dpackaging=jar && mvn install:install-file -Dfile=libs/VirtuosoOpsImpl-1.0-SNAPSHOT.jar -DgroupId=forth.ics -DartifactId=VirtuosoOpsImpl -Dversion=1.0-SNAPSHOT -Dpackaging=jar &&  mvn install:install-file -Dfile="libs\virtjdbc4.jar" -DartifactId=virtjdbc4 -DgroupId=gr.forth.ics -Dversion=7-20140918 -Dpackaging=jar && mvn install:install-file -Dfile="libs\virtjdbc3.jar" -DartifactId=virtjdbc3 -DgroupId=gr.forth.ics -Dversion=7-20140918 -Dpackaging=jar && mvn install:install-file -Dfile="libs\virt_sesame2.jar" -DartifactId=virtsesame -DgroupId=gr.forth.ics -Dversion=2.0 -Dpackaging=jar && mvn install:install-file -Dfile="libs\virt_jena.jar" -DartifactId=virtjena -DgroupId=gr.forth.ics -Dversion=7-20140918 -Dpackaging=jar 
