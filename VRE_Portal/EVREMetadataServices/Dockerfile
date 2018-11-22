@@ -7,7 +7,8 @@ RUN apt-get -y update && apt-get -y upgrade && apt-get install -y git maven open
 WORKDIR /
 # RUN git clone https://github.com/skoulouzis/EVREMetadataServices.git
 # WORKDIR EVREMetadataServices
-
+RUN mkdir -p /EVREMetadataServices/target
+RUN mkdir -p /EVREMetadataServices/libs
 
 # RUN mvn install:install-file -Dfile=libs/NodeService-0.0.1-SNAPSHOT-classes.jar -DartifactId=NodeService -DgroupId=eu.vre4eic.evre -Dversion=0.0.1-SNAPSHOT -Dpackaging=jar -DpomFile=pom.xml && mvn install:install-file -Dfile="libs/NodeService-0.0.3-SNAPSHOT-classes.jar" -DartifactId=NodeService -DgroupId=eu.vre4eic.evre -Dversion=0.0.3-SNAPSHOT -Dpackaging=jar -DpomFile=pom.xml && mvn install:install-file -Dfile="libs/BlazegraphOps-1.0-SNAPSHOT.jar" -DartifactId=BlazegraphOps -DgroupId=forth.ics -Dversion=0.0.1-SNAPSHOT -Dpackaging=jar -DpomFile=pom.xml && mvn install:install-file -Dfile="libs/VirtuosoOpsImpl-1.0-SNAPSHOT.jar" -DartifactId=VirtuosoOpsImpl -DgroupId=forth.ics -Dversion=0.0.1-SNAPSHOT -Dpackaging=jar -DpomFile=pom.xml
 
@@ -16,12 +17,13 @@ ADD libs/virtjdbc4.jar libs
 ADD libs/virt_jena.jar libs
 ADD libs/virt_sesame2.jar libs
 ADD libs/BlazegraphOps-1.0-SNAPSHOT.jar libs
+ADD libs/NodeService-0.0.3-SNAPSHOT-classes.jar libs
 # ADD libs/jta-1.0.1b.jar libs
 
 RUN mvn install:install-file -Dfile=libs/BlazegraphOps-1.0-SNAPSHOT.jar -DgroupId=forth.ics -DartifactId=BlazegraphOps -Dversion=1.0-SNAPSHOT -Dpackaging=jar && mvn install:install-file -Dfile=libs/NodeService-0.0.3-SNAPSHOT-classes.jar -DgroupId=eu.vre4eic.evre -DartifactId=NodeService -Dversion=0.0.3-SNAPSHOT -Dpackaging=jar && mvn install:install-file -Dfile=libs/VirtuosoOpsImpl-1.0-SNAPSHOT.jar -DgroupId=forth.ics -DartifactId=VirtuosoOpsImpl -Dversion=1.0-SNAPSHOT -Dpackaging=jar &&  mvn install:install-file -Dfile="libs\virtjdbc4.jar" -DartifactId=virtjdbc4 -DgroupId=gr.forth.ics -Dversion=7-20140918 -Dpackaging=jar && mvn install:install-file -Dfile="libs\virtjdbc3.jar" -DartifactId=virtjdbc3 -DgroupId=gr.forth.ics -Dversion=7-20140918 -Dpackaging=jar && mvn install:install-file -Dfile="libs\virt_sesame2.jar" -DartifactId=virtsesame -DgroupId=gr.forth.ics -Dversion=2.0 -Dpackaging=jar && mvn install:install-file -Dfile="libs\virt_jena.jar" -DartifactId=virtjena -DgroupId=gr.forth.ics -Dversion=7-20140918 -Dpackaging=jar 
 # RUN mvn install:install-file -Dfile=libs/jta-1.0.1b.jar -DgroupId=javax.transaction -DartifactId=jta -Dversion=1.0.1B -Dpackaging=jar 
 
-RUN mkdir -p /EVREMetadataServices/target
+
 ADD EVREMetadataServices-1.0-SNAPSHOT /EVREMetadataServices/target
 
 WORKDIR /EVREMetadataServices
