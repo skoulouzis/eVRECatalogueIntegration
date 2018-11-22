@@ -6,9 +6,10 @@ ARG EVRE_METADATA_SERVICES_VERSION=1.0-SNAPSHOT
 RUN apt-get -y update && apt-get -y upgrade && apt-get install -y git maven openjdk-8-jdk
 WORKDIR /
 # RUN git clone https://github.com/skoulouzis/EVREMetadataServices.git
-# WORKDIR EVREMetadataServices
+
 RUN mkdir -p /EVREMetadataServices/target
 RUN mkdir -p /EVREMetadataServices/libs
+WORKDIR EVREMetadataServices
 
 # RUN mvn install:install-file -Dfile=libs/NodeService-0.0.1-SNAPSHOT-classes.jar -DartifactId=NodeService -DgroupId=eu.vre4eic.evre -Dversion=0.0.1-SNAPSHOT -Dpackaging=jar -DpomFile=pom.xml && mvn install:install-file -Dfile="libs/NodeService-0.0.3-SNAPSHOT-classes.jar" -DartifactId=NodeService -DgroupId=eu.vre4eic.evre -Dversion=0.0.3-SNAPSHOT -Dpackaging=jar -DpomFile=pom.xml && mvn install:install-file -Dfile="libs/BlazegraphOps-1.0-SNAPSHOT.jar" -DartifactId=BlazegraphOps -DgroupId=forth.ics -Dversion=0.0.1-SNAPSHOT -Dpackaging=jar -DpomFile=pom.xml && mvn install:install-file -Dfile="libs/VirtuosoOpsImpl-1.0-SNAPSHOT.jar" -DartifactId=VirtuosoOpsImpl -DgroupId=forth.ics -Dversion=0.0.1-SNAPSHOT -Dpackaging=jar -DpomFile=pom.xml
 
