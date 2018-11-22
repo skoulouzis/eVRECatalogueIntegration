@@ -29,7 +29,8 @@ RUN mvn install:install-file -Dfile=libs/BlazegraphOps-1.0-SNAPSHOT.jar -DgroupI
 ADD EVREMetadataServices-1.0-SNAPSHOT /EVREMetadataServices/target
 
 WORKDIR /EVREMetadataServices
-RUN JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 mvn install
+# RUN JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 mvn install
+
 RUN cp -r target/EVREMetadataServices-$EVRE_METADATA_SERVICES_VERSION /usr/local/tomcat/webapps/EVREMetadataServices
 
 CMD echo "triplestore.url = $TRIPLESTORE_URL" > /usr/local/tomcat/webapps/EVREMetadataServices/WEB-INF/classes/config.properties && \  
