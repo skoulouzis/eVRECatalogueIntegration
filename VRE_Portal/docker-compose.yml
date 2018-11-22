@@ -6,30 +6,31 @@ services:
         image: tenforce/virtuoso
         environment:
             SPARQL_UPDATE: "true"
-            DEFAULT_GRAPH: "http://www.example.com/my-graph"
+            DEFAULT_GRAPH: "http://envri-data"
         volumes:
             - virtuoso-data:/data/virtuoso
         ports:
             - "8890:8890"
+            - "1111:1111"
             
-    mongo:
-        image: mongo
-        volumes:
-            - mongo-data:/data/db
-        ports:
-            - "27017:27017"     
+    #mongo:
+        #image: mongo
+        #volumes:
+            #- mongo-data:/data/db
+        #ports:
+            #- "27017:27017"     
             
-    zookeeper:
-        image: zookeeper      
-        ports:
-        - "2181:2181"
+    #zookeeper:
+        #image: zookeeper      
+        #ports:
+        #- "2181:2181"
 
         
-    activemq:
-        image: rmohr/activemq 
-        ports:
-        - "61616:61616"
-        - "8161:8161"
+    #activemq:
+        #image: rmohr/activemq 
+        #ports:
+        #- "61616:61616"
+        #- "8161:8161"
         
 
             
@@ -44,7 +45,7 @@ services:
             SPRING_HTTP_MULTIPART_MAX_REQUEST_SIZE: "400Mb"
             SPRING_DATASOURCE_DRIVER_CLASS_NAME: "org.h2.Driver"
             TRIPLESORE_NAMESPACE: "vre4eic"
-            SERVICE_URL: "http://metadata:8080/EVREMetadataServices"
+            SERVICE_URL: "http://172.17.0.1:8080/EVREMetadataServices"
             SERVICE_TIMEOUT: "6"
             SERVICE_MAX_RESULT_COUNT: "10000"
             URI_PREFIX: "http://vreportal"
@@ -52,7 +53,6 @@ services:
         ports:
             - "80:8080"
         depends_on:
-            - h2
             - metadata
             
     metadata:
@@ -103,4 +103,4 @@ services:
 volumes:
   virtuoso-data:
   h2-data:
-  mongo-data:
+  #mongo-data:
