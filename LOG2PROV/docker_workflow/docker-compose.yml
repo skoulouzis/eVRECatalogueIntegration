@@ -45,7 +45,6 @@ services:
             
     service:
         image: eliaskhaldi/my_image
-        environment:
         ports:
             - "8080:8080"
         deploy:
