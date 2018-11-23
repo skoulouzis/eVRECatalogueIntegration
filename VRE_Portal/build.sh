@@ -9,5 +9,7 @@ docker build -t node_service .
 cd ../vreportal
 docker build -t vre_portal . 
 
-cd ../
+cd ../virtuoso
+docker build -t virtuoso_evre .
 
+cd ../
