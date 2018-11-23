@@ -36,7 +36,7 @@ if __name__ == "__main__":
     elif options.file:
         all_vars = bindings(options.file)
     #    all_vars_encode = urllib.parse.quote_plus(all_vars)
-    #    print(all_vars)
+        print(all_vars)
         r = requests.post("https://envriplus-provenance.test.fedcloud.eu/templates/" + 
         options.templateID + "/expand?fmt=trig&writeprov="+str(options.write_prov).lower(),
         data= ""+all_vars+""

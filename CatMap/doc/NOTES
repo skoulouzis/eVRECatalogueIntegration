@@ -6,3 +6,6 @@ docker run -it -p 80:80 visity/webdav
 
 
 curl -X POST -H 'Content-Type:text/turtle' -H 'Authorization: Basic YWRtaW46taW4=' -H 'Host: localhost' -d @Mapping115_b2a19c73-be27-42a6-b4e1-332349b781c0.ttl  http://fuseki:3030/db/data
+curl -v -X PUT      --digest -u dba:dba      -H Content-Type:text/turtle      -T Mapping115_0ca0eeb1-41fd-4b25-bbea-070461188521.ttl      -G http://localhost:8890/sparql-graph-crud-auth  --data-urlencode graph=http://envri-data
+curl -X PUT -H Content-Type:text/turtle  -T Mapping115_0ca0eeb1-41fd-4b25-bbea-070461188521.ttl -G http://localhost:3030/envri/data -data-urlencode graph=http://envri-data
+
