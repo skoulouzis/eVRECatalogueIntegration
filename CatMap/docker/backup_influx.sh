@@ -6,4 +6,4 @@ sudo docker exec  -ti $influx_id influxd backup -portable -database mydb /tmp/my
 sudo docker cp $influx_id:/tmp/mydb /tmp/
 sudo chown -R $USER /tmp/mydb
 mv /tmp/mydb /tmp/mydb_$HOSTNAME
-cp /tmp/mydb_$HOSTNAME /media/$USER/surfDrive
+cp -r /tmp/mydb_$HOSTNAME /media/$USER/surfDrive
