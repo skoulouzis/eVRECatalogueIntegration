@@ -1,0 +1,43 @@
+
+		Fri Nov 23 2018
+14:55:15 { Loading plugin 1: Type `plain', file `wikiv' in `/usr/local/virtuoso-opensource/lib/virtuoso/hosting'
+14:55:15   FAILED  plugin 1: Unable to locate file }
+14:55:15 { Loading plugin 2: Type `plain', file `mediawiki' in `/usr/local/virtuoso-opensource/lib/virtuoso/hosting'
+14:55:15   FAILED  plugin 2: Unable to locate file }
+14:55:15 { Loading plugin 3: Type `plain', file `creolewiki' in `/usr/local/virtuoso-opensource/lib/virtuoso/hosting'
+14:55:15   FAILED  plugin 3: Unable to locate file }
+14:55:15 OpenLink Virtuoso Universal Server
+14:55:15 Version 07.20.3217-pthreads for Linux as of Nov  5 2018
+14:55:15 uses parts of OpenSSL, PCRE, Html Tidy
+14:55:15 Database version 3126
+14:55:15 SQL Optimizer enabled (max 1000 layouts)
+14:55:16 Compiler unit is timed at 0.000131 msec
+14:55:17 Roll forward started
+14:55:17 Roll forward complete
+14:55:17 Checkpoint started
+14:55:17 Checkpoint finished, log reused
+14:55:17 HTTP/WebDAV server online at 27015
+14:55:17 Server online at 1111 (pid 20)
+14:55:17 Server received signal 15
+14:55:17 Initiating quick shutdown
+14:55:17 Server shutdown complete
+
+		Fri Nov 23 2018
+14:55:17 { Loading plugin 1: Type `plain', file `wikiv' in `/usr/local/virtuoso-opensource/lib/virtuoso/hosting'
+14:55:17   FAILED  plugin 1: Unable to locate file }
+14:55:17 { Loading plugin 2: Type `plain', file `mediawiki' in `/usr/local/virtuoso-opensource/lib/virtuoso/hosting'
+14:55:17   FAILED  plugin 2: Unable to locate file }
+14:55:17 { Loading plugin 3: Type `plain', file `creolewiki' in `/usr/local/virtuoso-opensource/lib/virtuoso/hosting'
+14:55:17   FAILED  plugin 3: Unable to locate file }
+14:55:17 OpenLink Virtuoso Universal Server
+14:55:17 Version 07.20.3217-pthreads for Linux as of Nov  5 2018
+14:55:17 uses parts of OpenSSL, PCRE, Html Tidy
+14:55:17 Database version 3126
+14:55:17 SQL Optimizer enabled (max 1000 layouts)
+14:55:18 Compiler unit is timed at 0.000185 msec
+14:55:19 Roll forward started
+14:55:19 Roll forward complete
+14:55:19 Checkpoint started
+14:55:19 Checkpoint finished, log reused
+14:55:19 HTTP/WebDAV server online at 8890
+14:55:19 Server online at 1111 (pid 1)
