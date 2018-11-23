@@ -68,24 +68,24 @@ services:
         volumes:
             - webdav:/var/www             
             
-    jena-fuseki: 
-        image: stain/jena-fuseki
-        ports:
-            - 3030:3030 
-        deploy:
-            restart_policy:
-                condition: on-failure  
-        environment:
-            ADMIN_PASSWORD: "admin"
-        volumes:
-            - fuseki-data:/fuseki           
+    #jena-fuseki: 
+        #image: stain/jena-fuseki
+        #ports:
+            #- 3030:3030 
+        #deploy:
+            #restart_policy:
+                #condition: on-failure  
+        #environment:
+            #ADMIN_PASSWORD: "admin"
+        #volumes:
+            #- fuseki-data:/fuseki           
             
-    influx:
-        image: influxdb
-        environment:
-            INFLUXDB_DB: mydb
-        volumes:
-            - influx:/var/lib/influxdb
+    #influx:
+        #image: influxdb
+        #environment:
+            #INFLUXDB_DB: mydb
+        #volumes:
+            #- influx:/var/lib/influxdb
                     
     #rabbit-reporter :
         #image: alogo53/rabbit-metrics-reporter
