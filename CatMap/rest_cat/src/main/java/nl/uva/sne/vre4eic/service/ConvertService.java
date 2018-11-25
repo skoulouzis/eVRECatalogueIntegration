@@ -11,10 +11,8 @@ import com.github.sardine.SardineFactory;
 import gr.forth.ics.isl.exporter.CatalogueExporter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
@@ -45,25 +43,11 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.ByteArrayOutputStream;
-
-import org.apache.jena.query.DatasetAccessor;
-import org.apache.jena.query.DatasetAccessorFactory;
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
-import org.apache.jena.query.ResultSetFormatter;
-import org.apache.jena.query.Syntax;
 import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.RDFNode;
-import org.apache.jena.rdf.model.Resource;
 
 @Service
 public class ConvertService {
@@ -242,14 +226,17 @@ public class ConvertService {
     public void uploadRDF(InputStream rdfIns, String serviceURI, String datasetName)
             throws IOException {
 
-        Model m = ModelFactory.createDefaultModel();
+//        Model m = ModelFactory.createDefaultModel();
+//
+//        m.read(rdfIns, null, "text/turtle");
+//        if (!serviceURI.endsWith("/")) {
+//            serviceURI += "/";
+//        }
+//        DatasetAccessor accessor = DatasetAccessorFactory.createHTTP(serviceURI + datasetName + "/data");
+//        accessor.add(m);
 
-        m.read(rdfIns, null, "text/turtle");
-        if (!serviceURI.endsWith("/")) {
-            serviceURI += "/";
-        }
-        DatasetAccessor accessor = DatasetAccessorFactory.createHTTP(serviceURI + datasetName + "/data");
-        accessor.add(m);
+
+
     }
 
     private InputStream getWebDavInputStream(DavResource resource, Sardine sardine, String webDAVURL) throws IOException {
