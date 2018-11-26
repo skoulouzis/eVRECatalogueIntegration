@@ -48,6 +48,8 @@ import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Literal;
+import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 
 @Service
 public class ConvertService {
@@ -204,7 +206,7 @@ public class ConvertService {
         return null;
     }
 
-    public void ingest(String webDAVURL, String ingestCatURL,String datasetName) throws IOException {
+    public void ingest(String webDAVURL, String ingestCatURL, String datasetName) throws IOException {
         Sardine sardine = SardineFactory.begin();
 
         List<DavResource> resources = sardine.list(webDAVURL);
@@ -213,7 +215,7 @@ public class ConvertService {
         if (url.getPort() > -1) {
             base += ":" + url.getPort();
         }
-        
+
         for (DavResource res : resources) {
             if (!res.isDirectory() && res.getName().endsWith("ttl")) {
                 try (InputStream ins = getWebDavInputStream(res, sardine, base)) {
@@ -234,9 +236,6 @@ public class ConvertService {
 //        }
 //        DatasetAccessor accessor = DatasetAccessorFactory.createHTTP(serviceURI + datasetName + "/data");
 //        accessor.add(m);
-
-
-
     }
 
     private InputStream getWebDavInputStream(DavResource resource, Sardine sardine, String webDAVURL) throws IOException {
@@ -255,6 +254,20 @@ public class ConvertService {
         Literal countLiteral = ((Literal) r.get("count"));
         return countLiteral.getInt();
 
+    }
+
+    public void ingest(JSONObject requestParams) {
+        String token = (String) requestParams.get("token");
+        String namedGraphLabelParam = (String) requestParams.get("namedGraphLabelParam");
+        String selectedCategoryLabel = (String) requestParams.get("selectedCategoryLabel");
+        String namedGraphIdParam = (String) requestParams.get("namedGraphIdParam");
+        String selectedCategoryId = (String) requestParams.get("selectedCategoryId");
+
+        JSONObject userDetails = (JSONObject) requestParams.get("userDetails");
+        String linkingUpdateQuery = "with <" + namedGraphIdParam + "> insert {"
+                + "?uri <http://eurocris.org/ontology/cerif#is_destination_of> <null>. "
+                + "<null> <http://eurocris.org/ontology/cerif#has_destination> ?uri. } "
+                + "where { ?uri a <@#$%ENTITY%$#@>. }";
     }
 
 }

@@ -52,7 +52,7 @@ services:
             URI_PREFIX: "http://vreportal"
             PORTAL_STATE: "public"
         ports:
-            - "80:8080"
+            - "8099:8080"
         depends_on:
             - metadata
             
@@ -73,7 +73,7 @@ services:
             NODELINK_ENDPOINT: "http://v4e-lab.isti.cnr.it:8080/NodeService"
             #NODELINK_ENDPOINT: "http://node_service:8080/NodeService"
         ports:
-            - "8080:8080"   
+            - "8090:8080"
         depends_on:
             - virtuoso
 

@@ -26,11 +26,13 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletResponse;
 import nl.uva.sne.vre4eic.model.ProcessingStatus;
 import nl.uva.sne.vre4eic.service.ConvertService;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -212,17 +214,23 @@ public class ConvertController {
         return null;
     }
 
-//    http://localhost:8080/rest/ingest_records/?source_rec_url=http://localhost/Mapping115/3955e877-1d73-45fd-94ea-54b495465573/&ingest_cat_url=http://localhost:3030
-    @RequestMapping(value = "/ingest_records", method = RequestMethod.GET, params = {"source_rec_url", "ingest_cat_url"})
-    public void ingestRecords(@RequestParam(value = "source_rec_url") String sourceRecURL,
-            @RequestParam(value = "ingest_cat_url") String ingestCatURL,
-            @RequestParam(value = "dataset_name") String datasetName) {
-        try {
-            service.ingest(sourceRecURL, ingestCatURL, datasetName);
-        } catch (IOException ex) {
-            Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+////    http://localhost:8080/rest/ingest_records/?source_rec_url=http://localhost/Mapping115/3955e877-1d73-45fd-94ea-54b495465573/&ingest_cat_url=http://localhost:3030
+//    @RequestMapping(value = "/ingest_records", method = RequestMethod.GET, params = {"source_rec_url", "ingest_cat_url"})
+//    public void ingestRecords(@RequestParam(value = "source_rec_url") String sourceRecURL,
+//            @RequestParam(value = "ingest_cat_url") String ingestCatURL,
+//            @RequestParam(value = "dataset_name") String datasetName) {
+//        try {
+//            service.ingest(sourceRecURL, ingestCatURL, datasetName);
+//        } catch (IOException ex) {
+//            Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
+    
+        @RequestMapping(value = "/ingest_records", method = RequestMethod.POST)
+    public void ingestRecords( @RequestBody JSONObject requestParams) {
+        service.ingest(requestParams);
     }
+    
 
 //    http://localhost:8080/rest/count_rdf_records/?catalogue_url=http://localhost:3030
     @RequestMapping(value = "/count_rdf_records", method = RequestMethod.GET,
