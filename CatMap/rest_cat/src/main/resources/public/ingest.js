@@ -45,6 +45,7 @@ function ingest() {
             console.log(json)
         }
         console.log(ingestRecordsRequest.responseText);
+//        document.cookie = '';
         document.getElementById("loader").style.display = "none";
         window.open(ingest_cat_url+'#!/navigation', '_blank');
     };
