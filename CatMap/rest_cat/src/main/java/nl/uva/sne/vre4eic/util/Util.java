@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -230,6 +231,38 @@ public class Util {
     public static InputStream getWebDavInputStream(DavResource resource, Sardine sardine, String webDAVURL) throws IOException {
         String webdavFile = webDAVURL + "/" + resource.getPath();
         return sardine.get(webdavFile);
+    }
+    
+     public static boolean urlExists(String URLName) {
+        try {
+            HttpURLConnection.setFollowRedirects(true);
+            //        HttpURLConnection.setInstanceFollowRedirects(false)
+            HttpURLConnection con
+                    = (HttpURLConnection) new URL(URLName).openConnection();
+            con.setInstanceFollowRedirects(true);
+            con.setRequestMethod("HEAD");
+
+            int code = con.getResponseCode();
+            if (code != HttpURLConnection.HTTP_OK) {
+                if (code == HttpURLConnection.HTTP_MOVED_TEMP
+                        || code == HttpURLConnection.HTTP_MOVED_PERM
+                        || code == HttpURLConnection.HTTP_SEE_OTHER) {
+                    String newUrl = con.getHeaderField("Location");
+
+                    // get the cookie if need, for login
+                    String cookies = con.getHeaderField("Set-Cookie");
+                    con = (HttpURLConnection) new URL(newUrl).openConnection();
+                    con.setRequestProperty("Cookie", cookies);
+                    code = con.getResponseCode();
+                }
+            }
+
+            return (code == HttpURLConnection.HTTP_OK);
+        } catch (MalformedURLException ex) {
+            return false;
+        } catch (IOException ex) {
+            return false;
+        }
     }
 
 }

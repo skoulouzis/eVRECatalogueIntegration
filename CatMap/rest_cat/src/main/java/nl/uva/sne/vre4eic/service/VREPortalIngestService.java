@@ -255,7 +255,7 @@ public class VREPortalIngestService {
         JSONObject json = (JSONObject) parser.parse(resp);
         String response_status = ((String) json.get("response_status")).toLowerCase();
         json.remove("response_status");
-        if (response_status.equals("SUCCEED")) {
+        if (response_status.equals("succeed")) {
             json.put("success", true);
         } else {
             json.put("success", false);
