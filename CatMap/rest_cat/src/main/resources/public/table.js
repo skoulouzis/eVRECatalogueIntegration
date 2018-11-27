@@ -40,7 +40,7 @@ Table.prototype.build = function (container) {
     innerHTML = innerHTML.join('/');
 
     if (this.catalogueURL !== null || this.catalogueURL.length > 1) {
-        document.getElementById("loader").style.display = "inline";
+        document.getElementById("loader").style.display = "block";
 
         console.log(this.catalogueURL);
 

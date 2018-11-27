@@ -89,7 +89,9 @@
         <style>
             /* Center the loader */
             #loader {
-                position: absolute;
+                margin-top: -9em; /*set to a negative number 1/2 of your height*/
+                margin-left: -15em; /*set to a negative number 1/2 of your width*/
+                position: fixed;
                 left: 50%;
                 top: 50%;
                 z-index: 1;
@@ -99,8 +101,8 @@
                 border: 16px solid #f3f3f3;
                 border-radius: 50%;
                 border-top: 16px solid #3498db;
-                width: 60px;
-                height: 60px;
+                width: 120px;
+                height: 120px;
                 -webkit-animation: spin 2s linear infinite;
                 animation: spin 2s linear infinite;
             }
@@ -324,7 +326,6 @@
 
                             <div class="container" style="background-color:#f1f1f1">
                                 <button type="button" onclick="document.getElementById('id01').style.display = 'none'" class="cancelbtn">Cancel</button>
-                                <span class="psw">Forgot <a href="#">password?</a></span>
                             </div>
                         </div>
 
@@ -332,9 +333,7 @@
 
 
                     <br>
-                    <div id="ingestProgress">
-                        <div  class="w3-black" id="ingestBar">0%</div>
-                    </div>
+                  
                     <br>
                 </div>
             </div>

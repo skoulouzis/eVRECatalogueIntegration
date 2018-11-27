@@ -22,7 +22,7 @@ function ingest() {
         modal.style.display = "none";
         var ingestBtn = document.getElementById("ingestBtn");
         ingestBtn.disabled = false;
-
+        document.getElementById("loader").style.display = "block";
         var token = getToken();
 
         var source_rec_url = document.getElementById("source_rec_url").value;
@@ -34,7 +34,7 @@ function ingest() {
         innerHTML.pop();
         innerHTML = innerHTML.join('/');
         var ingestRecordsURL = innerHTML + '/ingest_records/';
-        
+
         var ingestRecordsRequest = new XMLHttpRequest();
         ingestRecordsRequest.open('POST', ingestRecordsURL, false);
         ingestRecordsRequest.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -45,7 +45,8 @@ function ingest() {
             console.log(json)
         }
         console.log(ingestRecordsRequest.responseText);
-
+        document.getElementById("loader").style.display = "none";
+        window.open(ingest_cat_url+'#!/navigation', '_blank');
     };
 
 }
