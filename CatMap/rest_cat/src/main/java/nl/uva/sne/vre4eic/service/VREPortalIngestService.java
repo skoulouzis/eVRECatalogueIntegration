@@ -201,7 +201,6 @@ public class VREPortalIngestService {
 
     private static JSONObject upload(String vreportal, JSONObject uploadnput, String filesPath) throws ProtocolException, IOException, ParseException {
         String endpoint = vreportal + "/upload";
-        URL url = new URL(endpoint);
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         HttpPost uploadFile = new HttpPost(endpoint);
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
