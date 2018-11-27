@@ -159,7 +159,7 @@ public class ConvertController {
                 addr = InetAddress.getLocalHost();
                 webdavHost = addr.getHostName();
                 webDAVURL = "http://" + webdavHost + "/" + folderName;
-                if (!urlExists(webDAVURL)) {
+                if (!Util.urlExists(webDAVURL)) {
                     records = new ArrayList<>();
                     return records;
                 }
@@ -172,38 +172,6 @@ public class ConvertController {
             Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return records;
-    }
-
-    private boolean urlExists(String URLName) {
-        try {
-            HttpURLConnection.setFollowRedirects(true);
-            //        HttpURLConnection.setInstanceFollowRedirects(false)
-            HttpURLConnection con
-                    = (HttpURLConnection) new URL(URLName).openConnection();
-            con.setInstanceFollowRedirects(true);
-            con.setRequestMethod("HEAD");
-
-            int code = con.getResponseCode();
-            if (code != HttpURLConnection.HTTP_OK) {
-                if (code == HttpURLConnection.HTTP_MOVED_TEMP
-                        || code == HttpURLConnection.HTTP_MOVED_PERM
-                        || code == HttpURLConnection.HTTP_SEE_OTHER) {
-                    String newUrl = con.getHeaderField("Location");
-
-                    // get the cookie if need, for login
-                    String cookies = con.getHeaderField("Set-Cookie");
-                    con = (HttpURLConnection) new URL(newUrl).openConnection();
-                    con.setRequestProperty("Cookie", cookies);
-                    code = con.getResponseCode();
-                }
-            }
-
-            return (code == HttpURLConnection.HTTP_OK);
-        } catch (MalformedURLException ex) {
-            return false;
-        } catch (IOException ex) {
-            return false;
-        }
     }
 
     @RequestMapping(value = "/catalogue_type", method = RequestMethod.GET, params = {"catalogue_url"})
