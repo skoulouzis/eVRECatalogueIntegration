@@ -26,7 +26,10 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletResponse;
 import nl.uva.sne.vre4eic.model.ProcessingStatus;
 import nl.uva.sne.vre4eic.service.ConvertService;
+import nl.uva.sne.vre4eic.service.VREPortalIngestService;
+import nl.uva.sne.vre4eic.util.Util;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.FileCopyUtils;
@@ -49,6 +52,10 @@ public class ConvertController {
 
     @Autowired
     private ConvertService service;
+
+    @Autowired
+    private VREPortalIngestService ingestService;
+
 //http://localhost:8080/rest/convert?catalogue_url=https://ckan-d4s.d4science.org&mapping_url=https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/Mapping115.x3ml&generator_url=https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml
 //http://localhost:8083/catalogue_mapper/convert?catalogue_url=https://ckan-d4s.d4science.org&mapping_url=https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/Mapping115.x3ml&generator_url=https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/CERIF-generator-policy-v5___21-08-2018124405___12069.xml
 //    http://localhost:8083/catalogue_mapper/convert?catalogue_url=http://172.17.0.2:8080/Mapping120/&mapping_url=http://172.17.0.2:8080/Mapping120/Mapping120.x3ml&generator_url=http://172.17.0.2:8080/Mapping120/ENVRIplus-generator-policy___13-07-2018131200___11511.xml
@@ -56,7 +63,6 @@ public class ConvertController {
 //    http://localhost:8080/rest/convert?catalogue_url=%20https://ckan-d4s.d4science.org&mapping_url=https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/Mapping62.x3ml&generator_url=https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/generator.xml
 //    http://localhost:8080/rest/convert?catalogue_url=%20https://catalog.data.gov&mapping_url=https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/Mapping62.x3ml&generator_url=https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/generator.xml
 //    http://localhost:8080/catalogue_mapper/convert?catalogue_url=%20https://ckan-d4s.d4science.org&mapping_url=https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/Mapping62.x3ml&generator_url=https://raw.githubusercontent.com/skoulouzis/eVRECatalogueIntegration/master/etc/generator.xml
-
     @RequestMapping(value = "/convert", method = RequestMethod.GET,
             params = {"catalogue_url", "mapping_url", "generator_url", "export_id"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -112,7 +118,7 @@ public class ConvertController {
         } else {
             webDAVURL = "http://" + webdavHost + "/" + folderName;
         }
-        File file = new File(service.zipRecords(webDAVURL));
+        File file = new File(Util.zipRecords(webDAVURL));
 
         if (!file.exists()) {
             String errorMessage = "Sorry. The file you are looking for does not exist";
@@ -225,12 +231,16 @@ public class ConvertController {
 //            Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 //    }
-    
-        @RequestMapping(value = "/ingest_records", method = RequestMethod.POST)
-    public void ingestRecords( @RequestBody JSONObject requestParams) {
-        service.ingest(requestParams);
+    @RequestMapping(value = "/ingest_records", method = RequestMethod.POST, produces = {"application/json"})
+    public @ResponseBody
+    JSONObject ingestRecords(@RequestBody JSONObject requestParams) {
+        try {
+            return ingestService.ingest(requestParams);
+        } catch (IOException | ParseException ex) {
+            Logger.getLogger(ConvertController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
-    
 
 //    http://localhost:8080/rest/count_rdf_records/?catalogue_url=http://localhost:3030
     @RequestMapping(value = "/count_rdf_records", method = RequestMethod.GET,
