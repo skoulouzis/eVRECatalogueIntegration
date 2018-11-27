@@ -12,44 +12,27 @@ import gr.forth.ics.isl.exporter.CatalogueExporter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 import nl.uva.sne.vre4eic.model.ExportDocTask;
 import nl.uva.sne.vre4eic.model.ProcessingStatus;
 import nl.uva.sne.vre4eic.util.Util;
-import org.apache.commons.compress.utils.IOUtils;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.metrics.MetricsEndpoint;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.IOException;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Literal;
-import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
 
 @Service
 public class ConvertService {
@@ -110,90 +93,9 @@ public class ConvertService {
         return sardine.list(webdavURL);
     }
 
-    public String zipRecords(String webDAVURL) throws IOException {
-        try {
-            Sardine sardine = SardineFactory.begin();
+    
 
-            List<DavResource> resources = sardine.list(webDAVURL);
-            URL url = new URL(webDAVURL);
-            String base = url.getProtocol() + "://" + url.getHost();
-            if (url.getPort() > -1) {
-                base += ":" + url.getPort();
-            }
-
-            File output = new File(System.getProperty("java.io.tmpdir") + File.separator + "records");
-            if (output.exists()) {
-                output.delete();
-            }
-            output.mkdirs();
-
-            for (DavResource res : resources) {
-                if (!res.isDirectory()) {
-                    File file = downloadFile(res, sardine, base, output);
-                }
-            }
-
-            zipFolder(Paths.get(output.getAbsolutePath()), Paths.get(output.getAbsolutePath() + ".zip"));
-            return output.getAbsolutePath() + ".zip";
-        } catch (Exception ex) {
-            Logger.getLogger(ConvertService.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-
-    private void zipFolder(Path sourceFolderPath, Path zipPath) throws Exception {
-        if (zipPath.toFile().exists()) {
-            zipPath.toFile().delete();
-        }
-        try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipPath.toFile()))) {
-            Files.walkFileTree(sourceFolderPath, new SimpleFileVisitor<Path>() {
-
-                @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-
-                    zos.putNextEntry(new ZipEntry(sourceFolderPath.relativize(file).toString()));
-
-                    Files.copy(file, zos);
-
-                    zos.closeEntry();
-
-                    return FileVisitResult.CONTINUE;
-
-                }
-
-            });
-        }
-
-    }
-
-    private File downloadFile(DavResource resource, Sardine sardine, String webDAVURL, File output) {
-
-        InputStream in = null;
-        File file = null;
-        String webdavFile = webDAVURL + "/" + resource.getPath();
-        try {
-            in = sardine.get(webdavFile);
-
-            file = new File(output, resource.getName());
-            try (OutputStream out = new FileOutputStream(file.getAbsoluteFile())) {
-                IOUtils.copy(in, out);
-                in.close();
-            } catch (IOException ex) {
-                Logger.getLogger(ConvertService.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(ConvertService.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                if (in != null) {
-                    in.close();
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(ConvertService.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return file;
-    }
+    
 
     public String getCatalogueType(String catalogueURL) throws MalformedURLException, InterruptedException {
         if (Util.isCKAN(catalogueURL)) {
@@ -206,42 +108,11 @@ public class ConvertService {
         return null;
     }
 
-    public void ingest(String webDAVURL, String ingestCatURL, String datasetName) throws IOException {
-        Sardine sardine = SardineFactory.begin();
+   
 
-        List<DavResource> resources = sardine.list(webDAVURL);
-        URL url = new URL(webDAVURL);
-        String base = url.getProtocol() + "://" + url.getHost();
-        if (url.getPort() > -1) {
-            base += ":" + url.getPort();
-        }
+   
 
-        for (DavResource res : resources) {
-            if (!res.isDirectory() && res.getName().endsWith("ttl")) {
-                try (InputStream ins = getWebDavInputStream(res, sardine, base)) {
-                    uploadRDF(ins, ingestCatURL, datasetName);
-                }
-            }
-        }
-    }
-
-    public void uploadRDF(InputStream rdfIns, String serviceURI, String datasetName)
-            throws IOException {
-
-//        Model m = ModelFactory.createDefaultModel();
-//
-//        m.read(rdfIns, null, "text/turtle");
-//        if (!serviceURI.endsWith("/")) {
-//            serviceURI += "/";
-//        }
-//        DatasetAccessor accessor = DatasetAccessorFactory.createHTTP(serviceURI + datasetName + "/data");
-//        accessor.add(m);
-    }
-
-    private InputStream getWebDavInputStream(DavResource resource, Sardine sardine, String webDAVURL) throws IOException {
-        String webdavFile = webDAVURL + "/" + resource.getPath();
-        return sardine.get(webdavFile);
-    }
+    
 
     public Integer countRDFRecords(String catalogueURL, String datasetName) {
         String query = "SELECT (COUNT(*) AS ?count) WHERE { ?subject ?predicate ?object}";
@@ -255,19 +126,4 @@ public class ConvertService {
         return countLiteral.getInt();
 
     }
-
-    public void ingest(JSONObject requestParams) {
-        String token = (String) requestParams.get("token");
-        String namedGraphLabelParam = (String) requestParams.get("namedGraphLabelParam");
-        String selectedCategoryLabel = (String) requestParams.get("selectedCategoryLabel");
-        String namedGraphIdParam = (String) requestParams.get("namedGraphIdParam");
-        String selectedCategoryId = (String) requestParams.get("selectedCategoryId");
-
-        JSONObject userDetails = (JSONObject) requestParams.get("userDetails");
-        String linkingUpdateQuery = "with <" + namedGraphIdParam + "> insert {"
-                + "?uri <http://eurocris.org/ontology/cerif#is_destination_of> <null>. "
-                + "<null> <http://eurocris.org/ontology/cerif#has_destination> ?uri. } "
-                + "where { ?uri a <@#$%ENTITY%$#@>. }";
-    }
-
 }

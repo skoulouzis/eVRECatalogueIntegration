@@ -5,18 +5,37 @@
  */
 package nl.uva.sne.vre4eic.util;
 
+import com.github.sardine.DavResource;
+import com.github.sardine.Sardine;
+import com.github.sardine.SardineFactory;
 import gr.forth.ics.isl.util.XML;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import nl.uva.sne.vre4eic.service.ConvertService;
+import org.apache.commons.compress.utils.IOUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
@@ -91,6 +110,126 @@ public class Util {
             return sb.toString();
         }
 
+    }
+
+    public static File downloadFile(DavResource resource, Sardine sardine, String webDAVURL, File output) {
+
+        InputStream in = null;
+        File file = null;
+        String webdavFile = webDAVURL + "/" + resource.getPath();
+        try {
+            in = sardine.get(webdavFile);
+
+            file = new File(output, resource.getName());
+            try (OutputStream out = new FileOutputStream(file.getAbsoluteFile())) {
+                IOUtils.copy(in, out);
+                in.close();
+            } catch (IOException ex) {
+                Logger.getLogger(ConvertService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ConvertService.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (in != null) {
+                    in.close();
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(ConvertService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return file;
+    }
+
+    public static String zipRecords(String webDAVURL) throws IOException {
+        try {
+            Sardine sardine = SardineFactory.begin();
+
+            List<DavResource> resources = sardine.list(webDAVURL);
+            URL url = new URL(webDAVURL);
+            String base = url.getProtocol() + "://" + url.getHost();
+            if (url.getPort() > -1) {
+                base += ":" + url.getPort();
+            }
+
+            File output = new File(System.getProperty("java.io.tmpdir") + File.separator + "records");
+            if (output.exists()) {
+                output.delete();
+            }
+            output.mkdirs();
+
+            for (DavResource res : resources) {
+                if (!res.isDirectory()) {
+                    File file = Util.downloadFile(res, sardine, base, output);
+                }
+            }
+
+            zipFolder(Paths.get(output.getAbsolutePath()), Paths.get(output.getAbsolutePath() + ".zip"));
+            return output.getAbsolutePath() + ".zip";
+        } catch (Exception ex) {
+            Logger.getLogger(ConvertService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public static String downloadRecords(String webDAVURL) throws IOException {
+        try {
+            Sardine sardine = SardineFactory.begin();
+
+            List<DavResource> resources = sardine.list(webDAVURL);
+            URL url = new URL(webDAVURL);
+            String base = url.getProtocol() + "://" + url.getHost();
+            if (url.getPort() > -1) {
+                base += ":" + url.getPort();
+            }
+
+            File output = new File(System.getProperty("java.io.tmpdir") + File.separator + "records");
+            if (output.exists()) {
+                output.delete();
+            }
+            output.mkdirs();
+
+            for (DavResource res : resources) {
+                if (!res.isDirectory()) {
+                    File file = Util.downloadFile(res, sardine, base, output);
+                }
+            }
+
+            return output.getAbsolutePath();
+        } catch (IOException ex) {
+            Logger.getLogger(ConvertService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    private static void zipFolder(Path sourceFolderPath, Path zipPath) throws Exception {
+        if (zipPath.toFile().exists()) {
+            zipPath.toFile().delete();
+        }
+        try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipPath.toFile()))) {
+            Files.walkFileTree(sourceFolderPath, new SimpleFileVisitor<Path>() {
+
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+
+                    zos.putNextEntry(new ZipEntry(sourceFolderPath.relativize(file).toString()));
+
+                    Files.copy(file, zos);
+
+                    zos.closeEntry();
+
+                    return FileVisitResult.CONTINUE;
+
+                }
+
+            });
+        }
+
+    }
+
+    public static InputStream getWebDavInputStream(DavResource resource, Sardine sardine, String webDAVURL) throws IOException {
+        String webdavFile = webDAVURL + "/" + resource.getPath();
+        return sardine.get(webdavFile);
     }
 
 }
