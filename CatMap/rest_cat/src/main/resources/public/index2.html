@@ -244,7 +244,6 @@
                     <label for="cat_url">Catalogue URL:</label>
                     <input id="cat_url" name="cat_url" type="url"
                            list="defaultURLs" size="40">
-
                     <datalist id="defaultURLs">
                         <option value="https://ckan-d4s.d4science.org/">
                         <option value="http://b2find.eudat.eu/">
@@ -301,8 +300,15 @@
 
                     <br>
                     <label for="ingest_cat_url">Ingest Catalogue URL:</label>
+                    
+                    
                     <input id="ingest_cat_url" name="ingest_cat_url" type="url"
                            list="defaulIingestURLs" size="40" oninput="enableBtn()">
+                                        <datalist id="defaulIingestURLs">
+                        <option value="http://drip.vlan400.uvalight.net:8099">
+                        <option value="http://139.91.183.97:8199">
+                        <option value="http://v4e-hub.isti.cnr.it:8099">
+                    </datalist>
                     <br>
                     <button class="w3-button w3-black w3-padding-large w3-large 
                             w3-margin-top btn btn-success" disabled="disabled"  onclick="ingest()" 
