@@ -47,7 +47,9 @@ function ingest() {
         console.log(ingestRecordsRequest.responseText);
 //        document.cookie = '';
         document.getElementById("loader").style.display = "none";
-        window.open(ingest_cat_url+'#!/navigation', '_blank');
+
+        
+//        window.open(ingest_cat_url + '#!/navigation', '_blank');
     };
 
 }
@@ -75,11 +77,8 @@ function getToken() {
     request.send(null);
     if (request.status === 200) {
         var json = JSON.parse(request.responseText);
-//        console.log(json);
         if (json.status === 'SUCCEED') {
             token = json.token;
-//            console.log(token);
-//            alert("login successful");
         }
     }
     return token;
