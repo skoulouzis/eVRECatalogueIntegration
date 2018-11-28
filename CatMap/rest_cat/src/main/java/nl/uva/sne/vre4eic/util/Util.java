@@ -35,7 +35,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import nl.uva.sne.vre4eic.service.ConvertService;
 import org.apache.commons.compress.utils.IOUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -126,17 +125,17 @@ public class Util {
                 IOUtils.copy(in, out);
                 in.close();
             } catch (IOException ex) {
-                Logger.getLogger(ConvertService.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (IOException ex) {
-            Logger.getLogger(ConvertService.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 if (in != null) {
                     in.close();
                 }
             } catch (IOException ex) {
-                Logger.getLogger(ConvertService.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return file;
@@ -168,7 +167,7 @@ public class Util {
             zipFolder(Paths.get(output.getAbsolutePath()), Paths.get(output.getAbsolutePath() + ".zip"));
             return output.getAbsolutePath() + ".zip";
         } catch (Exception ex) {
-            Logger.getLogger(ConvertService.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -198,7 +197,7 @@ public class Util {
 
             return output.getAbsolutePath();
         } catch (IOException ex) {
-            Logger.getLogger(ConvertService.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -232,8 +231,8 @@ public class Util {
         String webdavFile = webDAVURL + "/" + resource.getPath();
         return sardine.get(webdavFile);
     }
-    
-     public static boolean urlExists(String URLName) {
+
+    public static boolean urlExists(String URLName) {
         try {
             HttpURLConnection.setFollowRedirects(true);
             //        HttpURLConnection.setInstanceFollowRedirects(false)
