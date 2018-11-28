@@ -42,13 +42,13 @@ function ingest() {
 
         if (ingestRecordsRequest.status === 200) {
             var json = JSON.parse(ingestRecordsRequest.responseText);
-            console.log(json)
+            console.log(json);
         }
         console.log(ingestRecordsRequest.responseText);
 //        document.cookie = '';
         document.getElementById("loader").style.display = "none";
 
-        
+        window.alert("Ingestion completed");
 //        window.open(ingest_cat_url + '#!/navigation', '_blank');
     };
 
