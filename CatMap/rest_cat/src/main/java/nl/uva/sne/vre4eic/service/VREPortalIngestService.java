@@ -220,7 +220,7 @@ public class VREPortalIngestService {
         for (File f : files) {
             if (f.getName().endsWith(".ttl")) {
                 builder.addBinaryBody(
-                        "upload",
+                        f.getName(),
                         new FileInputStream(f),
                         ContentType.create((String) uploadnput.get("contentTypeParam")),
                         f.getName()
