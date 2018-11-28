@@ -28,7 +28,7 @@ function ingest() {
         var source_rec_url = document.getElementById("source_rec_url").value;
         var ingest_cat_url = document.getElementById("ingest_cat_url").value;
         var uname = document.getElementById("uname").value;
-        var requestParams = '{"sourceRecURL":"' + source_rec_url + '","ingestCatalogueURL":"' + ingest_cat_url + '","token":"' + token + '","username":"' + uname + '","namedGraphLabelParam":"ingest' + Date.now() + '"}';
+        var requestParams = '{"sourceRecURL":"' + source_rec_url + '","ingestCatalogueURL":"' + ingest_cat_url + '","token":"' + token + '","username":"' + uname + '","namedGraphLabelParam":"ENVRI' + Date.now() + '"}';
 
         var innerHTML = window.location.href.split('/');
         innerHTML.pop();
