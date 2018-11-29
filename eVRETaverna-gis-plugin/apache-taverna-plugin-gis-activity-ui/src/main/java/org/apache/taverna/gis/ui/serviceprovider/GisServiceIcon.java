@@ -26,7 +26,7 @@ public class GisServiceIcon implements ActivityIconSPI {
 
     public static Icon getIcon() {
         if (icon == null) {
-            icon = new ImageIcon(GisServiceIcon.class.getResource("/exampleIcon.png"));
+            icon = new ImageIcon(GisServiceIcon.class.getResource("/uva_logo.png"));
         }
         return icon;
     }
