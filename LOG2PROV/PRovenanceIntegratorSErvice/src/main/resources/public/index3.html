@@ -186,57 +186,41 @@
                     <h3>Load Files</h3>
 
                     <input type="file" id="provUpload" class="w3-input" multiple size="50" accept=".xml, .ttl">
-                    <label for="provUpload">Upload PROV files</label>
+                    <label for="provUpload">Upload Workflow PROV</label>
 
-                    <input type="file" id="serviceLogUpload" class="w3-input" multiple size="50" accept=".log, .txt">
-                    <label for="serviceLogUpload">Upload Service Log Files</label>
+                    <input type="file" id="serviceLogUpload" class="w3-input" multiple size="50" accept=".t2flow">
+                    <label for="serviceLogUpload">Upload Workflow</label>
 
                     <input type="file" id="sysLogUpload" class="w3-input" multiple size="50" accept=".log, .txt">
-                    <label for="sysLogUpload">Upload System Log Files</label>
+                    <label for="sysLogUpload">Upload Workflow logs</label>
 
                     <br>
                     <button id="uploadBtn" class="w3-button w3-black w3-padding-large w3-large 
-                            w3-margin-top btn btn-success" onclick="uploadAll()">Convert</button>    
-
-                </div>
-            </div>
-        </div>
-
-    
-
-        <div id="demo" class="w3-white w3-container ">
-            <div class="w3-content">
-                <div class="w3-twothird">
-                    <h3 align="left">Ingest Records To Search Engine</h3>
+                            w3-margin-top btn btn-success" onclick="uploadAll()">Generate Context</button>
                     <br>
-                    <label for="source_rec_url">Records URL:</label>
-                    <input id="source_rec_url" name="source_rec_url" type="url"
-                           list="defaulSourceRecURLs" size="40" oninput="enableBtn()">
-
                     <br>
-                    <label for="ingest_cat_url">Ingest Catalogue URL:</label>
-                    <input id="ingest_cat_url" name="ingest_cat_url" type="url"
-                           list="defaulIingestURLs" size="40" oninput="enableBtn()">
-                    <datalist id="defaulIingestURLs">
-                        <option value="http://139.91.183.97:8199/">
-                    </datalist>
-                    <br>
-                    <button class="w3-button w3-black w3-padding-large w3-large 
-                            w3-margin-top btn btn-success" disabled="disabled"  onclick="ingest()" 
-                            id="ingestBtn">Ingest</button> 
-                    <br> 
-                    <br>
-                    <div id="ingestProgress">
-                        <div  class="w3-black" id="ingestBar">0%</div>
+                    <div class="w3-light-grey">
+                        <div id="bar1" class="w3-container w3-gray" style="height:10px;width:0%">
+                        </div>
                     </div>
-                    <br>
+                    <p id="myP1">Workflow Context <span id="demo1">0</span> of </p>
+
+                    <div class="w3-light-grey">
+                        <div id="bar2" class="w3-container w3-gray" style="height:10px;width:0%">
+                        </div>
+                    </div>
+                    <p id="myP2">System Context <span id="demo2">0</span> of </p>
+                    <div class="w3-light-grey">
+                        <div id="bar3" class="w3-container w3-gray" style="height:10px;width:0%">
+                        </div>
+                    </div>
+                    <p id="myP3">Service Context <span id="demo3">0</span> of </p>
 
                 </div>
             </div>
         </div>
 
-
-
+   
 
         <!-- Footer -->
         <footer class="w3-container w3-padding-64 w3-center">  

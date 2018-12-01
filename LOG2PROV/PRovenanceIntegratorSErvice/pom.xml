@@ -37,6 +37,19 @@
             <artifactId>commons-codec</artifactId>
             <type>jar</type>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.taverna.language</groupId>
+            <artifactId>taverna-scufl2-api</artifactId>
+        <version>0.15.1-incubating</version>
+            
+        </dependency>
+        <dependency>
+            <groupId>org.apache.taverna.language</groupId>
+            <artifactId>taverna-scufl2-t2flow</artifactId>
+            <version>0.15.1-incubating</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 	
     <properties>
@@ -82,5 +95,7 @@
             </plugin>
         </plugins>
     </build>
+    
+    
 
 </project>

@@ -5,11 +5,14 @@
  */
 package nl.uva.sne.vre4eic.prise.controller;
 
+import nl.uva.sne.vre4eic.data.Context;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import nl.uva.sne.vre4eic.prise.service.Log2ProvService;
+import nl.uva.sne.vre4eic.prise.service.ContextService;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,25 +27,46 @@ public class ProvIntegratorController {
     @Autowired
     Log2ProvService service;
 
-    private final String[] logMimeTypes = new String[]{"text/plain", "text/x-log"};
+    @Autowired
+    ContextService cntxService;
 
-    @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
+    private final String[] logMimeTypes = new String[]{"text/plain", "text/x-log"};
+    private final String[] provMimeTypes = new String[]{"text/turtle"};
+    private final String[] workflowMimeTypes = new String[]{"application/octet-stream", "application/vnd.taverna.t2flow+xml"};
+    private final String[] workflowExtentions = new String[]{"t2flow"};
+
+    @RequestMapping(value = "/uploadFile", method = RequestMethod.POST, produces = {"application/json"})
     public @ResponseBody
-    String submit(@RequestParam("files") MultipartFile[] files) {
+    Context submit(@RequestParam("files") MultipartFile[] files) {
         try {
             for (MultipartFile file : files) {
-                for (String logMimetype : logMimeTypes) {
-                    if (file.getContentType() != null && file.getContentType().toLowerCase().equals(logMimetype)) {
-                        String prov = service.convert(file.getOriginalFilename(), file.getBytes());
-                        System.err.println(prov);
+
+                if (file.getContentType() != null) {
+                    for (String ext : workflowExtentions) {
+                        if (file.getOriginalFilename().endsWith(ext)) {
+                            cntxService.setWorkflowFile(file);
+                        }
                         break;
                     }
+                    for (String prov : provMimeTypes) {
+                        if (file.getContentType().toLowerCase().equals(prov)) {
+                            cntxService.setWorkflowProvFile(file);
+                            break;
+                        }
+                    }
+                    for (String log : logMimeTypes) {
+                        if (file.getContentType().toLowerCase().equals(log)) {
+                            cntxService.setWorkflowLogFile(file);
+                        }
+                    }
                 }
+
             }
-        } catch (IOException | TimeoutException | InterruptedException ex) {
+            return cntxService.generate();
+        } catch (IOException ex) {
             Logger.getLogger(ProvIntegratorController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return "done";
+        return null;
     }
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
