@@ -27,7 +27,7 @@ function uploadAll() {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", innerHTML + '/uploadFile');
     xhr.send(formData);
-    console.log(json);
+    console.log(innerHTML);
 
     xhr.onload = function () {
         if (xhr.responseText !== null || xhr.responseText.length > 0) {

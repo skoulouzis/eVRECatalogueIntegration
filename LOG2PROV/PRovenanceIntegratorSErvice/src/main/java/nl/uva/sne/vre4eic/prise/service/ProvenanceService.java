@@ -10,6 +10,8 @@ import com.github.sardine.SardineFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import nl.uva.sne.vre4eic.data.Provenance;
 import nl.uva.sne.vre4eic.prise.util.Util;
 import org.apache.commons.io.FileUtils;
@@ -31,12 +33,17 @@ public class ProvenanceService {
         return logRepoURI;
     }
 
-    private String insertProvFile(File provFile) throws IOException {
+    private String insertProvFile(File provFile) {
         if (Util.urlExists(logRepoURI)) {
-            Sardine sardine = SardineFactory.begin();
-            String webdavFolder = "prov";
-            sardine.put(logRepoURI + "/" + webdavFolder + "/" + provFile.getName(), FileUtils.readFileToByteArray(provFile));
-            return logRepoURI + "/" + webdavFolder + "/" + provFile.getName();
+            try {
+                Sardine sardine = SardineFactory.begin();
+                String webdavFolder = "prov";
+                sardine.put(logRepoURI + "/" + webdavFolder + "/" + provFile.getName(), FileUtils.readFileToByteArray(provFile));
+                return logRepoURI + "/" + webdavFolder + "/" + provFile.getName();
+            } catch (IOException ex) {
+                Logger.getLogger(ProvenanceService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return null;
         }
         return null;
     }

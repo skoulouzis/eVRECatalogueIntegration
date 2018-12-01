@@ -59,18 +59,21 @@ public class LogsService {
         return null;
     }
 
-    String getWorkflowLogsEndpoint(File workflowLogFile) throws IOException {
-
+    String getWorkflowLogsEndpoint(File workflowLogFile) {
         return insertLog(workflowLogFile);
-
     }
 
-    private String insertLog(File workflowLogFile) throws IOException {
+    private String insertLog(File workflowLogFile) {
         if (Util.urlExists(logRepoURI)) {
-            Sardine sardine = SardineFactory.begin();
-            String webdavFolder = "logs";
-            sardine.put(logRepoURI + "/" + webdavFolder + "/" + workflowLogFile.getName(), FileUtils.readFileToByteArray(workflowLogFile));
-            return logRepoURI + "/" + webdavFolder + "/" + workflowLogFile.getName();
+            try {
+                Sardine sardine = SardineFactory.begin();
+                String webdavFolder = "logs";
+                sardine.put(logRepoURI + "/" + webdavFolder + "/" + workflowLogFile.getName(), FileUtils.readFileToByteArray(workflowLogFile));
+                return logRepoURI + "/" + webdavFolder + "/" + workflowLogFile.getName();
+            } catch (IOException ex) {
+                Logger.getLogger(LogsService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return null;
         }
         return null;
     }

@@ -17,6 +17,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.xml.parsers.ParserConfigurationException;
@@ -128,12 +130,17 @@ public class TavernaService {
         return insertWorkflowFile(workflowFile);
     }
 
-    private String insertWorkflowFile(File workflowFile) throws IOException {
+    private String insertWorkflowFile(File workflowFile) {
         if (Util.urlExists(wfRepoURI)) {
-            Sardine sardine = SardineFactory.begin();
-            String webdavFolder = "workflows";
-            sardine.put(wfRepoURI + "/" + webdavFolder + "/" + workflowFile.getName(), FileUtils.readFileToByteArray(workflowFile));
-            return wfRepoURI + "/" + webdavFolder + "/" + workflowFile.getName();
+            try {
+                Sardine sardine = SardineFactory.begin();
+                String webdavFolder = "workflows";
+                sardine.put(wfRepoURI + "/" + webdavFolder + "/" + workflowFile.getName(), FileUtils.readFileToByteArray(workflowFile));
+                return wfRepoURI + "/" + webdavFolder + "/" + workflowFile.getName();
+            } catch (IOException ex) {
+                Logger.getLogger(TavernaService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return null;
         }
         return null;
 
