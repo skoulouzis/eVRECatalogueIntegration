@@ -5,13 +5,18 @@
  */
 package nl.uva.sne.vre4eic.prise.service;
 
+import com.github.sardine.Sardine;
+import com.github.sardine.SardineFactory;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import nl.uva.sne.vre4eic.data.Logs;
+import nl.uva.sne.vre4eic.prise.util.Util;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 //import org.elasticsearch.action.search.SearchResponse;
@@ -43,22 +48,31 @@ public class LogsService {
             endpoint = url.getProtocol() + "://" + url.getHost() + ":9200/log/_search";
         } catch (MalformedURLException ex) {
             try {
-                endpoint = new URL("http://" + sysID + ":8093/query").toString();
+                endpoint = new URL("http://" + sysID + ":8086/query?db=mydb").toString();
             } catch (MalformedURLException ex1) {
                 Logger.getLogger(LogsService.class.getName()).log(Level.SEVERE, null, ex1);
             }
         }
-        return endpoint;
+        if (Util.urlExists(endpoint)) {
+            return endpoint;
+        }
+        return null;
     }
 
-    String getWorkflowLogsEndpoint(File workflowLogFile) {
-        insertLog(workflowLogFile);
-        return logRepoURI + "/log/_search";
+    String getWorkflowLogsEndpoint(File workflowLogFile) throws IOException {
+
+        return insertLog(workflowLogFile);
 
     }
 
-    private void insertLog(File workflowLogFile) {
-
+    private String insertLog(File workflowLogFile) throws IOException {
+        if (Util.urlExists(logRepoURI)) {
+            Sardine sardine = SardineFactory.begin();
+            String webdavFolder = "logs";
+            sardine.put(logRepoURI + "/" + webdavFolder + "/" + workflowLogFile.getName(), FileUtils.readFileToByteArray(workflowLogFile));
+            return logRepoURI + "/" + webdavFolder + "/" + workflowLogFile.getName();
+        }
+        return null;
     }
 
     Logs getServcieLogs(String id, Date start, Date end) {
@@ -68,7 +82,7 @@ public class LogsService {
         return logs;
     }
 
-    Logs getWorkflowLogs(File workflowLogFile) {
+    Logs getWorkflowLogs(File workflowLogFile) throws IOException {
         String endpoint = getWorkflowLogsEndpoint(workflowLogFile);
         Logs logs = new Logs();
         logs.setLocation(endpoint);

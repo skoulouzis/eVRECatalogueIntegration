@@ -5,6 +5,8 @@
  */
 package nl.uva.sne.vre4eic.prise.service;
 
+import com.github.sardine.Sardine;
+import com.github.sardine.SardineFactory;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -18,10 +20,12 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.xml.parsers.ParserConfigurationException;
+import nl.uva.sne.vre4eic.prise.util.Util;
 import org.apache.taverna.scufl2.api.io.ReaderException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
+import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -30,7 +34,7 @@ import org.xml.sax.SAXException;
 @Service
 public class TavernaService {
 
-    @Value("${wf.reposetory.uri:=http://localhost:3030}")
+    @Value("${wf.reposetory.uri:=http://localhost}")
     private String wfRepoURI;
 
     private static final String URL_REGEX = "\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
@@ -120,12 +124,18 @@ public class TavernaService {
         return id;
     }
 
-    String getWorkflowEndpoint(File workflowFile) {
-        insertWorkflowFile(workflowFile);
-        return wfRepoURI;
+    String getWorkflowEndpoint(File workflowFile) throws IOException {
+        return insertWorkflowFile(workflowFile);
     }
 
-    private void insertWorkflowFile(File workflowFile) {
+    private String insertWorkflowFile(File workflowFile) throws IOException {
+        if (Util.urlExists(wfRepoURI)) {
+            Sardine sardine = SardineFactory.begin();
+            String webdavFolder = "workflows";
+            sardine.put(wfRepoURI + "/" + webdavFolder + "/" + workflowFile.getName(), FileUtils.readFileToByteArray(workflowFile));
+            return wfRepoURI + "/" + webdavFolder + "/" + workflowFile.getName();
+        }
+        return null;
 
     }
 

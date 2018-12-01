@@ -118,7 +118,7 @@ public class ContextService {
         return logsService.getSysLogs(sysID, startDate, endDate);
     }
 
-    private Logs generateWorkflowLogs() {
+    private Logs generateWorkflowLogs() throws IOException {
         if (this.workflowLogFile != null && this.workflowLogFile.exists()) {
             Logs logs = logsService.getWorkflowLogs(workflowLogFile);
             return logs;
@@ -126,7 +126,7 @@ public class ContextService {
         return null;
     }
 
-    private Provenance generateWorkflowProvenance() {
+    private Provenance generateWorkflowProvenance() throws IOException {
         if (this.provFile != null && this.provFile.exists()) {
             Provenance prov = provenanceService.getProvenance(provFile);
             return prov;
