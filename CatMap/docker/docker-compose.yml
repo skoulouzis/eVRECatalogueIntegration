@@ -57,7 +57,7 @@ services:
             PROV_REPO_URL: "http://webdav/"
             LOG_REPO_URL: "http://webdav/"
         ports:
-            - "8084:8081"
+            - "8084:8080"
             
             
     #pylog2prov:
