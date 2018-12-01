@@ -19,8 +19,7 @@ function uploadAll() {
     formData = getFormData("serviceLogUpload", formData);
     formData = getFormData("sysLogUpload", formData);
 
-
-
+    document.getElementById('uploadBtn').disabled = true;
 
     var innerHTML = window.location.href.split('/');
     innerHTML.pop();
@@ -28,6 +27,7 @@ function uploadAll() {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", innerHTML + '/uploadFile');
     xhr.send(formData);
+    console.log(json);
 
     xhr.onload = function () {
         if (xhr.responseText !== null || xhr.responseText.length > 0) {
@@ -48,7 +48,7 @@ function uploadAll() {
             var cont = syntaxHighlight(json);
 //            console.log(cont)
 //            document.getElementById("res").innerHTML = cont;
-
+            document.getElementById('uploadBtn').disabled = false;
         }
 
     };
