@@ -8,7 +8,7 @@ services:
         volumes:
             - influx:/var/lib/influxdb      
         ports:
-            -"8086:8086"
+            - "8086:8086"
             
     cadvisor:
         image: google/cadvisor
