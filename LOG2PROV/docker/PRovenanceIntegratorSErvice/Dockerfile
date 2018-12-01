@@ -18,4 +18,7 @@ CMD echo "spring.rabbitmq.host=$RABBIT_HOST" > application.properties && \
     echo "management.metrics.export.influx.enabled=true" >> application.properties && \ 
     echo "management.metrics.binders.integration.enabled=true" >> application.properties && \ 
     echo "management.metrics.binders.uptime.enabled=true" >> application.properties && \ 
+    echo "log.reposetory.uri=$LOG_REPO_URL" >> application.properties && \ 
+    echo "prov.reposetory.uri=$PROV_REPO_URL" >> application.properties && \ 
+    echo "wf.reposetory.uri=$WF_REPO_URL" >> application.properties && \ 
     java -jar /ProvenanceIntegrationServcie-0.0.1-SNAPSHOT.jar --spring.config.location=file:./application.properties 

@@ -39,8 +39,8 @@ services:
             DS_ACCESS: "proxy"
             DS_URL: "http://influx:8086"
             DS_DB: "mydb"
-        ports:
-            - "3000:3000"
+        #ports:
+            #- "3000:3000"
         volumes:
             - grafana:/var/lib/grafana
         depends_on:
@@ -57,7 +57,7 @@ services:
             RABBIT_PASSWORD: "guest"
             INFLUX_URI: "http://influx:8086"
         ports:
-            - "8081:8080"
+            - "8081:8091"
             
             
     pylog2prov:
