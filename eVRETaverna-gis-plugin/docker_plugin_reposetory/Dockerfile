@@ -13,6 +13,6 @@ RUN rm /usr/local/apache2/htdocs/index.html
 
 # CMD myip="$(dig +short myip.opendns.com @resolver1.opendns.com)" && sed "s/REPOSETORY_IP/http:\/\/$myip:8084\/vre4eic_repo/g" -i  /var/www/gis-plugin.xml && /set_htpasswd.sh && nginx -g "daemon off;" 
 
-CMD myip="$(dig +short myip.opendns.com @resolver1.opendns.com)" && sed "s/REPOSETORY_IP/http:\/\/$myip:8084\/vre4eic_repo/g" -i /usr/local/apache2/htdocs/gis-plugin.xml && httpd-foreground
+CMD myip="$(dig +short myip.opendns.com @resolver1.opendns.com)" && myip=localhost && sed "s/REPOSETORY_IP/http:\/\/$myip:8084\/vre4eic_repo/g" -i /usr/local/apache2/htdocs/gis-plugin.xml && httpd-foreground
 
 #docker build -t taverna-gis-reposetory .
