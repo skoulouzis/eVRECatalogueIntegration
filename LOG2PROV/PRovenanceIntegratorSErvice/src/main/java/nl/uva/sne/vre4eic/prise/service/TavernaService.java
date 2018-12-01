@@ -5,8 +5,6 @@
  */
 package nl.uva.sne.vre4eic.prise.service;
 
-import com.github.sardine.Sardine;
-import com.github.sardine.SardineFactory;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -133,14 +131,15 @@ public class TavernaService {
     private String insertWorkflowFile(File workflowFile) {
         if (Util.urlExists(wfRepoURI)) {
             try {
-                Sardine sardine = SardineFactory.begin();
+//                Sardine sardine = SardineFactory.begin();
                 String webdavFolder = "workflows";
-                sardine.put(wfRepoURI + "/" + webdavFolder + "/" + workflowFile.getName(), FileUtils.readFileToByteArray(workflowFile));
+//                sardine.put(wfRepoURI + "/" + webdavFolder + "/" + workflowFile.getName(), FileUtils.readFileToByteArray(workflowFile));
                 return wfRepoURI + "/" + webdavFolder + "/" + workflowFile.getName();
-            } catch (IOException ex) {
-                Logger.getLogger(TavernaService.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Throwable ex) {
+                Logger.getLogger(TavernaService.class.getName()).log(Level.WARNING, null, ex);
+                return null;
             }
-            return null;
+
         }
         return null;
 

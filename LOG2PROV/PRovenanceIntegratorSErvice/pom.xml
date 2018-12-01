@@ -29,7 +29,7 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20180130</version>
+            <version>20180813</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -41,8 +41,7 @@
         <dependency>
             <groupId>org.apache.taverna.language</groupId>
             <artifactId>taverna-scufl2-api</artifactId>
-        <version>0.15.1-incubating</version>
-            
+            <version>0.15.1-incubating</version>
         </dependency>
         <dependency>
             <groupId>org.apache.taverna.language</groupId>
@@ -50,12 +49,7 @@
             <version>0.15.1-incubating</version>
             <type>jar</type>
         </dependency>
-        <dependency>
-            <groupId>com.github.lookfirst</groupId>
-            <artifactId>sardine</artifactId>
-            <version>5.8</version>
-            <type>jar</type>
-        </dependency>
+        
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>

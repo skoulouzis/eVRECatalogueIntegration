@@ -5,8 +5,7 @@
  */
 package nl.uva.sne.vre4eic.prise.service;
 
-import com.github.sardine.Sardine;
-import com.github.sardine.SardineFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
@@ -36,14 +35,15 @@ public class ProvenanceService {
     private String insertProvFile(File provFile) {
         if (Util.urlExists(logRepoURI)) {
             try {
-                Sardine sardine = SardineFactory.begin();
+//                Sardine sardine = SardineFactory.begin();
                 String webdavFolder = "prov";
-                sardine.put(logRepoURI + "/" + webdavFolder + "/" + provFile.getName(), FileUtils.readFileToByteArray(provFile));
+//                sardine.put(logRepoURI + "/" + webdavFolder + "/" + provFile.getName(), FileUtils.readFileToByteArray(provFile));
                 return logRepoURI + "/" + webdavFolder + "/" + provFile.getName();
-            } catch (IOException ex) {
-                Logger.getLogger(ProvenanceService.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Throwable ex) {
+                Logger.getLogger(ProvenanceService.class.getName()).log(Level.WARNING, null, ex);
+                return null;
             }
-            return null;
+            
         }
         return null;
     }

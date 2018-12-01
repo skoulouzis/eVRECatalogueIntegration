@@ -5,8 +5,6 @@
  */
 package nl.uva.sne.vre4eic.prise.service;
 
-import com.github.sardine.Sardine;
-import com.github.sardine.SardineFactory;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -66,14 +64,15 @@ public class LogsService {
     private String insertLog(File workflowLogFile) {
         if (Util.urlExists(logRepoURI)) {
             try {
-                Sardine sardine = SardineFactory.begin();
+//                Sardine sardine = SardineFactory.begin();
                 String webdavFolder = "logs";
-                sardine.put(logRepoURI + "/" + webdavFolder + "/" + workflowLogFile.getName(), FileUtils.readFileToByteArray(workflowLogFile));
+//                sardine.put(logRepoURI + "/" + webdavFolder + "/" + workflowLogFile.getName(), FileUtils.readFileToByteArray(workflowLogFile));
                 return logRepoURI + "/" + webdavFolder + "/" + workflowLogFile.getName();
-            } catch (IOException ex) {
-                Logger.getLogger(LogsService.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Throwable ex) {
+                Logger.getLogger(LogsService.class.getName()).log(Level.WARNING, null, ex);
+                return null;
             }
-            return null;
+
         }
         return null;
     }
