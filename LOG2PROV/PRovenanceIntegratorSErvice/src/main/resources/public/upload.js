@@ -20,51 +20,56 @@ function uploadAll() {
     formData = getFormData("sysLogUpload", formData);
 
     document.getElementById('uploadBtn').disabled = true;
+    document.getElementById('source').value = '';
 
     var innerHTML = window.location.href.split('/');
     innerHTML.pop();
     innerHTML = innerHTML.join('/');
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", innerHTML + '/uploadFile');
+    xhr.open("POST", innerHTML + '/uploadFile', false);
     xhr.send(formData);
     console.log(innerHTML);
 
-    xhr.onload = function () {
-        if (xhr.responseText !== null || xhr.responseText.length > 0) {
-            json = JSON.parse(xhr.responseText);
+//    xhr.onload = function () {
+    if (xhr.responseText !== null || xhr.responseText.length > 0) {
+        var json = JSON.parse(xhr.responseText);
 //            console.log(json);
 //            console.log(json['workflowContext']);
-            move('1', 1, 'workflow');
+        move('1', 1, 'workflow', json);
 
-            move('2', json['systemContext'].length, 'system');
+        move('2', json['systemContext'].length, 'system', json);
 
-            var totalServices = 0;
-            for (var key in json['systemContext']) {
-                var systemContext = json['systemContext'][key];
-                totalServices += systemContext['services'].length;
-            }
-
-            move('3', totalServices, 'services');
-            var cont = syntaxHighlight(json);
-//            console.log(cont)
-//            document.getElementById("res").innerHTML = cont;
-            document.getElementById('uploadBtn').disabled = false;
+        var totalServices = 0;
+        for (var key in json['systemContext']) {
+            var systemContext = json['systemContext'][key];
+            totalServices += systemContext['services'].length;
         }
 
-    };
+        move('3', totalServices, 'services', json);
+
+    }
+
+//    };
 
 
 }
 
-function move(docID, to, ctxName) {
+function move(docID, to, ctxName, json) {
     var elem = document.getElementById('bar' + docID);
     var width = 0;
-    var id = setInterval(frame, 2);
+    var id = setInterval(frame, 4);
     function frame() {
         if (width >= 100) {
             clearInterval(id);
             document.getElementById("myP" + docID).className = "w3-text-green w3-animate-opacity";
             document.getElementById("myP" + docID).innerHTML = 'Successfully created ' + to + ' ' + ctxName + ' context';
+            
+            if (docID === '3') {
+                document.getElementById('uploadBtn').disabled = false;
+                document.getElementById('source').value = JSON.stringify(json, undefined, 2);
+            }
+
+
         } else {
             width++;
             elem.style.width = width + '%';

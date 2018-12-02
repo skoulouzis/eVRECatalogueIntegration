@@ -21,11 +21,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.xml.parsers.ParserConfigurationException;
 import nl.uva.sne.vre4eic.prise.util.Util;
+import nl.uva.sne.vre4eic.prise.util.WebDAVClient;
 import org.apache.taverna.scufl2.api.io.ReaderException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
-import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -131,9 +131,11 @@ public class TavernaService {
     private String insertWorkflowFile(File workflowFile) {
         if (Util.urlExists(wfRepoURI)) {
             try {
-//                Sardine sardine = SardineFactory.begin();
+                WebDAVClient c = new WebDAVClient(wfRepoURI);
+                
+
                 String webdavFolder = "workflows";
-//                sardine.put(wfRepoURI + "/" + webdavFolder + "/" + workflowFile.getName(), FileUtils.readFileToByteArray(workflowFile));
+c.putFile(workflowFile,webdavFolder,"application/vnd.taverna.t2flow+xml");
                 return wfRepoURI + "/" + webdavFolder + "/" + workflowFile.getName();
             } catch (Throwable ex) {
                 Logger.getLogger(TavernaService.class.getName()).log(Level.WARNING, null, ex);
