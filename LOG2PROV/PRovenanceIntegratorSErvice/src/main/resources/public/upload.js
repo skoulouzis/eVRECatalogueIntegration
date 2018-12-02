@@ -14,6 +14,7 @@ function getFormData(fileID, formData) {
 
 
 function uploadAll() {
+    document.getElementById("loader").style.display = "block";
     var formData = new FormData();
     formData = getFormData("provUpload", formData);
     formData = getFormData("serviceLogUpload", formData);
@@ -51,7 +52,7 @@ function uploadAll() {
 
 //    };
 
-
+document.getElementById("loader").style.display = "none";
 }
 
 function move(docID, to, ctxName, json) {

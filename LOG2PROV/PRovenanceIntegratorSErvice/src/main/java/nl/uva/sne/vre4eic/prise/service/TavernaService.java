@@ -132,10 +132,9 @@ public class TavernaService {
         if (Util.urlExists(wfRepoURI)) {
             try {
                 WebDAVClient c = new WebDAVClient(wfRepoURI);
-                
 
                 String webdavFolder = "workflows";
-c.putFile(workflowFile,webdavFolder,"application/vnd.taverna.t2flow+xml");
+                c.putFile(workflowFile, webdavFolder, "application/vnd.taverna.t2flow+xml");
                 return wfRepoURI + "/" + webdavFolder + "/" + workflowFile.getName();
             } catch (Throwable ex) {
                 Logger.getLogger(TavernaService.class.getName()).log(Level.WARNING, null, ex);

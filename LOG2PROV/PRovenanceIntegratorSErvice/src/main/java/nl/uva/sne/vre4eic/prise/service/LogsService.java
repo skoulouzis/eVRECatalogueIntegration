@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import nl.uva.sne.vre4eic.data.Logs;
 import nl.uva.sne.vre4eic.prise.util.Util;
+import nl.uva.sne.vre4eic.prise.util.WebDAVClient;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -64,9 +65,10 @@ public class LogsService {
     private String insertLog(File workflowLogFile) {
         if (Util.urlExists(logRepoURI)) {
             try {
-//                Sardine sardine = SardineFactory.begin();
+                WebDAVClient c = new WebDAVClient(logRepoURI);
                 String webdavFolder = "logs";
 //                sardine.put(logRepoURI + "/" + webdavFolder + "/" + workflowLogFile.getName(), FileUtils.readFileToByteArray(workflowLogFile));
+                c.putFile(workflowLogFile, webdavFolder, "application/vnd.taverna.t2flow+xml");
                 return logRepoURI + "/" + webdavFolder + "/" + workflowLogFile.getName();
             } catch (Throwable ex) {
                 Logger.getLogger(LogsService.class.getName()).log(Level.WARNING, null, ex);
