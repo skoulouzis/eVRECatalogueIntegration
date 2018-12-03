@@ -43,6 +43,15 @@ services:
         deploy:
             replicas: 1 
             
+    elasticsearch:
+        image: elasticsearch
+        environment:
+            discovery.type: "single-node"
+        ports:
+            - "9200:9200"
+        deploy:
+            replicas: 1             
+            
             
             
     service:

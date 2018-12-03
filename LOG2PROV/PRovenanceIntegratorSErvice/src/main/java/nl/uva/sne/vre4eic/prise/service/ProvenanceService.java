@@ -39,7 +39,7 @@ public class ProvenanceService {
                 String webdavFolder = "prov";
                 c.putFile(provFile, webdavFolder, "application/vnd.taverna.t2flow+xml");
                 return logRepoURI + "/" + webdavFolder + "/" + provFile.getName();
-            } catch (Throwable ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(ProvenanceService.class.getName()).log(Level.WARNING, null, ex);
                 return null;
             }
