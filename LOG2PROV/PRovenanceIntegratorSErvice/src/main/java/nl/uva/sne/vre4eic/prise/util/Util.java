@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -40,15 +42,18 @@ public class Util {
             int code = con.getResponseCode();
 
             if (code == HttpURLConnection.HTTP_NOT_FOUND) {
+                Logger.getLogger(Util.class.getName()).log(Level.INFO, "URLName: " + URLName + " exitsts: false");
                 return false;
             }
 
         } catch (MalformedURLException ex) {
+            Logger.getLogger(Util.class.getName()).log(Level.INFO, "URLName: " + URLName + " exitsts: false");
             return false;
         } catch (IOException ex) {
+            Logger.getLogger(Util.class.getName()).log(Level.INFO, "URLName: " + URLName + " exitsts: false");
             return false;
         }
-
+        Logger.getLogger(Util.class.getName()).log(Level.INFO, "URLName: " + URLName + " exitsts: true");
         return true;
     }
 

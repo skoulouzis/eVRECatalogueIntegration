@@ -53,6 +53,7 @@ public class LogsService {
             }
         }
         if (Util.urlExists(endpoint)) {
+            Logger.getLogger(LogsService.class.getName()).log(Level.INFO, "endpoint: {0}", endpoint);
             return endpoint;
         }
         return null;
