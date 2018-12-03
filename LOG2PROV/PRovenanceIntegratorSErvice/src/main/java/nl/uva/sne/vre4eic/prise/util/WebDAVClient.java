@@ -21,10 +21,11 @@ public class WebDAVClient {
     private final HttpClient client;
 
     public WebDAVClient(String uri) {
-        this.uri = uri;
         if (!uri.endsWith("/")) {
             uri += "/";
         }
+        this.uri = uri;
+
         this.client = new HttpClient();
     }
 
