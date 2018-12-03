@@ -44,7 +44,7 @@ services:
             replicas: 1 
             
     elasticsearch:
-        image: elasticsearch
+        image: elasticsearch:6.5.1
         environment:
             discovery.type: "single-node"
         ports:
