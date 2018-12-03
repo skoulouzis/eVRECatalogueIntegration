@@ -53,9 +53,9 @@ services:
             RABBIT_USERNAME: "guest"
             RABBIT_PASSWORD: "guest"
             INFLUX_URI: "http://influx:8086"
-            WF_REPO_URL: "http://webdav/"
-            PROV_REPO_URL: "http://webdav/"
-            LOG_REPO_URL: "http://webdav/"
+            WF_REPO_URL: "http://drip.vlan400.uvalight.net"
+            PROV_REPO_URL: "http://drip.vlan400.uvalight.net"
+            LOG_REPO_URL: "http://drip.vlan400.uvalight.net"
         ports:
             - "8084:8080"
             
@@ -88,7 +88,7 @@ services:
             - 80:80
         deploy:
             restart_policy:
-                condition: on-failure       
+                condition: on-failure
         volumes:
             - webdav:/var/www             
             
