@@ -17,11 +17,14 @@ import org.apache.commons.httpclient.methods.RequestEntity;
 
 public class WebDAVClient {
 
-    private String uri;
+    private final String uri;
     private final HttpClient client;
 
     public WebDAVClient(String uri) {
         this.uri = uri;
+        if (!uri.endsWith("/")) {
+            uri += "/";
+        }
         this.client = new HttpClient();
     }
 
