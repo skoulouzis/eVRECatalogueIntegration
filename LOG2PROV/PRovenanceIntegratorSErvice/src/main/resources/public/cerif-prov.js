@@ -20,7 +20,7 @@ function convertProvJsonToCerifRdf(data) {
 
     cerif += `
 
-vre:${uuidv4()} a cerif:Event ;
+vre:${guid()} a cerif:Event ;
     cerif:is_source_of vre:${xIds[0]} , vre:${xIds[1]} , vre:${xIds[2]} , vre:${xIds[3]}`;
 
     let linkIds = [], sysIds = [];
