@@ -36,7 +36,7 @@ public class Util {
                     = (HttpURLConnection) new URL(URLName).openConnection();
             con.setInstanceFollowRedirects(true);
             con.setRequestMethod("HEAD");
-            con.setConnectTimeout(3000);
+            con.setConnectTimeout(6000);
             int code = con.getResponseCode();
 
             if (code == HttpURLConnection.HTTP_NOT_FOUND) {

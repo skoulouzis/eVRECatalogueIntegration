@@ -48,7 +48,7 @@ services:
         environment:
             discovery.type: "single-node"
         ports:
-            - "8081:9200"
+            - "9200:9200"
             #- "9300:9300"
         deploy:
             replicas: 1             
