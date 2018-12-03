@@ -16,7 +16,7 @@ function convertProvJsonToCerifRdf(data) {
         systemContext  = data['systemContext'];
 
     let xIds = [];
-    for (let i = 0; i < 5; i++) xIds[i] = uuidv4();
+    for (let i = 0; i < 5; i++) xIds[i] = guid();
 
     cerif += `
 
@@ -25,8 +25,8 @@ vre:${uuidv4()} a cerif:Event ;
 
     let linkIds = [], sysIds = [];
     for (let i = 0; i < systemContext.length; i++) {
-        linkIds[i] = uuidv4();
-        sysIds[i]  = uuidv4();
+        linkIds[i] = guid();
+        sysIds[i]  = guid();
         cerif += ` , <vre:${linkIds[i]}>`;
     }
 
@@ -59,7 +59,7 @@ vre:${xIds[4]} a cerif:Dataset ;
     for (let i = 0; i < systemContext.length; i++) {
         let host = systemContext[i], services = host['services'], slIds = [];
 
-        for (let i = 0; i < 3; i++) slIds[i] = uuidv4();
+        for (let i = 0; i < 3; i++) slIds[i] = guid();
 
         cerif += `
 
@@ -72,10 +72,10 @@ vre:${sysIds[i]} a cerif:Equipment ;
 
         let sLinkIds = [], sslIds = [], sflIds = [], sxlIds = [];
         for (let j = 0; j < services.length; j++) {
-            sLinkIds[j] = uuidv4();
-            sslIds[j]   = uuidv4();
-            sflIds[j]   = uuidv4();
-            sxlIds[j]   = uuidv4();
+            sLinkIds[j] = guid();
+            sslIds[j]   = guid();
+            sflIds[j]   = guid();
+            sxlIds[j]   = guid();
             cerif += ` , vre:${sLinkIds[j]}`;
         }
 
@@ -126,4 +126,14 @@ function writeCERIFProv(source, target) {
     } catch(exception) {
         alert("Error parsing the source JSON: " + exception.message);
     }
+}
+
+
+function guid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 }

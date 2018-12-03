@@ -47,6 +47,8 @@ public class GisActivity extends AbstractAsynchronousActivity<GisActivityConfigu
         // to avoid duplicates
         removeInputs();
         removeOutputs();
+        
+//        org.apache.taverna.workbench.models.graph.svg.SVGUtil d;
 
         // Add input ports
         for (IPortDataDescriptor inputPort : configBean.getInputPortDefinitions()) {
