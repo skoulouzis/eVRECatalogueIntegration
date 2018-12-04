@@ -23,6 +23,9 @@ import nl.uva.sne.vre4eic.data.Workflow;
 import nl.uva.sne.vre4eic.data.WorkflowContext;
 import nl.uva.sne.vre4eic.prise.util.Util;
 import org.apache.taverna.scufl2.api.io.ReaderException;
+import org.influxdb.InfluxDB;
+import org.influxdb.InfluxDBFactory;
+import org.influxdb.dto.Pong;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -71,6 +74,14 @@ public class ContextService {
             List<SystemContext> systemContexts = new ArrayList<>();
             for (String sysID : sysIds) {
                 SystemContext systemContext = generateSystemContext(sysID, start, end);
+
+                //Test InfluxDB connection. This is only for an example
+//                InfluxDB influxDB = InfluxDBFactory.connect(systemContext.getLogs().getLocation());
+//                InfluxDB influxDB = InfluxDBFactory.connect("http://cori.lab130.uvalight.net:8086/");
+//                Pong response = influxDB.ping();
+//                if (response.getVersion().equalsIgnoreCase("unknown")) {
+//                    Logger.getLogger(ContextService.class.getName()).log(Level.WARNING, "Error pinging server.");
+//                }
                 Collection<String> ids = getServiceIDs(sysID);
                 List<ServiceContext> services = new ArrayList<>();
                 for (String id : ids) {

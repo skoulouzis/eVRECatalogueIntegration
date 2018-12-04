@@ -69,6 +69,11 @@
             <type>jar</type>
         </dependency>
        
+        <dependency>
+            <groupId>org.influxdb</groupId>
+            <artifactId>influxdb-java</artifactId>
+        </dependency>
+
 
     </dependencies>
 	

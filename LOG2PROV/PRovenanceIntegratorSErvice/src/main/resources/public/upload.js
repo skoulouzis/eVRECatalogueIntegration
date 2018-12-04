@@ -68,6 +68,7 @@ function move(docID, to, ctxName, json) {
             if (docID === '3') {
                 document.getElementById('uploadBtn').disabled = false;
                 document.getElementById('source').value = JSON.stringify(json, undefined, 2);
+                prettyPrint('source');
             }
 
 
@@ -101,4 +102,12 @@ function syntaxHighlight(json) {
         }
         return '<span class="' + cls + '">' + match + '</span>';
     });
+}
+
+
+function prettyPrint(id) {
+    var ugly = document.getElementById(id).value;
+    var obj = JSON.parse(ugly);
+    var pretty = JSON.stringify(obj, undefined, 4);
+    document.getElementById(id).value = pretty;
 }

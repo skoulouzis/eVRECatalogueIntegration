@@ -5,6 +5,7 @@
  */
 package nl.uva.sne.vre4eic.prise.controller;
 
+import java.io.File;
 import nl.uva.sne.vre4eic.data.Context;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -12,6 +13,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import nl.uva.sne.vre4eic.prise.service.Log2ProvService;
 import nl.uva.sne.vre4eic.prise.service.ContextService;
+import org.apache.taverna.scufl2.api.container.WorkflowBundle;
+import org.apache.taverna.scufl2.api.core.Workflow;
+import org.apache.taverna.scufl2.api.io.ReaderException;
+import org.apache.taverna.scufl2.api.io.WorkflowBundleIO;
+import static org.apache.taverna.scufl2.translator.t2flow.T2FlowReader.APPLICATION_VND_TAVERNA_T2FLOW_XML;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,10 +75,6 @@ public class ProvIntegratorController {
         return null;
     }
 
-    @RequestMapping(value = "/get", method = RequestMethod.GET)
-    public @ResponseBody
-    String get() {
-        return "done";
-    }
+    
 
 }
