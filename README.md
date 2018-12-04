@@ -24,7 +24,7 @@ Scaling eVRE to multiple Research infrastructures. To achive this, first automat
 
 
 ### Metadata Recorder Creator
-Demonstrates the automatic the alignment of metadata of a catalogue onto CERIF. The Metadata Recorder Creator retrieves records from a catalogue endpoint and creates mapped CERIF records using conferrable mappers created by 3M. The records are available for downscaling.  
+Demonstrates the automatic the alignment of metadata of a catalogue onto CERIF. The Metadata Recorder Creator retrieves records from a catalogue endpoint and creates mapped CERIF records using conferrable mappers created by 3M. The records are available for downloading.  
 
 <p align="center">
   <img width="360" height="200" src="https://raw.githubusercontent.com/QCAPI-DRIP/eVRE-ENVRI/master/images/demo1Arch.png">
