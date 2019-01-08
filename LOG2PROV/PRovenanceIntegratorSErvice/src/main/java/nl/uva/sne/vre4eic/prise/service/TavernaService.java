@@ -85,6 +85,7 @@ public class TavernaService {
         while (matcher.find()) {
             String matched = matcher.group();
             if (!nonHostSet.contains(matched)) {
+
                 serviceIds.add(matched);
             }
         }

@@ -14,11 +14,9 @@ function getFormData(fileID, formData) {
 
 
 function uploadAll() {
-    document.getElementById("loader").style.display = "block";
     var formData = new FormData();
     formData = getFormData("provUpload", formData);
     formData = getFormData("serviceLogUpload", formData);
-    formData = getFormData("sysLogUpload", formData);
 
     document.getElementById('uploadBtn').disabled = true;
     document.getElementById('source').value = '';
@@ -29,31 +27,15 @@ function uploadAll() {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", innerHTML + '/uploadFile', false);
     xhr.send(formData);
-    console.log(innerHTML);
 
-//    xhr.onload = function () {
-    if (xhr.responseText !== null || xhr.responseText.length > 0) {
-        var json = JSON.parse(xhr.responseText);
-//            console.log(json);
-//            console.log(json['workflowContext']);
-        move('1', 1, 'workflow', json);
+    var serviceArray = JSON.parse(xhr.responseText);
 
-        move('2', json['systemContext'].length, 'system', json);
-
-        var totalServices = 0;
-        for (var key in json['systemContext']) {
-            var systemContext = json['systemContext'][key];
-            totalServices += systemContext['services'].length;
-        }
-
-        move('3', totalServices, 'services', json);
-
-    }
-
-//    };
-
-document.getElementById("loader").style.display = "none";
-}
+    document.getElementById('source').value = "Services found:";
+    serviceArray.forEach(function(element) {
+        document.getElementById('source').value += '\n';
+        document.getElementById('source').value += JSON.stringify(element, null, "\t");
+    });
+};
 
 function move(docID, to, ctxName, json) {
     var elem = document.getElementById('bar' + docID);
@@ -68,7 +50,6 @@ function move(docID, to, ctxName, json) {
             if (docID === '3') {
                 document.getElementById('uploadBtn').disabled = false;
                 document.getElementById('source').value = JSON.stringify(json, undefined, 2);
-                prettyPrint('source');
             }
 
 
@@ -80,34 +61,4 @@ function move(docID, to, ctxName, json) {
             document.getElementById('demo' + docID).innerHTML = num;
         }
     }
-}
-
-function syntaxHighlight(json) {
-    if (typeof json != 'string') {
-        json = JSON.stringify(json, undefined, 2);
-    }
-    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-        var cls = 'number';
-        if (/^"/.test(match)) {
-            if (/:$/.test(match)) {
-                cls = 'key';
-            } else {
-                cls = 'string';
-            }
-        } else if (/true|false/.test(match)) {
-            cls = 'boolean';
-        } else if (/null/.test(match)) {
-            cls = 'null';
-        }
-        return '<span class="' + cls + '">' + match + '</span>';
-    });
-}
-
-
-function prettyPrint(id) {
-    var ugly = document.getElementById(id).value;
-    var obj = JSON.parse(ugly);
-    var pretty = JSON.stringify(obj, undefined, 4);
-    document.getElementById(id).value = pretty;
 }

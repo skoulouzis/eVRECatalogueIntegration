@@ -16,9 +16,6 @@ import nl.uva.sne.vre4eic.data.Logs;
 import nl.uva.sne.vre4eic.prise.util.Util;
 import nl.uva.sne.vre4eic.prise.util.WebDAVClient;
 import org.apache.commons.io.FileUtils;
-import org.influxdb.InfluxDB;
-import org.influxdb.InfluxDBFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 //import org.elasticsearch.action.search.SearchResponse;
@@ -33,10 +30,7 @@ import org.springframework.stereotype.Service;
 public class LogsService {
 
     @Value("${log.reposetory.uri:=http://localhost:9200}")
-    
     private String logRepoURI;
-
-
 
     public Logs getSysLogs(String id, Date startDate, Date endDate) {
         Logs logs = new Logs();
