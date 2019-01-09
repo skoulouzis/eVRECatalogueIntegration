@@ -13,7 +13,7 @@ public class ProvParser {
     ArrayList<Service> services;
     Model model;
 
-    public ProvParser(File inputProv) throws FileNotFoundException {
+    public ProvParser(File inputProv, ArrayList<Service> services) throws FileNotFoundException {
         this.services = services;
 
         try {
