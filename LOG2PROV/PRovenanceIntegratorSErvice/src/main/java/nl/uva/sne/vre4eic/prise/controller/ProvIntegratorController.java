@@ -5,6 +5,7 @@
  */
 package nl.uva.sne.vre4eic.prise.controller;
 
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,25 +31,30 @@ public class ProvIntegratorController {
     @RequestMapping(value = "/uploadFile", method = RequestMethod.POST, produces = {"application/json"})
     public @ResponseBody String submit(@RequestParam("files") MultipartFile[] files) {
         String output = new String();
+        File provFile = null,
+                wfFile = null;
 
         try {
             for (MultipartFile file : files) {
                 if (file.getContentType() != null) {
                     for (String ext : workflowExtentions) {
                         if (file.getOriginalFilename().endsWith(ext)) {
-                            wfParser = new WorkflowParser(Util.convert(file));
+                            wfFile = Util.convert(file);
                         }
                         break;
                     }
 
                     for (String ext : provExtensions) {
                         if (file.getOriginalFilename().endsWith(ext)) {
-                            provParser = new ProvParser(Util.convert(file), wfParser.extractServices());
+                            provFile = Util.convert(file);
                         }
                         break;
                     }
                 }
             }
+
+            wfParser = new WorkflowParser(wfFile);
+            provParser = new ProvParser(provFile, wfParser.extractServices());
         } catch (Exception e) {
             Logger.getLogger(ProvIntegratorController.class.getName()).log(Level.SEVERE, e.getMessage(), e);
         }

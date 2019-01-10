@@ -1,7 +1,10 @@
 package nl.uva.sne.vre4eic.data;
 
+import java.util.Date;
+
 public class Service {
     private String name, endpoint, httpMethod;
+    private Date startTime, endTime;
 
     public String getName() {
         return name;
@@ -30,6 +33,25 @@ public class Service {
     public String toString(){
         return "{" + "\"name\":" + "\"" + getName() + "\"" + ", "
                 + "\"endpoint\":" + "\"" + getEndpoint() + "\"" + ", "
-                + "\"method\":" + "\"" + getHttpMethod() + "\"" + "}";
+                + "\"method\":" + "\"" + getHttpMethod() + "\"" + ", "
+                + "\"startTime\":" + "\"" + getStartTime() + "\"" + ", "
+                + "\"endTime\":" + "\"" + getEndpoint() + "\"" + ", "
+                + "}";
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 }
