@@ -17,24 +17,27 @@ function uploadAll() {
     var formData = new FormData();
     formData = getFormData("provUpload", formData);
     formData = getFormData("serviceLogUpload", formData);
-
     document.getElementById('uploadBtn').disabled = true;
-    document.getElementById('source').value = '';
-
     var innerHTML = window.location.href.split('/');
     innerHTML.pop();
     innerHTML = innerHTML.join('/');
     var xhr = new XMLHttpRequest();
     xhr.open("POST", innerHTML + '/uploadFile', false);
     xhr.send(formData);
-
     var serviceArray = JSON.parse(xhr.responseText);
 
-    document.getElementById('source').value = "Services found:";
+    var table = document.getElementById('output_table');
     serviceArray.forEach(function(element) {
-        document.getElementById('source').value += '\n';
-        document.getElementById('source').value += JSON.stringify(element, null, "\t");
+    console.log('bang!');
+          var row = table.insertRow(0);
+          row.insertCell(0).innerHTML = element.name;
+          row.insertCell(1).innerHTML = element.endpoint;
+          row.insertCell(2).innerHTML = element.method;
+          row.insertCell(3).innerHTML = element.startTime;
+          row.insertCell(4).innerHTML = element.endTime;
     });
+
+    document.getElementById('demo_output').style.display === "block";
 };
 
 function move(docID, to, ctxName, json) {

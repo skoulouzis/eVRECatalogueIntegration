@@ -122,7 +122,8 @@
             function closeNav() {
                 document.getElementById("mySidenav").style.width = "0";
             }
-        </script>     
+        </script>
+
         <div id="demo" class="w3-white w3-container ">
             <div class="w3-content">
                 <div class="w3-twothird">
@@ -142,20 +143,21 @@
             </div>
         </div>
 
-        <div class="w3-half w3-panel">
+        <div id="demo_output" class="w3-white w3-container " style="display: none;">
+            <br>
+            <br>
+            <table id="output_table" class="w3-table">
+                <caption>Output</caption>
+                <tr>
+                    <td>Name</td>
+                    <td>Endpoint</td>
+                    <td>Method</td>
+                    <td>Start-time</td>
+                    <td>End-time</td>
+                </tr>
+            </table>
+        </div>
 
-                <textarea id="source" class="w3-input w3-border" rows="25">
-
-                </textarea>
-
-                <div class="w3-panel w3-center">
-
-                    <button class="w3-button w3-black w3-padding-large w3-large 
-                            w3-margin-top btn btn-success" onclick="writeCERIFProv(document.getElementById('source').value, 'target')">submit</button>
-
-                </div>
-            </div>
-        <!-- Footer -->
         <footer class="w3-container w3-padding-64 w3-center">  
             <div class="w3-xlarge w3-padding-32 w3-black">
                 <small>
