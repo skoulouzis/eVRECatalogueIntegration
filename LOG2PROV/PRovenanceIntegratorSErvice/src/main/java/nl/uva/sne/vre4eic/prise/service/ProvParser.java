@@ -42,8 +42,6 @@ public class ProvParser {
                 s.setEndTime(endTime.asCalendar().getTime());
             }
         }
-
-        System.out.println("done parsing");
     }
 
     String getQueryString(String serviceName){
