@@ -59,7 +59,7 @@ public class ProvIntegratorController {
             Logger.getLogger(ProvIntegratorController.class.getName()).log(Level.SEVERE, e.getMessage(), e);
         }
 
-        return wfParser.extractServices().toString();
+        return wfParser.getServicelist().toString();
     }
     
 

@@ -1,5 +1,6 @@
 package nl.uva.sne.vre4eic.data;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Service {
@@ -31,11 +32,12 @@ public class Service {
     }
 
     public String toString(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS z");
         return "{" + "\"name\":" + "\"" + getName() + "\"" + ", "
                 + "\"endpoint\":" + "\"" + getEndpoint() + "\"" + ", "
                 + "\"method\":" + "\"" + getHttpMethod() + "\"" + ", "
-                + "\"startTime\":" + "\"" + getStartTime() + "\"" + ", "
-                + "\"endTime\":" + "\"" + getEndpoint() + "\"" + ", "
+                + "\"startTime\":" + "\"" + sdf.format(getStartTime()) + "\"" + ", "
+                + "\"endTime\":" + "\"" + sdf.format(getEndTime()) + "\""
                 + "}";
     }
 

@@ -39,7 +39,7 @@ public class ProvParser {
                 XSDDateTime endTime = (XSDDateTime) sol.get("endTime").asLiteral().getValue();
 
                 s.setStartTime(startTime.asCalendar().getTime());
-                s.setEndTime(startTime.asCalendar().getTime());
+                s.setEndTime(endTime.asCalendar().getTime());
             }
         }
 

@@ -66,6 +66,10 @@ public class WorkflowParser {
         return servicelist;
     }
 
+    public ArrayList<Service> getServicelist(){
+        return servicelist;
+    }
+
     private NodeList getProcessorNodes(Document inputdoc){
         return inputdoc.getElementsByTagName(PROCESSORS_TAG).item(0).getChildNodes();
     }
