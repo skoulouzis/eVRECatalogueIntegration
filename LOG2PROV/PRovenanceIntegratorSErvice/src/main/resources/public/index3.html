@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Metadata Recorder Creator</title>
-        <link rel="icon" href="https://www.envriplus.eu/wp-content/uploads/2017/10/Untitled-300x294.png">
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
-        <script src="upload.js"></script> 
-        <!--<script src="http://wzrd.in/standalone/uuid%2Fv4@latest"></script>-->
-        <script src="cerif-prov.js"></script>
+<head>
+    <title>Metadata Recorder Creator</title>
+    <link rel="icon" href="https://www.envriplus.eu/wp-content/uploads/2017/10/Untitled-300x294.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
+    <script src="upload.js"></script>
+    <script src="getData.js"></script>
+    <script src="cerif-prov.js"></script>
 
-        <style>
+    <style>
             .footer {
                 position: fixed;
                 left: 0;
@@ -25,13 +25,14 @@
                 width: 100%;
                 text-align: center;
             }
-        </style>
-        <style>
+    </style>
+    <style>
             body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
             .w3-bar,h1,button {font-family: "Montserrat", sans-serif}
             .fa-anchor,.fa-coffee {font-size:200px}
-        </style>
-        <style>
+
+    </style>
+    <style>
             body {
                 font-family: "Lato", sans-serif;
             }
@@ -74,8 +75,9 @@
                 .sidenav {padding-top: 15px;}
                 .sidenav a {font-size: 18px;}
             }
-        </style>
-        <style>
+
+    </style>
+    <style>
 
             #source {
                 resize: none;
@@ -88,33 +90,37 @@
                 font-family: monospace;
             }
 
-        </style>
 
-    </head>
-    <body style="margin:0;">
+    </style>
 
-
-        <!-- Header -->
-        <header class="w3-container w3-gray w3-center" style="padding:2px 1px">
+</head>
+<body style="margin:0;">
 
 
-            <h1 class="w3-margin w3-large">Context Gathering tool</h1>
-            <img src="https://teaching.science.uva.nl/wp-content/uploads/2017/12/uva-logo.png" alt="HTML5 Icon" width="70" height="75" >
-            <img src="https://www.envriplus.eu/wp-content/uploads/2015/08/ENVRI-plus_m.png" alt="HTML5 Icon" width="95" height="70" hspace="100">
-            <img src="https://www.envriplus.eu/wp-content/uploads/2017/10/Untitled-300x294.png" alt="HTML5 Icon" width="80" height="80">
-
-        </header>
-        <div id="mySidenav" align="center" class="sidenav w3-padding-32">
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-            <br>
-            <br>
-            <br>
-        </div>
+<!-- Header -->
+<header class="w3-container w3-gray w3-center" style="padding:2px 1px">
 
 
-        <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; configure</span>
+    <h1 class="w3-margin w3-large">Context Gathering tool</h1>
+    <img src="https://teaching.science.uva.nl/wp-content/uploads/2017/12/uva-logo.png" alt="HTML5 Icon" width="70"
+         height="75">
+    <img src="https://www.envriplus.eu/wp-content/uploads/2015/08/ENVRI-plus_m.png" alt="HTML5 Icon" width="95"
+         height="70" hspace="100">
+    <img src="https://www.envriplus.eu/wp-content/uploads/2017/10/Untitled-300x294.png" alt="HTML5 Icon" width="80"
+         height="80">
 
-        <script>
+</header>
+<div id="mySidenav" align="center" class="sidenav w3-padding-32">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <br>
+    <br>
+    <br>
+</div>
+
+
+<span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; configure</span>
+
+<script>
             function openNav() {
                 document.getElementById("mySidenav").style.width = "250px";
             }
@@ -122,33 +128,38 @@
             function closeNav() {
                 document.getElementById("mySidenav").style.width = "0";
             }
-        </script>
 
-        <div id="demo" class="w3-white w3-container ">
-            <div class="w3-content">
-                <div class="w3-twothird">
-                    <h3>Load Files</h3>
+</script>
 
-                    <label for="serviceLogUpload">Upload Workflow</label>
-                    <input type="file" id="serviceLogUpload" class="w3-input" multiple size="50" accept=".t2flow">
+<div id="demo" class="w3-white w3-container ">
+    <div class="w3-content">
+        <div class="w3-twothird">
+            <h3>Load Files</h3>
 
-                    <label for="provUpload">Upload PROV</label>
-                    <input type="file" id="provUpload" class="w3-input" multiple size="50" accept=".xml, .ttl">
+            <label for="serviceLogUpload">Upload Workflow</label>
+            <input type="file" id="serviceLogUpload" class="w3-input" multiple size="50" accept=".t2flow">
 
-                    <br>
-                    <button id="uploadBtn" class="w3-button w3-black w3-padding-large w3-large
-                            w3-margin-top btn btn-success" onclick="uploadAll()">Generate Context</button>
-                    <br>
-                </div>
-            </div>
+            <label for="provUpload">Upload PROV</label>
+            <input type="file" id="provUpload" class="w3-input" multiple size="50" accept=".xml, .ttl">
+
+            <br>
+            <button id="uploadBtn" class="w3-button w3-black w3-padding-large w3-large
+                            w3-margin-top btn btn-success" onclick="uploadAll()">Parse input
+            </button>
+            <br>
         </div>
+    </div>
+</div>
 
-        <div id="demo_output" class="w3-white w3-container " style="display: none;">
+<div id="demo_output" class="w3-white w3-container" style="display: none;">
+    <div class="w3-content">
+        <div class="w3-twothird">
             <br>
             <br>
             <table id="output_table" class="w3-table">
                 <caption>Output</caption>
                 <tr>
+                    <td></td>
                     <td>Name</td>
                     <td>Endpoint</td>
                     <td>Method</td>
@@ -156,18 +167,25 @@
                     <td>End-time</td>
                 </tr>
             </table>
+
+            <button id="dataBtn" class="w3-button w3-black w3-padding-large w3-large
+                            w3-margin-top btn btn-success" onclick="getData()">Gather context
+            </button>
+            <br>
         </div>
+    </div>
+</div>
 
-        <footer class="w3-container w3-padding-64 w3-center">  
-            <div class="w3-xlarge w3-padding-32 w3-black">
-                <small>
-                    &copy; Copyright 2018, University of Amsterdam
-                </small>
+<footer class="w3-container w3-padding-64 w3-center">
+    <div class="w3-xlarge w3-padding-32 w3-black">
+        <small>
+            &copy; Copyright 2018, University of Amsterdam
+        </small>
 
-                <i class="fa fa-email w3-hover-opacity"></i>
-            </div>
-        </footer>
-    </body>
+        <i class="fa fa-email w3-hover-opacity"></i>
+    </div>
+</footer>
+</body>
 
-    <script src="table.js " type="text/javascript"></script>
+<script src="table.js " type="text/javascript"></script>
 </html>

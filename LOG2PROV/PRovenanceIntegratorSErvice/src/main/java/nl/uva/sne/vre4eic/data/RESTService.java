@@ -3,7 +3,7 @@ package nl.uva.sne.vre4eic.data;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Service {
+public class RESTService {
     private String name, endpoint, httpMethod;
     private Date startTime, endTime;
 

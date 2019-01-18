@@ -1,11 +1,10 @@
 package nl.uva.sne.vre4eic.prise.service;
 
-import nl.uva.sne.vre4eic.data.Service;
+import nl.uva.sne.vre4eic.data.RESTService;
 import org.apache.jena.datatypes.xsd.XSDDateTime;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.query.*;
-import org.apache.jena.rdf.model.RDFNode;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,19 +14,19 @@ import java.util.ArrayList;
 public class ProvParser {
     Model model;
 
-    public ProvParser(File inputProv, ArrayList<Service> services) throws FileNotFoundException {
+    public ProvParser(File inputProv, ArrayList<RESTService> RESTServices) throws FileNotFoundException {
         try {
-            parseProv(new FileInputStream(inputProv), services);
+            parseProv(new FileInputStream(inputProv), RESTServices);
         } catch (FileNotFoundException e) {
             throw e;
         }
     }
 
-    public void parseProv(FileInputStream inputFile, ArrayList<Service> services){
+    public void parseProv(FileInputStream inputFile, ArrayList<RESTService> RESTServices){
         model = ModelFactory.createDefaultModel();
         model.read(inputFile, null,"TTL");
 
-        for(Service s : services){
+        for(RESTService s : RESTServices){
             Query query = QueryFactory.create(getQueryString(s.getName()));
             QueryExecution qe = QueryExecutionFactory.create(query, model);
             ResultSet rs = qe.execSelect();

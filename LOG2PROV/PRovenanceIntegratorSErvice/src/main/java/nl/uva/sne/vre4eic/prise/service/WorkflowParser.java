@@ -1,6 +1,6 @@
 package nl.uva.sne.vre4eic.prise.service;
 
-import nl.uva.sne.vre4eic.data.Service;
+import nl.uva.sne.vre4eic.data.RESTService;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -21,7 +21,7 @@ public class WorkflowParser {
             ACTIVITIES_TAG = "activities";
 
 
-    private ArrayList<Service> servicelist;
+    private ArrayList<RESTService> servicelist;
     private Document doc;
 
     public WorkflowParser(File inputFile) throws Exception {
@@ -37,12 +37,12 @@ public class WorkflowParser {
         }
     }
 
-    public ArrayList<Service> extractServices(){
+    public ArrayList<RESTService> extractServices(){
         NodeList nodes = getProcessorNodes(doc);
 
         Node currNode;
         Element currElement;
-        Service restService;
+        RESTService restService;
 
         String type;
         for(int i = 0; i < nodes.getLength(); i++){
@@ -53,7 +53,7 @@ public class WorkflowParser {
                 type = getContext(getActivityElement(currElement), ARTIFCAT_TAG);
 
                 if(type.equals(REST_TAG)){
-                    restService = new Service();
+                    restService = new RESTService();
                     restService.setName(getContext(currElement, NAME_TAG));
                     restService.setEndpoint(getContext(currElement, EP_TAG));
                     restService.setHttpMethod(getContext(currElement, HTTP_TAG));
@@ -66,7 +66,7 @@ public class WorkflowParser {
         return servicelist;
     }
 
-    public ArrayList<Service> getServicelist(){
+    public ArrayList<RESTService> getServicelist(){
         return servicelist;
     }
 

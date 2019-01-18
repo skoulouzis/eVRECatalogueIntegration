@@ -54,6 +54,13 @@
     <orderEntry type="library" name="Maven: org.latencyutils:LatencyUtils:2.0.3" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.25" level="project" />
     <orderEntry type="library" name="Maven: org.json:json:20180813" level="project" />
+    <orderEntry type="library" name="Maven: org.influxdb:influxdb-java:2.9" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.retrofit2:retrofit:2.3.0" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.retrofit2:converter-moshi:2.3.0" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.moshi:moshi:1.4.0" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okhttp3:okhttp:3.9.1" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okio:okio:1.13.0" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okhttp3:logging-interceptor:3.9.1" level="project" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.11" level="project" />
     <orderEntry type="library" name="Maven: org.apache.taverna.language:taverna-scufl2-api:0.15.1-incubating" level="project" />
     <orderEntry type="library" name="Maven: org.apache.taverna.language:taverna-scufl2-ucfpackage:0.15.1-incubating" level="project" />
