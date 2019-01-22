@@ -43,15 +43,15 @@ services:
         deploy:
             replicas: 1 
             
-    elasticsearch:
-        image: elasticsearch:6.5.1
-        environment:
-            discovery.type: "single-node"
-        ports:
-            - "9200:9200"
-            #- "9300:9300"
-        deploy:
-            replicas: 1             
+ #   elasticsearch:
+ #       image: elasticsearch:6.5.1
+ #       environment:
+ #           discovery.type: "single-node"
+ #       ports:
+ #           - "9200:9200"
+ #           #- "9300:9300"
+ #       deploy:
+ #           replicas: 1             
             
             
             
