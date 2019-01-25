@@ -12,8 +12,8 @@ services:
             
     cadvisor:
         image: google/cadvisor
-        #ports:
-            #- "8081:8080"
+        ports:
+            - "8081:8080"
         hostname: '{{.Node.ID}}'
         command: -logtostderr -docker_only -storage_driver=influxdb -storage_driver_db=mydb -storage_driver_host=influx:8086
         volumes:
@@ -43,15 +43,15 @@ services:
         deploy:
             replicas: 1 
             
-    elasticsearch:
-        image: elasticsearch:6.5.1
-        environment:
-            discovery.type: "single-node"
-        ports:
-            - "9200:9200"
-            #- "9300:9300"
-        deploy:
-            replicas: 1             
+ #   elasticsearch:
+ #       image: elasticsearch:6.5.1
+ #       environment:
+ #           discovery.type: "single-node"
+ #       ports:
+ #           - "9200:9200"
+ #           #- "9300:9300"
+ #       deploy:
+ #           replicas: 1             
             
             
             
