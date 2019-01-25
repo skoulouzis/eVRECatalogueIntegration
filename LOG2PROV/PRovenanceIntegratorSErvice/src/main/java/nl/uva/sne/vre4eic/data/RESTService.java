@@ -36,8 +36,8 @@ public class RESTService {
         return "{" + "\"name\":" + "\"" + getName() + "\"" + ", "
                 + "\"endpoint\":" + "\"" + getEndpoint() + "\"" + ", "
                 + "\"method\":" + "\"" + getHttpMethod() + "\"" + ", "
-                + "\"startTime\":" + "\"" + sdf.format(getStartTime()) + "\"" + ", "
-                + "\"endTime\":" + "\"" + sdf.format(getEndTime()) + "\""
+                + "\"startTime\":" + getStartTime().getTime() + ", "
+                + "\"endTime\":" + getEndTime().getTime()
                 + "}";
     }
 

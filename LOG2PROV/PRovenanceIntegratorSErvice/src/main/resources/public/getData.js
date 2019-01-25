@@ -1,3 +1,7 @@
+const dbPort = 8086;
+
+
+
 function getData(){
     //make connection to influxDB and retrieve data
     document.getElementById('dataBtn').disabled = true;
@@ -16,8 +20,31 @@ function getData(){
         }
     }
 
-    console.log(JSON.stringify(serviceArray));
-    var xhr = new XMLHttpRequest();
-//    hr.open("POST", innerHTML + '/connectDB', false);
-//    xhr.send(JSON.stringify(serviceArray));
+    //connectDB(serviceArray);
+}
+
+function connectDB(serviceArray){
+    var resultData = new Object();
+
+    serviceArray.forEach(element => {
+        resultData[element.name] = retrieveData(element);
+    });
+}
+
+
+function retrieveData(restService){
+    var dbURL = new URL(restService.endpoint.split(":")[0] + ":" + dbPort);
+    dbURL.searchParams.append('db', 'mydb');
+
+    dbURL.searchParams.append('q', memoryQuery(restService.startTime, restService.endTime));
+    // dbURL.searchParams.set('q', cpuQuery(start, end));
+    // dbURL.searchParams.set('q', fileQuery(start, end));
+    // dbURL.searchParams.set('q', networkQuery(start, end));
+
+    dbURL.searchParams.append('epoch', 'ms'); 
+}
+
+function memoryQuery(start, end){
+    var difference = end - start; 
+    
 }

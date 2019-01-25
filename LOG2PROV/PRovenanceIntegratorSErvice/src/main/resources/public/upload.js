@@ -9,6 +9,7 @@ function getFormData(fileID, formData) {
             formData.append("files", file);
         }
     }
+    
     return formData;
 }
 
@@ -29,6 +30,8 @@ function uploadAll() {
     var serviceArray = JSON.parse(xhr.responseText);
 
     var table = document.getElementById('output_table');
+    var startTime, endTime;
+
     for(var i = 0; i < serviceArray.length; i++){
         var element = serviceArray[i];
         var row = table.insertRow(i+1);
@@ -38,12 +41,22 @@ function uploadAll() {
         row.insertCell(1).innerHTML = element.name;
         row.insertCell(2).innerHTML = element.endpoint;
         row.insertCell(3).innerHTML = element.method;
-        row.insertCell(4).innerHTML = element.startTime;
-        row.insertCell(5).innerHTML = element.endTime;
+        row.insertCell(4).innerHTML = printTime(new Date(element.startTime));
+        row.insertCell(5).innerHTML = printTime(new Date(element.endTime));
     }
 
     document.getElementById('demo_output').style.display = "block";
 };
+
+function printTime(timestamp){
+    return timestamp.getFullYear() + "-" +
+        timestamp.getMonth() + "-" +
+        timestamp.getDate() + " " +
+        timestamp.getHours() + ":" + 
+        timestamp.getMinutes() + ":" + 
+        timestamp.getSeconds() + "." +
+        timestamp.getMilliseconds();
+}
 
 function move(docID, to, ctxName, json) {
     var elem = document.getElementById('bar' + docID);

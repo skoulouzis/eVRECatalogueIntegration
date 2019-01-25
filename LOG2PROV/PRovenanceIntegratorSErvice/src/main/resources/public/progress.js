@@ -13,7 +13,6 @@ function move() {
     var id = setInterval(frame, 10);
     var catalogueURL = document.getElementById("cat_url").value;
 
-
     var mappingParams = getMappingParams();
     var mappingURL = mappingParams[0];
     var generator_url = mappingParams[1];
