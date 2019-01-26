@@ -1,49 +1,60 @@
 version: '3.1'
 
 services:     
-	prometheus:
-		image: prom/prometheus:latest
-		container_name: prometheus
-		ports:
-		- 9090:9090
-		command:
-		- --config.file=/etc/prometheus/prometheus.yml
-		volumes:
-		- ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
-		
+    influx:
+        image: influxdb
+        environment:
+            INFLUXDB_DB: mydb
+        volumes:
+            - influx:/var/lib/influxdb      
+        ports:
+            - "8086:8086"
+            
     cadvisor:
         image: google/cadvisor
         ports:
             - "8081:8080"
         hostname: '{{.Node.ID}}'
-        command: -logtostderr -docker_only -storage_driver=influxdb -storage_driver_db=mydb -storage_driver_host=prometheus:9090
+        command: -logtostderr -docker_only -storage_driver=influxdb -storage_driver_db=mydb -storage_driver_host=influx:8086
         volumes:
             - /:/rootfs:ro
             - /var/run:/var/run:rw
             - /sys:/sys:ro
             - /var/lib/docker/:/var/lib/docker:ro
         depends_on:
-            - prometheus
+            - influx
         deploy:
             mode: global                
             
     grafana:
         image: grafana/grafana
         environment:
-            DS_NAME: "Prometheus"
-            DS_TYPE: "Prometheus"
+            DS_NAME: "InfluxDB"
+            DS_TYPE: "InfluxDB"
             DS_ACCESS: "proxy"
-            DS_URL: "http://prometheus:9090"
+            DS_URL: "http://influx:8086"
             DS_DB: "mydb"
         ports:
             - "3000:3000"
         volumes:
             - grafana:/var/lib/grafana
         depends_on:
-            - prometheus
+            - influx
         deploy:
-            replicas: 1           
-         
+            replicas: 1 
+            
+ #   elasticsearch:
+ #       image: elasticsearch:6.5.1
+ #       environment:
+ #           discovery.type: "single-node"
+ #       ports:
+ #           - "9200:9200"
+ #           #- "9300:9300"
+ #       deploy:
+ #           replicas: 1             
+            
+            
+            
     service:
         image: eliaskhaldi/my_image
         ports:
@@ -54,5 +65,5 @@ services:
 
 
 volumes:
-  prometheus:
+  influx:
   grafana:
