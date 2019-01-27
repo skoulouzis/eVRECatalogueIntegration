@@ -51,9 +51,7 @@ services:
  #           - "9200:9200"
  #           #- "9300:9300"
  #       deploy:
- #           replicas: 1             
-            
-            
+ #           replicas: 1           
             
     service:
         image: eliaskhaldi/my_image
