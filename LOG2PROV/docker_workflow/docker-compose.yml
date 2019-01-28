@@ -3,7 +3,6 @@ version: '3.2'
 services:
   prometheus:
     image: prom/prometheus:latest
-    container_name: prometheus
     ports:
     - "9090:9090"
     command:
@@ -18,6 +17,15 @@ services:
     ports:
     - "8080:8080"
 
+  grafana:
+    image: grafana/grafana
+    ports:
+        - "3000:3000"
+    volumes:
+        - grafana:/var/lib/grafana
+    depends_on:
+        - prometheus
+
   cadvisor:
     image: google/cadvisor:latest
     ports:
@@ -29,3 +37,6 @@ services:
     - /var/lib/docker/:/var/lib/docker:ro
     depends_on:
     - service
+	
+volumes:
+  grafana:
