@@ -17,8 +17,6 @@ services:
     image: eliaskhaldi/my_image
     ports:
     - "8080:8080"
-    deploy:
-    replicas: 1
 
   cadvisor:
     image: google/cadvisor:latest
