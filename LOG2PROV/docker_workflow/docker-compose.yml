@@ -42,4 +42,9 @@ services:
         ports:
             - "8080:8080"
         deploy:
-            replicas: 1
+            replicas: 1             
+    
+
+
+volumes:
+  grafana:
