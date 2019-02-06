@@ -32,7 +32,6 @@ public class RESTService {
     }
 
     public String toString(){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS z");
         return "{" + "\"name\":" + "\"" + getName() + "\"" + ", "
                 + "\"endpoint\":" + "\"" + getEndpoint() + "\"" + ", "
                 + "\"method\":" + "\"" + getHttpMethod() + "\"" + ", "
@@ -49,7 +48,7 @@ public class RESTService {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+     public Date getEndTime() {
         return endTime;
     }
 

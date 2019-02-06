@@ -1,7 +1,5 @@
 function getFormData(fileID, formData) {
-
     var x = document.getElementById(fileID);
-
 
     if ('files' in x) {
         for (var i = 0; i < x.files.length; i++) {
@@ -9,7 +7,7 @@ function getFormData(fileID, formData) {
             formData.append("files", file);
         }
     }
-    
+
     return formData;
 }
 
@@ -28,14 +26,40 @@ function uploadAll() {
 
     console.log(xhr.responseText);
     var serviceArray = JSON.parse(xhr.responseText);
+    drawTimeline(serviceArray);
+    drawTable(serviceArray);
+};
 
+function drawTimeline(serviceArray) {
+    google.charts.load('current', { 'packages': ['timeline'] });
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+        var container = document.getElementById('timeline');
+        var chart = new google.visualization.Timeline(container);
+        var dataTable = new google.visualization.DataTable();
+
+        dataTable.addColumn({ type: 'string', id: 'Service' });
+        dataTable.addColumn({ type: 'date', id: 'Start' });
+        dataTable.addColumn({ type: 'date', id: 'End' });
+
+        for (var i = 0; i < serviceArray.length; i++) {
+            var ser = serviceArray[i];
+            console.log('nnd: ' + ser.name)
+            dataTable.addRow([ser.name , new Date(ser.startTime), new Date(ser.endTime)]);
+        }
+
+        chart.draw(dataTable);
+    }
+}
+
+function drawTable(serviceArray) {
     var table = document.getElementById('output_table');
     var startTime, endTime;
 
-    for(var i = 0; i < serviceArray.length; i++){
+    for (var i = 0; i < serviceArray.length; i++) {
         var element = serviceArray[i];
-        var row = table.insertRow(i+1);
-        row.setAttribute('data-rest',JSON.stringify(element));
+        var row = table.insertRow(i + 1);
+        row.setAttribute('data-rest', JSON.stringify(element));
 
         row.insertCell(0).innerHTML = "<input type=\"checkbox\">";
         row.insertCell(1).innerHTML = element.name;
@@ -46,14 +70,14 @@ function uploadAll() {
     }
 
     document.getElementById('demo_output').style.display = "block";
-};
+}
 
-function printTime(timestamp){
+function printTime(timestamp) {
     return timestamp.getFullYear() + "-" +
         timestamp.getMonth() + "-" +
         timestamp.getDate() + " " +
-        timestamp.getHours() + ":" + 
-        timestamp.getMinutes() + ":" + 
+        timestamp.getHours() + ":" +
+        timestamp.getMinutes() + ":" +
         timestamp.getSeconds() + "." +
         timestamp.getMilliseconds();
 }
@@ -67,7 +91,7 @@ function move(docID, to, ctxName, json) {
             clearInterval(id);
             document.getElementById("myP" + docID).className = "w3-text-green w3-animate-opacity";
             document.getElementById("myP" + docID).innerHTML = 'Successfully created ' + to + ' ' + ctxName + ' context';
-            
+
             if (docID === '3') {
                 document.getElementById('uploadBtn').disabled = false;
                 document.getElementById('source').value = JSON.stringify(json, undefined, 2);
