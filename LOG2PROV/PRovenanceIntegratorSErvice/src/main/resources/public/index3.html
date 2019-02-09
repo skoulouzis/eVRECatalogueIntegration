@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Metadata Recorder Creator</title>
     <link rel="icon" href="https://www.envriplus.eu/wp-content/uploads/2017/10/Untitled-300x294.png">
@@ -19,7 +20,7 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
     <style>
-            .footer {
+        .footer {
                 position: fixed;
                 left: 0;
                 bottom: 0;
@@ -28,13 +29,13 @@
             }
     </style>
     <style>
-            body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
+        body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
             .w3-bar,h1,button {font-family: "Montserrat", sans-serif}
             .fa-anchor,.fa-coffee {font-size:200px}
 
     </style>
     <style>
-            body {
+        body {
                 font-family: "Lato", sans-serif;
             }
 
@@ -80,7 +81,7 @@
     </style>
     <style>
 
-            #source {
+        #source {
                 resize: none;
                 spellcheck: false;
             }
@@ -95,99 +96,102 @@
     </style>
 
 </head>
+
 <body style="margin:0;">
 
 
-<!-- Header -->
-<header class="w3-container w3-gray w3-center" style="padding:2px 1px">
+    <!-- Header -->
+    <header class="w3-container w3-gray w3-center" style="padding:2px 1px">
 
 
-    <h1 class="w3-margin w3-large">Context Gathering tool</h1>
-    <img src="https://teaching.science.uva.nl/wp-content/uploads/2017/12/uva-logo.png" alt="HTML5 Icon" width="70"
-         height="75">
-    <img src="https://www.envriplus.eu/wp-content/uploads/2015/08/ENVRI-plus_m.png" alt="HTML5 Icon" width="95"
-         height="70" hspace="100">
-    <img src="https://www.envriplus.eu/wp-content/uploads/2017/10/Untitled-300x294.png" alt="HTML5 Icon" width="80"
-         height="80">
+        <h1 class="w3-margin w3-large">Context Gathering tool</h1>
+        <img src="https://teaching.science.uva.nl/wp-content/uploads/2017/12/uva-logo.png" alt="HTML5 Icon" width="70"
+            height="75">
+        <img src="https://www.envriplus.eu/wp-content/uploads/2015/08/ENVRI-plus_m.png" alt="HTML5 Icon" width="95"
+            height="70" hspace="100">
+        <img src="https://www.envriplus.eu/wp-content/uploads/2017/10/Untitled-300x294.png" alt="HTML5 Icon" width="80"
+            height="80">
 
-</header>
-<div id="mySidenav" align="center" class="sidenav w3-padding-32">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <br>
-    <br>
-    <br>
-</div>
+    </header>
+    <div id="mySidenav" align="center" class="sidenav w3-padding-32">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <br>
+        <br>
+        <br>
+    </div>
 
 
-<span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; configure</span>
+    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; configure</span>
 
-<script>
-            function openNav() {
-                document.getElementById("mySidenav").style.width = "250px";
-            }
+    <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        }
 
-            function closeNav() {
-                document.getElementById("mySidenav").style.width = "0";
-            }
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
 
-</script>
+    </script>
 
-<div id="demo" class="w3-white w3-container ">
-    <div class="w3-content">
-        <div class="w3-twothird">
-            <h3>Load Files</h3>
+    <div id="demo" class="w3-white w3-container ">
+        <div class="w3-content">
+            <div class="w3-twothird">
+                <h3>Load Files</h3>
 
-            <label for="serviceLogUpload">Upload Workflow</label>
-            <input type="file" id="serviceLogUpload" class="w3-input" multiple size="50" accept=".t2flow">
+                <label for="serviceLogUpload">Upload Workflow</label>
+                <input type="file" id="serviceLogUpload" class="w3-input" multiple size="50" accept=".t2flow">
 
-            <label for="provUpload">Upload PROV</label>
-            <input type="file" id="provUpload" class="w3-input" multiple size="50" accept=".xml, .ttl">
+                <label for="provUpload">Upload PROV</label>
+                <input type="file" id="provUpload" class="w3-input" multiple size="50" accept=".xml, .ttl">
 
-            <br>
-            <button id="uploadBtn" class="w3-button w3-black w3-padding-large w3-large
-                            w3-margin-top btn btn-success" onclick="uploadAll()">Parse input
-            </button>
-            <br>
+                <br>
+                <button id="uploadBtn" class="w3-button w3-black w3-padding-large w3-large
+                            w3-margin-top btn btn-success"
+                    onclick="uploadAll()">Parse input
+                </button>
+                <br>
+            </div>
         </div>
     </div>
-</div>
 
-<div id="demo_output" class="w3-white w3-container" style="display: none;">
-    <div class="w3-content">
-        <div class="w3-twothird">
-            <br>
-            <br>
-            <div id="timeline"></div>
-            <table id="output_table" class="w3-table">
-                <caption>Output</caption>
-                <tr>
-                    <td></td>
-                    <td>Name</td>
-                    <td>Endpoint</td>
-                    <td>Method</td>
-                    <td>Start-time</td>
-                    <td>End-time</td>
-                </tr>
-            </table>
-
-            <button id="dataBtn" class="w3-button w3-black w3-padding-large w3-large
-                            w3-margin-top btn btn-success" onclick="getData()">Gather context
-            </button>
-            <br>
+    <div id="demo_output" class="w3-white w3-container" style="display: none;">
+        <div class="w3-content">
+            <div class="w3-twothird">
+                <br>
+                <br>
+                <table id="output_table" class="w3-table">
+                    <caption>Output</caption>
+                    <tr>
+                        <td></td>
+                        <td>Name</td>
+                        <td>Endpoint</td>
+                        <td>Method</td>
+                        <td>Start-time</td>
+                        <td>End-time</td>
+                    </tr>
+                </table>
+                <div id="timeline"></div>
+                <button id="dataBtn" class="w3-button w3-black w3-padding-large w3-large
+                            w3-margin-top btn btn-success"
+                    onclick="getData()">Gather context
+                </button>
+                <br>
+            </div>
         </div>
     </div>
-</div>
 
-<footer class="w3-container w3-padding-64 w3-center">
-    <div class="w3-xlarge w3-padding-32 w3-black">
-        <small>
-            &copy; Copyright 2018, University of Amsterdam
-        </small>
+    <footer class="w3-container w3-padding-64 w3-center">
+        <div class="w3-xlarge w3-padding-32 w3-black">
+            <small>
+                &copy; Copyright 2018, University of Amsterdam
+            </small>
 
-        <i class="fa fa-email w3-hover-opacity"></i>
-    </div>
-</footer>
+            <i class="fa fa-email w3-hover-opacity"></i>
+        </div>
+    </footer>
 </body>
 
 <script src="table.js " type="text/javascript"></script>
+
 </html>

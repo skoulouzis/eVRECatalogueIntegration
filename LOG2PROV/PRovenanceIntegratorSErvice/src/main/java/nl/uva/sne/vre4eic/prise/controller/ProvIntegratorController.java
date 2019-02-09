@@ -59,7 +59,9 @@ public class ProvIntegratorController {
             Logger.getLogger(ProvIntegratorController.class.getName()).log(Level.SEVERE, e.getMessage(), e);
         }
 
-        return wfParser.getServicelist().toString();
+        String services = "\"services\":" + wfParser.getServicelist().toString();
+        String workflow = "\"workflow\":" + provParser.getWorkflow().toString();
+        return "{" + services + "," + workflow + "}";
     }
     
 

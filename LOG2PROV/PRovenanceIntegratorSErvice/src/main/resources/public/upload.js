@@ -25,9 +25,9 @@ function uploadAll() {
     xhr.send(formData);
 
     console.log(xhr.responseText);
-    var serviceArray = JSON.parse(xhr.responseText);
-    drawTimeline(serviceArray);
-    drawTable(serviceArray);
+    var resultObject = JSON.parse(xhr.responseText);
+    drawTimeline(resultObject.services);
+    drawTable(resultObject);
 };
 
 function drawTimeline(serviceArray) {
@@ -48,12 +48,18 @@ function drawTimeline(serviceArray) {
             dataTable.addRow([ser.name , new Date(ser.startTime), new Date(ser.endTime)]);
         }
 
-        chart.draw(dataTable);
+        var options = {
+               'chartArea': {'width': '100%', 'height': '100%'}
+        };
+
+        chart.draw(dataTable, options);
     }
 }
 
-function drawTable(serviceArray) {
+function drawTable(resultObject) {
+    var serviceArray = resultObject.services;
     var table = document.getElementById('output_table');
+    table.setAttribute('workflow', JSON.stringify(resultObject.workflow));
     var startTime, endTime;
 
     for (var i = 0; i < serviceArray.length; i++) {
