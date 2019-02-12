@@ -26,33 +26,43 @@ function uploadAll() {
 
     console.log(xhr.responseText);
     var resultObject = JSON.parse(xhr.responseText);
-    drawTimeline(resultObject.services);
+    drawTimeline(resultObject);
     drawTable(resultObject);
 };
 
-function drawTimeline(serviceArray) {
-    google.charts.load('current', { 'packages': ['timeline'] });
+function drawTimeline(resultObject) {
+    google.charts.load('current', { 'packages': ['gantt'] });
     google.charts.setOnLoadCallback(drawChart);
+
     function drawChart() {
-        var container = document.getElementById('timeline');
-        var chart = new google.visualization.Timeline(container);
         var dataTable = new google.visualization.DataTable();
+        dataTable.addColumn('string', 'Task ID');
+        dataTable.addColumn('string', 'Task Name');
+        dataTable.addColumn('string', 'Resource');
+        dataTable.addColumn('date', 'Start Date');
+        dataTable.addColumn('date', 'End Date');
+        dataTable.addColumn('number', 'Load');
+        dataTable.addColumn('number', 'Percent Complete');
+        dataTable.addColumn('string', 'Dependencies');
 
-        dataTable.addColumn({ type: 'string', id: 'Service' });
-        dataTable.addColumn({ type: 'date', id: 'Start' });
-        dataTable.addColumn({ type: 'date', id: 'End' });
+        var workflow_duration = resultObject.workflow.endTime - resultObject.workflow.startTime;
+        var duration;
+        resultObject.services.forEach(element => {
+            duration = element.endTime - element.startTime;
+            dataTable.addRow([element.name,
+                element.name,
+                element.endpoint.replace(/:[0-9]+(?:\/.*)?/, ''),
+                new Date(element.startTime),
+                new Date(element.endTime),
+                null,
+                Math.round((duration * 100) / workflow_duration),
+                null
+            ]);
+        });
 
-        for (var i = 0; i < serviceArray.length; i++) {
-            var ser = serviceArray[i];
-            console.log('nnd: ' + ser.name)
-            dataTable.addRow([ser.name , new Date(ser.startTime), new Date(ser.endTime)]);
-        }
-
-        var options = {
-               'chartArea': {'width': '100%', 'height': '100%'}
-        };
-
-        chart.draw(dataTable, options);
+        var container = document.getElementById('timeline');
+        var chart = new google.visualization.Gantt(container);
+        chart.draw(dataTable);
     }
 }
 
