@@ -4,3 +4,9 @@ scrape_configs:
   static_configs:
   - targets:
     - "cadvisor:8080"
+# Sets the `Authorization` header on every scrape request with the
+# configured username and password.
+# password and password_file are mutually exclusive.
+basic_auth:
+  [ username: USER_NAME ]
+  [ password: SECRET ]    
