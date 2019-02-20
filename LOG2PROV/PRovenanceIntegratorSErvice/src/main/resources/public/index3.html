@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript" src="dygraph.js"></script>
+    <link rel="stylesheet" src="dygraph.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -21,78 +23,95 @@
 
     <style>
         .footer {
-                position: fixed;
-                left: 0;
-                bottom: 0;
-                width: 100%;
-                text-align: center;
-            }
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
     </style>
     <style>
-        body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
-            .w3-bar,h1,button {font-family: "Montserrat", sans-serif}
-            .fa-anchor,.fa-coffee {font-size:200px}
+        body,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: "Lato", sans-serif
+        }
 
+        .w3-bar,
+        h1,
+        button {
+            font-family: "Montserrat", sans-serif
+        }
+
+        .fa-anchor,
+        .fa-coffee {
+            font-size: 200px
+        }
     </style>
     <style>
         body {
-                font-family: "Lato", sans-serif;
-            }
+            font-family: "Lato", sans-serif;
+        }
 
+        .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .sidenav a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
+
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        @media screen and (max-height: 450px) {
             .sidenav {
-                height: 100%;
-                width: 0;
-                position: fixed;
-                z-index: 1;
-                top: 0;
-                left: 0;
-                background-color: #111;
-                overflow-x: hidden;
-                transition: 0.5s;
-                padding-top: 60px;
+                padding-top: 15px;
             }
 
             .sidenav a {
-                padding: 8px 8px 8px 32px;
-                text-decoration: none;
-                font-size: 25px;
-                color: #818181;
-                display: block;
-                transition: 0.3s;
+                font-size: 18px;
             }
-
-            .sidenav a:hover {
-                color: #f1f1f1;
-            }
-
-            .sidenav .closebtn {
-                position: absolute;
-                top: 0;
-                right: 25px;
-                font-size: 36px;
-                margin-left: 50px;
-            }
-
-            @media screen and (max-height: 450px) {
-                .sidenav {padding-top: 15px;}
-                .sidenav a {font-size: 18px;}
-            }
-
+        }
     </style>
     <style>
-
         #source {
-                resize: none;
-                spellcheck: false;
-            }
+            resize: none;
+            spellcheck: false;
+        }
 
-            #target {
-                resize: none;
-                spellcheck: false;
-                font-family: monospace;
-            }
-
-
+        #target {
+            resize: none;
+            spellcheck: false;
+            font-family: monospace;
+        }
     </style>
 
 </head>
@@ -147,13 +166,13 @@
 
                 <br>
                 <button id="uploadBtn" class="w3-button w3-black w3-padding-large w3-large
-                            w3-margin-top btn btn-success"
-                    onclick="uploadAll()">Parse input
+                            w3-margin-top btn btn-success" onclick="uploadAll()">Parse input
                 </button>
                 <br>
             </div>
         </div>
     </div>
+
 
     <div id="demo_output" class="w3-white w3-container" style="display: none;">
         <div class="w3-content">
@@ -173,11 +192,26 @@
                 </table>
                 <div id="timeline"></div>
                 <button id="dataBtn" class="w3-button w3-black w3-padding-large w3-large
-                            w3-margin-top btn btn-success"
-                    onclick="getData()">Gather context
+                            w3-margin-top btn btn-success" onclick="getData()">Visualize data
                 </button>
                 <br>
             </div>
+        </div>
+    </div>
+
+    <div id="plot_div" class="w3-white w3-container" style="display: none;">
+        <br>
+        <br>
+        <br>
+        <div class="w3-row">
+            <div id="cpu_out" class="w3-half w3-container"></div>
+            <div id="mem_out" class="w3-half w3-container"></div>
+        </div>
+        <br>
+        <br>
+        <div class="w3-row">
+            <div id="net_out" class="w3-half w3-container"></div>
+            <div id="fle_out" class="w3-half w3-container"></div>
         </div>
     </div>
 

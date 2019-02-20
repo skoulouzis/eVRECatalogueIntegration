@@ -3,9 +3,6 @@
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/org/influxdb/influxdb-java/2.9/influxdb-java-2.9.jar!/" />
     </CLASSES>
-    <JAVADOC>
-      <root url="jar://$MAVEN_REPOSITORY$/org/influxdb/influxdb-java/2.9/influxdb-java-2.9-javadoc.jar!/" />
-    </JAVADOC>
     <SOURCES>
       <root url="jar://$MAVEN_REPOSITORY$/org/influxdb/influxdb-java/2.9/influxdb-java-2.9-sources.jar!/" />
     </SOURCES>

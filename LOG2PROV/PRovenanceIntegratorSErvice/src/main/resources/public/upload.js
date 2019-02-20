@@ -24,7 +24,6 @@ function uploadAll() {
     xhr.open("POST", innerHTML + '/uploadFile', false);
     xhr.send(formData);
 
-    console.log(xhr.responseText);
     var resultObject = JSON.parse(xhr.responseText);
     drawTimeline(resultObject);
     drawTable(resultObject);
