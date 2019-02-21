@@ -7,6 +7,6 @@ scrape_configs:
 # Sets the `Authorization` header on every scrape request with the
 # configured username and password.
 # password and password_file are mutually exclusive.
-basic_auth:
-  [ username: demo ]
-  [ password: demo ]    
+#basic_auth:
+#  [ username: demo ]
+#  [ password: demo ]    
