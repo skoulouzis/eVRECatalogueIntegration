@@ -8,5 +8,5 @@ scrape_configs:
 # configured username and password.
 # password and password_file are mutually exclusive.
 basic_auth:
-  [ username: USER_NAME ]
-  [ password: SECRET ]    
+  [ username: demo ]
+  [ password: demo ]    
