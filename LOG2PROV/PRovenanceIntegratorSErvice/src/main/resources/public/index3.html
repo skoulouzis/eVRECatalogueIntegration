@@ -10,17 +10,18 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script type="text/javascript" src="dygraph.js"></script>
     <link rel="stylesheet" src="dygraph.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script type="text/javascript" src="dygraph.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
     <script src="upload.js"></script>
+    <script src="visualize.js"></script>
     <script src="getData.js"></script>
     <script src="cerif-prov.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <style>
         .footer {
             position: fixed;
@@ -176,42 +177,80 @@
 
     <div id="demo_output" class="w3-white w3-container" style="display: none;">
         <div class="w3-content">
-            <div class="w3-twothird">
-                <br>
-                <br>
-                <table id="output_table" class="w3-table">
-                    <caption>Output</caption>
-                    <tr>
-                        <td></td>
-                        <td>Name</td>
-                        <td>Endpoint</td>
-                        <td>Method</td>
-                        <td>Start-time</td>
-                        <td>End-time</td>
-                    </tr>
-                </table>
-                <div id="timeline"></div>
-                <button id="dataBtn" class="w3-button w3-black w3-padding-large w3-large
+            <br>
+            <br>
+            <table id="output_table" class="w3-table">
+                <caption>Output</caption>
+                <tr>
+                    <td></td>
+                    <td>Name</td>
+                    <td>Endpoint</td>
+                    <td>Method</td>
+                    <td>Start-time</td>
+                    <td>End-time</td>
+                </tr>
+            </table>
+
+            <button id="dataBtn" class="w3-button w3-black w3-padding-large w3-large
                             w3-margin-top btn btn-success" onclick="getData()">Visualize data
-                </button>
-                <br>
-            </div>
+            </button>
+            <br>
         </div>
     </div>
 
     <div id="plot_div" class="w3-white w3-container" style="display: none;">
-        <br>
-        <br>
-        <br>
-        <div class="w3-row">
-            <div id="cpu_out" class="w3-half w3-container"></div>
-            <div id="mem_out" class="w3-half w3-container"></div>
-        </div>
-        <br>
-        <br>
-        <div class="w3-row">
-            <div id="net_out" class="w3-half w3-container"></div>
-            <div id="fle_out" class="w3-half w3-container"></div>
+        <div class="w3-content">
+            <br>
+            <br>
+            <label>Timeline</label>
+            <div id="timeline" style="width:100%"></div>
+
+            <label>CPU</label>
+            <div id="plot_cpu" style="width:100%"></div>
+            <br>
+            <div class="w3-row">
+                <input type="checkbox" id="chk_highlight_cpu"  onclick="highlight('cpu')">
+                <label for="serviceLogUpload">Highlight Steps </label>
+
+                <input type="checkbox" id="chk_kneepoint_cpu"  onclick="kneepoint('cpu')">
+                <label for="serviceLogUpload">Kneepoint Detection </label>
+            </div>
+
+            <br>
+            <label>Memory</label>
+            <div id="plot_mem" style="width:100%"></div>
+            <br>
+            <div class="w3-row">
+                <input type="checkbox" id="chk_highlight_mem"  onclick="highlight('mem')">
+                <label for="serviceLogUpload">Highlight Steps </label>
+
+                <input type="checkbox" id="chk_kneepoint_mem"  onclick="kneepoint('mem')">
+                <label for="serviceLogUpload">Kneepoint Detection </label>
+            </div>
+
+            <br>
+            <label>Network (in)</label>
+            <div id="plot_net_in" style="width:100%"></div>
+            <br>
+            <div class="w3-row">
+                <input type="checkbox" id="chk_highlight_net_in"  onclick="highlight('net_in')">
+                <label for="serviceLogUpload">Highlight Steps </label>
+
+                <input type="checkbox" id="chk_kneepoint_net_in"  onclick="kneepoint('net_in')">
+                <label for="serviceLogUpload">Kneepoint Detection </label>
+            </div>
+
+            <br>
+            <label>Network (out)</label>
+            <div id="plot_net_out" style="width:100%"></div>
+            <br>
+            <div class="w3-row">
+                <input type="checkbox" id="chk_highlight_net_out"  onclick="highlight('net_out')">
+                <label for="serviceLogUpload">Highlight Steps </label>
+
+                <input type="checkbox" id="chk_kneepoint_net_out"  onclick="kneepoint('net_out')">
+                <label for="serviceLogUpload">Kneepoint Detection </label>
+            </div>
         </div>
     </div>
 

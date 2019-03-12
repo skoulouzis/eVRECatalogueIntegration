@@ -1,3 +1,38 @@
+var wfObject;
+// Example of object:
+// {
+//     "services":[
+//        {
+//           "name":"GETIMAGE",
+//           "endpoint":"http://jang.lab130.uvalight.net:8080",
+//           "method":"GET",
+//           "startTime":1551373890583,
+//           "endTime":1551373890611,
+//           "resource":"jang.lab130.uvalight.net"
+//        },
+//        {
+//           "name":"heavy_cpu",
+//           "endpoint":"http://jang.lab130.uvalight.net:8080/exhaustCPU",
+//           "method":"POST",
+//           "startTime":1551373890618,
+//           "endTime":1551373897627,
+//           "resource":"jang.lab130.uvalight.net"
+//        },
+//        {
+//           "name":"heavy_mem",
+//           "endpoint":"http://jang.lab130.uvalight.net:8080/exhaustMEM",
+//           "method":"POST",
+//           "startTime":1551373897643,
+//           "endTime":1551373897754,
+//           "resource":"jang.lab130.uvalight.net"
+//        }
+//     ],
+//     "workflow":{
+//        "startTime":1551373890516,
+//        "endTime":1551373897762
+//     }
+//  }
+
 function getFormData(fileID, formData) {
     var x = document.getElementById(fileID);
 
@@ -24,46 +59,13 @@ function uploadAll() {
     xhr.open("POST", innerHTML + '/uploadFile', false);
     xhr.send(formData);
 
-    var resultObject = JSON.parse(xhr.responseText);
-    drawTimeline(resultObject);
-    drawTable(resultObject);
+    wfObject = JSON.parse(xhr.responseText);
+    
+    
+    drawTable(wfObject);
 };
 
-function drawTimeline(resultObject) {
-    google.charts.load('current', { 'packages': ['gantt'] });
-    google.charts.setOnLoadCallback(drawChart);
 
-    function drawChart() {
-        var dataTable = new google.visualization.DataTable();
-        dataTable.addColumn('string', 'Task ID');
-        dataTable.addColumn('string', 'Task Name');
-        dataTable.addColumn('string', 'Resource');
-        dataTable.addColumn('date', 'Start Date');
-        dataTable.addColumn('date', 'End Date');
-        dataTable.addColumn('number', 'Load');
-        dataTable.addColumn('number', 'Percent Complete');
-        dataTable.addColumn('string', 'Dependencies');
-
-        var workflow_duration = resultObject.workflow.endTime - resultObject.workflow.startTime;
-        var duration;
-        resultObject.services.forEach(element => {
-            duration = element.endTime - element.startTime;
-            dataTable.addRow([element.name,
-                element.name,
-                element.endpoint.replace(/:[0-9]+(?:\/.*)?/, ''),
-                new Date(element.startTime),
-                new Date(element.endTime),
-                null,
-                Math.round((duration * 100) / workflow_duration),
-                null
-            ]);
-        });
-
-        var container = document.getElementById('timeline');
-        var chart = new google.visualization.Gantt(container);
-        chart.draw(dataTable);
-    }
-}
 
 function drawTable(resultObject) {
     var serviceArray = resultObject.services;
@@ -71,11 +73,13 @@ function drawTable(resultObject) {
     table.setAttribute('workflow', JSON.stringify(resultObject.workflow));
     var startTime, endTime;
 
+    var element, row;
     for (var i = 0; i < serviceArray.length; i++) {
-        var element = serviceArray[i];
-        var row = table.insertRow(i + 1);
-        row.setAttribute('data-rest', JSON.stringify(element));
+        element = serviceArray[i];
+        element.resource = element.endpoint.replace(/:[0-9]+(?:\/.*)?/, '').replace(/http:\/\//, '');
 
+        row = table.insertRow(i + 1);
+        row.setAttribute('data-rest', element.name);
         row.insertCell(0).innerHTML = "<input type=\"checkbox\">";
         row.insertCell(1).innerHTML = element.name;
         row.insertCell(2).innerHTML = element.endpoint;

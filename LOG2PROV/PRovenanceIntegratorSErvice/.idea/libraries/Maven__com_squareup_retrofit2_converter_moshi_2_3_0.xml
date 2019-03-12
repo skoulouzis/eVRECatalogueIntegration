@@ -3,6 +3,7 @@
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/com/squareup/retrofit2/converter-moshi/2.3.0/converter-moshi-2.3.0.jar!/" />
     </CLASSES>
+    <JAVADOC />
     <SOURCES>
       <root url="jar://$MAVEN_REPOSITORY$/com/squareup/retrofit2/converter-moshi/2.3.0/converter-moshi-2.3.0-sources.jar!/" />
     </SOURCES>

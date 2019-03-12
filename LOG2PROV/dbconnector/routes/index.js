@@ -3,8 +3,16 @@ var axios = require('axios');
 var URL = require("url").URL;
 var router = express.Router();
 
+router.use(function(req,res,next){
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 /* GET home page. */
 router.get('/metrics', function (req, res, next) {
+  res.send({'data':'blablabla'});
+  console.log(req.url);
   var resultOBJ = new Object();
   axios.all([
     getCPUdata(req.query.endpoint, req.query.startTime, req.query.endTime),
