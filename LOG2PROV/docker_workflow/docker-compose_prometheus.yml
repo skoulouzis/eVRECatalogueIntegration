@@ -13,7 +13,7 @@ services:
     - cadvisor
 
   service:
-    image: eliaskhaldi/demo_webservice:latest
+    image: eliaskhaldi/sim_ws_v1:latest
     ports:
     - "8080:8080"
 
