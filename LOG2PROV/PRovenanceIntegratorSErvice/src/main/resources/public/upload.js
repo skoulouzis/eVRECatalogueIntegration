@@ -65,7 +65,12 @@ function uploadAll() {
     drawTable(wfObject);
 };
 
-
+function checkAll(checked){
+    var rows = document.getElementById('output_table').rows;
+    for(var i = 0; i < rows.length; i++){
+        rows.item(i).cells[0].childNodes[0].checked = checked;
+    }
+}
 
 function drawTable(resultObject) {
     var serviceArray = resultObject.services;

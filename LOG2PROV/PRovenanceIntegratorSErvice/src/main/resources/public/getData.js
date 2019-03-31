@@ -1,6 +1,7 @@
 const prometheusPort = 9090;
 const minFrameLength = 30000;
-const db_connector_endpoint = 'http://192.168.99.100:8080/metrics';
+//const db_connector_endpoint = 'http://192.168.99.100:8082/metrics';
+const db_connector_endpoint = 'http://localhost:8080/metrics';
 
 function getData() {
     document.getElementById('dataBtn').disabled = true;
@@ -12,7 +13,6 @@ function getData() {
     var table = document.getElementById('output_table');
     var workflow = JSON.parse(table.getAttribute("workflow"));
 
-    // TODO: change to forEach
     // serviceArray.sort((a, b) => (a.startTime > b.endTime) ? 1 : (a.startTime > b.endTime) ? -1 : 0);
     var name;
     for (var i = 1; i < table.rows.length; i++) {
@@ -26,18 +26,18 @@ function getData() {
 
     var promiseArray = connectDB(wfObject);
     Promise.all(promiseArray)
-    .then(values => {
-        var resultData = new Object();
-        values.forEach((value, i) => {
-            resultData[promiseArray[i].resourceID] = value.data;
-        });
+        .then(values => {
+            var resultData = new Object();
+            values.forEach((value, i) => {
+                resultData[promiseArray[i].resourceID] = value.data;
+            });
 
-        visualizeData(formatData(resultData));
-        console.log(JSON.stringify(wfObject));
-    })
-    .catch(err => {
-        console.log(err.stack);
-    });
+            console.log(JSON.stringify(resultData));
+            visualizeData(formatData(resultData, wfObject.workflow));
+        })
+        .catch(err => {
+            console.log(err.stack);
+        });
 }
 
 function connectDB(wfObject) {
@@ -45,77 +45,76 @@ function connectDB(wfObject) {
     var set = new Set();
 
     wfObject.services.forEach(element => {
-        if(!set.has(element.resource)){
+        if (!set.has(element.resource)) {
             set.add(element.resource);
-            
+
             var prm = retrieveData(element.endpoint, wfObject.workflow);
             prm.resourceID = element.resource;
-            promiseArray.push(prm)
+            promiseArray.push(prm);
         }
     });
 
     return promiseArray;
 }
 
-function formatData (resultData){
-    var plotData = new Object();
-    plotData.resources = [];
+function formatData(resultData, workflow) {    
+    var result = new Object();
 
+    result.resources = new Array();
     for (var key in resultData) {
         if (resultData.hasOwnProperty(key)) {
-            plotData.resources.push(key);
-            if(!plotData.cpu){
-                plotData.cpu = resultData[key].cpu;
-                plotData.mem = resultData[key].mem;
-                plotData.net_in = resultData[key].net_in;
-                plotData.net_out = resultData[key].net_out;
-            }else{
-                for(var i = 0; i < plotData.cpu.length; i++){
-                    plotData.cpu[i].push(resultData[key].cpu[i][1]);
-                    plotData.mem[i].push(resultData[key].mem[i][1]);
-                    plotData.net_in[i].push(resultData[key].net_in[i][1]);
-                    plotData.net_out[i].push(resultData[key].net_out[i][1]);
-                }
-            }
-            
+            result.resources.push(key);
         }
     }
 
-    function matchTypes(x, div){
-        x[0] = new Date(x[0] * 1000);
-    
-        for(var i = 1; i < x.length; i++){
-            x[i] = parseFloat(x[i]) / div;
-        }
-        
-        return x;
+    result.cpu = new Array();
+    result.mem = new Array();
+    result.net_in = new Array();
+    result.net_out = new Array();
+
+    var timeRange = getTimeRange(workflow);
+    timeRange[0] += 1;
+    var difference = timeRange[1] - timeRange[0];
+    for(var i = 0; i <= difference; i++){        
+        result.cpu[i] = [new Date((i + timeRange[0]) * 1000)];
+        result.mem[i] = [new Date((i + timeRange[0]) * 1000)];
+        result.net_in[i] = [new Date((i + timeRange[0]) * 1000)];
+        result.net_out[i] = [new Date((i + timeRange[0]) * 1000)];
+
+        result.resources.forEach(resource => {
+                result.cpu[i].push(parseFloat(resultData[resource].cpu[i][1]));
+                result.mem[i].push(parseFloat(resultData[resource].mem[i][1] * 0.00000095367432));
+                result.net_in[i].push(parseFloat(resultData[resource].net_in[i][1]));
+                result.net_out[i].push(parseFloat(resultData[resource].net_out[i][1]));
+        });
     }
 
-    if(plotData.cpu){
-        plotData.cpu = plotData.cpu.map(x => matchTypes(x,1));
-        plotData.mem = plotData.mem.map(x => matchTypes(x,1000000));
-        plotData.net_in = plotData.net_in.map(x => matchTypes(x,1));
-        plotData.net_out = plotData.net_out.map(x => matchTypes(x,1));
+    console.log(result);
+    return result;
+}
+
+function getTimeRange(workflow){
+    var difference = workflow.endTime - workflow.startTime;
+    if (difference < minFrameLength) {
+        difference += (minFrameLength - difference) / 2
+        difference = Math.round(difference + 0.5);
+    }else{
+        difference = 0;
     }
 
-    return plotData;
+    var startSec = Math.round((workflow.startTime - difference) / 1000);
+    var endSec = Math.round((workflow.endTime + difference) / 1000);
+    return [startSec, endSec];
 }
 
 function retrieveData(endpoint, workflow) {
     var endpointURL = endpoint.replace(/:[0-9]+(?:\/.*)?/, ':' + prometheusPort);
-
-    var difference = workflow.endTime - workflow.startTime;
-    if (difference * 3 < minFrameLength) {
-        difference += (minFrameLength - difference * 3) / 2
-        difference = Math.round(difference + 0.5);
-    }
-    var startSec = Math.round((workflow.startTime - difference) / 1000);
-    var endSec = Math.round((workflow.endTime + difference) / 1000);
+    var timeRange = getTimeRange(workflow);
 
     var url = new URL(db_connector_endpoint);
     url.searchParams.append('endpoint', endpointURL);
-    url.searchParams.append('startTime', startSec);
-    url.searchParams.append('endTime', endSec);
+    url.searchParams.append('startTime', timeRange[0]);
+    url.searchParams.append('endTime', timeRange[1]);
 
     return axios.get(url);
 }

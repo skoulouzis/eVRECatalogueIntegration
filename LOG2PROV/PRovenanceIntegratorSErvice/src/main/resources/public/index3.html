@@ -182,7 +182,7 @@
             <table id="output_table" class="w3-table">
                 <caption>Output</caption>
                 <tr>
-                    <td></td>
+                    <td><input type="checkbox" onclick="checkAll(this.checked)"></td>
                     <td>Name</td>
                     <td>Endpoint</td>
                     <td>Method</td>
@@ -211,9 +211,6 @@
             <div class="w3-row">
                 <input type="checkbox" id="chk_highlight_cpu"  onclick="highlight('cpu')">
                 <label for="serviceLogUpload">Highlight Steps </label>
-
-                <input type="checkbox" id="chk_kneepoint_cpu"  onclick="kneepoint('cpu')">
-                <label for="serviceLogUpload">Kneepoint Detection </label>
             </div>
 
             <br>
@@ -223,9 +220,6 @@
             <div class="w3-row">
                 <input type="checkbox" id="chk_highlight_mem"  onclick="highlight('mem')">
                 <label for="serviceLogUpload">Highlight Steps </label>
-
-                <input type="checkbox" id="chk_kneepoint_mem"  onclick="kneepoint('mem')">
-                <label for="serviceLogUpload">Kneepoint Detection </label>
             </div>
 
             <br>
@@ -235,9 +229,6 @@
             <div class="w3-row">
                 <input type="checkbox" id="chk_highlight_net_in"  onclick="highlight('net_in')">
                 <label for="serviceLogUpload">Highlight Steps </label>
-
-                <input type="checkbox" id="chk_kneepoint_net_in"  onclick="kneepoint('net_in')">
-                <label for="serviceLogUpload">Kneepoint Detection </label>
             </div>
 
             <br>
@@ -247,9 +238,6 @@
             <div class="w3-row">
                 <input type="checkbox" id="chk_highlight_net_out"  onclick="highlight('net_out')">
                 <label for="serviceLogUpload">Highlight Steps </label>
-
-                <input type="checkbox" id="chk_kneepoint_net_out"  onclick="kneepoint('net_out')">
-                <label for="serviceLogUpload">Kneepoint Detection </label>
             </div>
         </div>
     </div>

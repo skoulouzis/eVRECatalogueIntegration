@@ -1,17 +1,16 @@
 var resources, resourceColors;
-var colors = ['#33cc33', '#6699ff', '#ff0000', '#ffff1a', '#cc00cc']
+var colors = ['#33cc33', '#ff0000', '#6699ff', '#ffff1a', '#cc00cc']
 var graphs, plotData;
 
 function visualizeData(data) {
     console.log(wfObject);
-    console.log('');
-    console.log(JSON.stringify(data));
     plotData = data;
     resourceColors = createColorDictionary(plotData.resources);
+    
     plotDyGraphs();
 
     drawTimeline(wfObject);
-    document.getElementById('plot_div').style.display = "block";
+    
 }
 
 function createColorDictionary(resources) {
@@ -63,20 +62,31 @@ function plotDyGraphs() {
         graphs = {};
     }
 
+    document.getElementById('plot_div').style.display = "block";
     graphs.cpu = new Dygraph(document.getElementById("plot_cpu"), plotData.cpu, {
         labels: ["time"].concat(plotData.resources), 
-        legend: 'always', 
         colors: resourceColors.colorArray,
-        labelsSeparateLines: true
+        labelsSeparateLines: true,
+        ylabel: "Usage percentage",
+        fillGraph: true
     });
     graphs.mem = new Dygraph(document.getElementById("plot_mem"), plotData.mem, {
-        labels: ["time"].concat(plotData.resources), legend: 'always', colors: resourceColors.colorArray
+        labels: ["time"].concat(plotData.resources), 
+        colors: resourceColors.colorArray,
+        ylabel: "Usage in MBs",
+        fillGraph: true
     });
     graphs.net_in = new Dygraph(document.getElementById("plot_net_in"), plotData.net_in, {
-        labels: ["time"].concat(plotData.resources), legend: 'always', colors: resourceColors.colorArray
+        labels: ["time"].concat(plotData.resources), 
+        colors: resourceColors.colorArray,
+        ylabel: "KB/s",
+        fillGraph: true
     });
     graphs.net_out = new Dygraph(document.getElementById("plot_net_out"), plotData.net_out, {
-        labels: ["time"].concat(plotData.resources), legend: 'always', colors: resourceColors.colorArray
+        labels: ["time"].concat(plotData.resources), 
+        colors: resourceColors.colorArray,
+        ylabel: "KB/s",
+        fillGraph: true
     });
 
     return graphs;
@@ -106,7 +116,7 @@ function highlight(data_type) {
                 var right = top_right[0];
 
                 if (checked) {
-                    canvas.fillStyle = hex2rgba(resourceColors[service.resource], 10);
+                    canvas.fillStyle = hex2rgba(resourceColors[service.resource], 20);
                 } else {
                     canvas.fillStyle = '#ffffff';
                 }
