@@ -1,7 +1,6 @@
 FROM openjdk:8-jdk-alpine
-
-ARG DEPENDENCY=target/dependency
-COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
-COPY ${DEPENDENCY}/META-INF /app/META-INF
-COPY ${DEPENDENCY}/BOOT-INF/classes /app
-ENTRYPOINT ["java","-cp","app:app/lib/*","nl.uva.sne.vre4eic.prise.Application"]
+COPY ./target/ProvenanceIntegrationServcie-0.0.1-SNAPSHOT.war /usr/app/
+WORKDIR /usr/app
+EXPOSE 8081
+RUN sh -c 'touch ProvenanceIntegrationServcie-0.0.1-SNAPSHOT.war'
+ENTRYPOINT ["java","-jar","ProvenanceIntegrationServcie-0.0.1-SNAPSHOT.war"]
