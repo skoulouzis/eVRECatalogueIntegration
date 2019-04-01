@@ -2,17 +2,10 @@ var express = require('express');
 var axios = require('axios');
 var URL = require("url").URL;
 var router = express.Router();
-
-router.use(function(req,res,next){
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+var fs = require("fs");
 
 /* GET home page. */
 router.get('/metrics', function (req, res, next) {
-  res.send({'data':'blablabla'});
-  console.log(req.url);
   var resultOBJ = new Object();
   axios.all([
     getCPUdata(req.query.endpoint, req.query.startTime, req.query.endTime),
@@ -21,35 +14,24 @@ router.get('/metrics', function (req, res, next) {
     getNETOUTdata(req.query.endpoint, req.query.startTime, req.query.endTime)
   ])
     .then(axios.spread(function (cpu, mem, netin, netout) {
-      resultOBJ.cpu = filterData(cpu.data.data.result);
-      resultOBJ.mem = filterData(mem.data.data.result);
-      resultOBJ.net_in = filterData(netin.data.data.result);
-      resultOBJ.net_out = filterData(netout.data.data.result);
-      res.send(JSON.stringify(resultOBJ));
-     }))
+      resultOBJ.cpu = extractData(cpu.data.data.result,req.query.startTime, req.query.endTime);
+      resultOBJ.mem = extractData(mem.data.data.result,req.query.startTime, req.query.endTime);
+      resultOBJ.net_in = extractData(netin.data.data.result,req.query.startTime, req.query.endTime);
+      resultOBJ.net_out = extractData(netout.data.data.result,req.query.startTime, req.query.endTime);
+
+      res.send(resultOBJ);
+    }))
     .catch(function (error) {
-      res.send('error retrieving input: \n' + error.stack);
+      console.log(error.stack);
+      res.send(error.stack);
     });
 });
-
-function filterData(data){
-  var result;
-
-  data.forEach(function(element){
-    var expr = /grafana|cAdvisor|cadvisor|nodeexporter|alertmanager|caddy|prometheus|influxdb/;
-    if (!expr.test(element.metric.name)) {
-      result = element.values;
-    }
-  })
-
-  return result;
-}
 
 function getCPUdata(endpoint, startTime, endTime) {
   var url = new URL(endpoint);
 
   url.pathname = '/api/v1/query_range';
-  url.searchParams.set('query', 'sum(rate(container_cpu_usage_seconds_total{name=~".+"}[30m])) by (name) * 100');
+  url.searchParams.set('query', 'sum(rate(container_cpu_usage_seconds_total{name=~".+"}[22s])) by (name) * 100');
   url.searchParams.append('start', startTime);
   url.searchParams.append('end', endTime);
   url.searchParams.append('step', 1);
@@ -60,9 +42,8 @@ function getCPUdata(endpoint, startTime, endTime) {
 
 function getMEMdata(endpoint, startTime, endTime) {
   var url = new URL(endpoint);
-
   url.pathname = '/api/v1/query_range';
-  url.searchParams.set('query', 'sum(container_memory_rss{name=~".+"}) by (name)');
+  url.searchParams.set('query', 'container_memory_usage_bytes{name=~".+"}');
   url.searchParams.append('start', startTime);
   url.searchParams.append('end', endTime);
   url.searchParams.append('step', 1);
@@ -75,7 +56,7 @@ function getNETOUTdata(endpoint, startTime, endTime) {
   var url = new URL(endpoint);
 
   url.pathname = '/api/v1/query_range';
-  url.searchParams.set('query', 'sum(rate(container_network_transmit_bytes_total{name=~".+"}[30m])) by (name)');
+  url.searchParams.set('query', 'sum(rate(container_network_transmit_bytes_total{name=~".+"}[22s])) by (name)');
   url.searchParams.append('start', startTime);
   url.searchParams.append('end', endTime);
   url.searchParams.append('step', 1);
@@ -88,13 +69,55 @@ function getNETINdata(endpoint, startTime, endTime) {
   var url = new URL(endpoint);
 
   url.pathname = '/api/v1/query_range';
-  url.searchParams.set('query', 'sum(rate(container_network_receive_bytes_total{name=~".+"}[30m])) by (name)');
+  url.searchParams.set('query', 'sum(rate(container_network_receive_bytes_total{name=~".+"}[22s])) by (name)');
   url.searchParams.append('start', startTime);
   url.searchParams.append('end', endTime);
   url.searchParams.append('step', 1);
   url.searchParams.append('timeout', '5s');
 
   return axios.get(url.href);
+}
+
+function createEmptyData(startsec, endsec){
+  var emptyArray = new Array();
+  for(var i = startsec; i < endsec; i++){
+    emptyArray.push([i, null]);
+  }
+  return emptyArray;
+}
+
+function populateData(data, startsec, endsec){
+  var result = createEmptyData(startsec, endsec);
+
+  data.forEach(([sec, value]) => {
+    if(sec < endsec && sec > startsec){
+      result[sec - startsec - 1][1] = value;
+    }
+  });
+  
+  return result;
+}
+
+function filterData(data) {
+  var result;
+
+  data.forEach(function (element) {
+    var expr = /grafana|cAdvisor|cadvisor|nodeexporter|alertmanager|caddy|prometheus|influxdb/;
+    if (!expr.test(element.metric.name)) {
+      result = element.values;
+    }
+  })
+
+  return result;
+}
+
+function extractData(responseData, startsec, endsec){
+  var resultdata;
+
+  resultdata = filterData(responseData);
+  resultdata = populateData(resultdata,startsec,endsec);
+
+  return resultdata;
 }
 
 module.exports = router;
