@@ -1,7 +1,7 @@
 const prometheusPort = 9090;
 const minFrameLength = 30000;
-//const db_connector_endpoint = 'http://192.168.99.100:8082/metrics';
-const db_connector_endpoint = 'http://localhost:8080/metrics';
+const db_connector_endpoint = 'http://db_connector:8082/metrics';
+//const db_connector_endpoint = 'http://localhost:8080/metrics';
 
 function getData() {
     document.getElementById('dataBtn').disabled = true;
