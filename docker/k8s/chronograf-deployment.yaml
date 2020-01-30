@@ -11,7 +11,7 @@ metadata:
 spec:
   selector:
    matchLabels:
-    app: chronograf
+    io.kompose.service: chronograf
   replicas: 1
   strategy: {}
   template:

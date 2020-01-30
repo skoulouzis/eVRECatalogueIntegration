@@ -12,7 +12,7 @@ spec:
   replicas: 1
   selector:
    matchLabels:
-    app: influx  
+    io.kompose.service: influx
   strategy:
     type: Recreate
   template:
