@@ -12,7 +12,7 @@ services:
             - 5672:5672    
                                 
     rest-cat:
-        image: rest-cat
+        image: alogo53/rest-cat
         deploy:
             restart_policy:
                 condition: on-failure
@@ -30,7 +30,7 @@ services:
             - influx          
             
     cat-worker:
-        image: cat-worker
+        image: alogo53/cat-worker
         deploy:
             restart_policy:
                 condition: on-failure      
