@@ -9,12 +9,10 @@ metadata:
     io.kompose.service: influx
   name: influx
 spec:
-  type: NodePort
   ports:
-    - port: 8086
-      nodePort: 8086     
-    - port: 8086
-      nodePort: 8086        
+  - name: "8086"
+    port: 8086
+    targetPort: 8086
   selector:
     io.kompose.service: influx
 status:
