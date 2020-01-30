@@ -17,14 +17,14 @@
   </modules>
   
     <repositories>       
-        <repository>
+<!--        <repository>
             <snapshots />
             <id>skoulouzis-snapshots</id>
             <url>https://raw.githubusercontent.com/skoulouzis/mvn-repo/master/snapshots</url>
-        </repository>
+        </repository>-->
         <repository>
             <snapshots>
-                <enabled>false</enabled>
+                <enabled>true</enabled>
             </snapshots>
             <id>releases</id>
             <url>https://raw.githubusercontent.com/skoulouzis/mvn-repo/master/releases</url>
