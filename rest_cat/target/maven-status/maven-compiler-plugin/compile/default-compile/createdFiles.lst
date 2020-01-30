@@ -1,0 +1,15 @@
+nl/uva/sne/vre4eic/conf/ClientWebConfig.class
+nl/uva/sne/vre4eic/conf/ThreadConfig.class
+nl/uva/sne/vre4eic/conf/AppConfig.class
+nl/uva/sne/vre4eic/rest/ConvertController.class
+nl/uva/sne/vre4eic/service/ConvertService.class
+nl/uva/sne/vre4eic/conf/AsyncConfig.class
+nl/uva/sne/vre4eic/conf/ServletRegistrationConf.class
+nl/uva/sne/vre4eic/model/ExportDocTask.class
+nl/uva/sne/vre4eic/conf/PropertiesConf.class
+nl/uva/sne/vre4eic/service/ConvertService$1.class
+nl/uva/sne/vre4eic/model/ProcessingStatus.class
+nl/uva/sne/vre4eic/model/WPSExporter.class
+nl/uva/sne/vre4eic/amqp/rpc/Caller.class
+nl/uva/sne/vre4eic/amqp/rpc/Caller$1.class
+nl/uva/sne/vre4eic/conf/WebAppInitializer.class
