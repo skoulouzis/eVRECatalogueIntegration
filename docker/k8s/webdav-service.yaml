@@ -9,10 +9,10 @@ metadata:
     io.kompose.service: webdav
   name: webdav
 spec:
+  type: NodePort
   ports:
-  - name: "80"
-    port: 80
-    nodePort: 80
+    - port: 80
+      nodePort: 80    
   selector:
     io.kompose.service: webdav
 status:

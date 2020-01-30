@@ -7,15 +7,14 @@ metadata:
   creationTimestamp: null
   labels:
     io.kompose.service: rabbit
-  name: rabbit
+  name: rabbit  
 spec:
+  type: NodePort
   ports:
-  - name: "15672"
-    port: 15672
-    nodePort: 15672
-  - name: "5672"
-    port: 5672
-    nodePort: 5672
+    - port: 15672
+      nodePort: 15672     
+    - port: 5672
+      nodePort: 5672            
   selector:
     io.kompose.service: rabbit
 status:

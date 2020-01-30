@@ -9,10 +9,10 @@ metadata:
     io.kompose.service: rest-cat
   name: rest-cat
 spec:
+  type: NodePort
   ports:
-  - name: "8080"
-    port: 8080
-    nodePort: 8083
+    - port: 8080
+      nodePort: 8083    
   selector:
     io.kompose.service: rest-cat
 status:
