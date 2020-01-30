@@ -1,8 +1,15 @@
 /statistics_cat/target/
 /CerifDataHarvester/target/
 <<<<<<< HEAD
+<<<<<<< HEAD
 /cat_worker/target/
 =======
+=======
+/cat_worker/target/
+
+/statistics_cat/target/
+/CerifDataHarvester/target/
+>>>>>>> 87e9c74d2a56e5afdf6352d9db2214e8871d9372
 CatMap/cat_worker/target
 /CatMap/CerifDataHarvester/target
 /CatMap/rest_cat/target
@@ -15,4 +22,7 @@ CatMap/cat_worker/target
 /CatMap/statistics_cat/target/
 /CatMap/rest_cat/nbproject/
 /.git-rewrite/t/eVRETaverna/eVRETaverna-activity/target/
+<<<<<<< HEAD
 >>>>>>> 9c5fd40faeb33756f972d41f5513ae5410286d8d
+=======
+>>>>>>> 87e9c74d2a56e5afdf6352d9db2214e8871d9372
