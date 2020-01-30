@@ -12,12 +12,12 @@ spec:
     ports:
     - containerPort: 80
     resources: {}
-    volumeMounts:
-    - mountPath: /var/www
-      name: webdav
+    #volumeMounts:
+    #- mountPath: /var/www
+      #name: webdav
   restartPolicy: OnFailure
-  volumes:
-  - name: webdav
-    persistentVolumeClaim:
-      claimName: webdav
+  #volumes:
+  #- name: webdav
+    #persistentVolumeClaim:
+      #claimName: webdav
 status: {}
