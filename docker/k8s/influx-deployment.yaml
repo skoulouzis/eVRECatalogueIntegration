@@ -30,12 +30,12 @@ spec:
         ports:
         - containerPort: 8086
         resources: {}
-        volumeMounts:
-        - mountPath: /var/lib/influxdb
-          name: influx
+        #volumeMounts:
+        #- mountPath: /var/lib/influxdb
+          #name: influx
       restartPolicy: Always
-      volumes:
-      - name: influx
-        persistentVolumeClaim:
-          claimName: influx
+      #volumes:
+      #- name: influx
+        #persistentVolumeClaim:
+          #claimName: influx
 status: {}
