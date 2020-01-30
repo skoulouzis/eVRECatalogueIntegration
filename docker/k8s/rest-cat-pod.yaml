@@ -20,7 +20,7 @@ spec:
       value: guest
     - name: WEBDAV_HOST
       value: webdav
-    image: rest-cat
+    image: alogo53/rest-cat
     name: rest-cat
     ports:
     - containerPort: 8080

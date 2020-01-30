@@ -24,7 +24,7 @@ spec:
       value: resu
     - name: WEBDAV_USERNAME
       value: user
-    image: cat-worker
+    image: alogo53/cat-worker
     name: cat-worker
     resources: {}
   restartPolicy: OnFailure
