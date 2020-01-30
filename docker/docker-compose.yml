@@ -1,15 +1,6 @@
 version: '3.1'
 
 services:     
-                
-    rabbit:
-        image: rabbitmq:3-management
-        deploy:
-            restart_policy:
-                condition: on-failure      
-        ports:
-            - 15672:15672    
-            - 5672:5672    
                                 
     rest-cat:
         image: alogo53/rest-cat
@@ -17,17 +8,22 @@ services:
             restart_policy:
                 condition: on-failure
         environment:
-            RABBIT_HOST: rabbit
-            RABBIT_PORT: 5672
-            RABBIT_USERNAME: guest
-            RABBIT_PASSWORD: guest
-            INFLUX_URI: http://influx:8086
-            WEBDAV_HOST: webdav            
+            RABBIT_HOST: "rabbit"
+            RABBIT_PORT: "5672"
+            RABBIT_USERNAME: "guest"
+            RABBIT_PASSWORD: "guest"
+            INFLUX_URI: "http://influx:8086"
+            WEBDAV_HOST: "webdav"
         ports:
+<<<<<<< HEAD
             - 30000:8080   
+=======
+            - "8083:8080"
+>>>>>>> 9c5fd40faeb33756f972d41f5513ae5410286d8d
         depends_on:
             - rabbit          
-            - influx          
+            - influx
+            - cat-worker
             
     cat-worker:
         image: alogo53/cat-worker
@@ -35,6 +31,7 @@ services:
             restart_policy:
                 condition: on-failure      
         environment:
+<<<<<<< HEAD
             RABBIT_HOST: rabbit
             RABBIT_PORT: 5672
             RABBIT_USERNAME: guest
@@ -43,9 +40,44 @@ services:
             WEBDAV_HOST: webdav
             WEBDAV_USERNAME: user
             WEBDAV_PASSWORD: resu 
+=======
+            RABBIT_HOST: "rabbit"
+            RABBIT_PORT: "5672"
+            RABBIT_USERNAME: "guest"
+            RABBIT_PASSWORD: "guest"
+            INFLUX_URI: "http://influx:8086"
+            WEBDAV_HOST: "webdav"
+            WEBDAV_USERNAME: "user"
+            WEBDAV_PASSWORD: "resu"
+>>>>>>> 9c5fd40faeb33756f972d41f5513ae5410286d8d
         depends_on:
             - rabbit   
             - webdav
+            
+    #prise:
+        #image: prise
+        #environment:
+            #RABBIT_HOST: "rabbit"
+            #RABBIT_PORT: "5672"
+            #RABBIT_USERNAME: "guest"
+            #RABBIT_PASSWORD: "guest"
+            #INFLUX_URI: "http://influx:8086"
+        #ports:
+            #- "8084:8080"
+        #depends_on:
+            #- rabbit   
+            #- pylog2prov
+            
+            
+    #pylog2prov:
+        #image: pylog2prov
+        #environment:
+            #RABBIT_HOST: "rabbit"
+            #RABBIT_PORT: "5672"
+            #RABBIT_USERNAME: "guest"
+            #RABBIT_PASSWORD: "guest"
+        #depends_on:
+            #- rabbit               
              
     #statistics-cat:
         #image: statistics-cat
@@ -61,10 +93,20 @@ services:
         #depends_on:
             #- webdav              
 
+    rabbit:
+        image: rabbitmq:3-management
+        deploy:
+            restart_policy:
+                condition: on-failure    
+                
     webdav:
         image: visity/webdav
         ports:
+<<<<<<< HEAD
             - 30001:80
+=======
+            - "80:80"
+>>>>>>> 9c5fd40faeb33756f972d41f5513ae5410286d8d
         deploy:
             restart_policy:
                 condition: on-failure       
@@ -74,23 +116,31 @@ services:
     influx:
         image: influxdb
         environment:
+<<<<<<< HEAD
             INFLUXDB_DB: mydb
         ports:
             - 8086:8086
         #volumes:
             #- influx:/var/lib/influxdb
+=======
+            INFLUXDB_DB: "mydb"
+            INFLUXDB_USER: "eVRE_USER"
+            INFLUXDB_USER_PASSWORD: "eVRE_PASSWORD"
+        volumes:
+            - influx:/var/lib/influxdb
+>>>>>>> 9c5fd40faeb33756f972d41f5513ae5410286d8d
                     
     #rabbit-reporter :
         #image: alogo53/rabbit-metrics-reporter
         #environment:
-            #RABBIT_HOST: rabbit
-            #RABBIT_PORT: 15672
-            #RABBIT_USERNAME: guest
-            #RABBIT_PASSWORD: guest
-            #INFLUX_HOST: influx
-            #INFLUX_PORT: 8086
-            #INFLUX_DB: mydb
-            #REPORT_INTERVAL: 10
+            #RABBIT_HOST: "rabbit"
+            #RABBIT_PORT: "15672"
+            #RABBIT_USERNAME: "guest"
+            #RABBIT_PASSWORD: "guest"
+            #INFLUX_HOST: "influx"
+            #INFLUX_PORT: "8086"
+            #INFLUX_DB: "mydb"
+            #REPORT_INTERVAL: "30"
         #depends_on:
             #- rabbit
             #- influx
@@ -98,26 +148,28 @@ services:
     #grafana:
         #image: grafana/grafana
         #environment:
-            #DS_NAME: InfluxDB
-            #DS_TYPE: InfluxDB
-            #DS_ACCESS: proxy
-            #DS_URL: http://influx:8086
-            #DS_DB: cadvisor
+            #DS_NAME: "InfluxDB"
+            #DS_TYPE: "InfluxDB"
+            #DS_ACCESS: "proxy"
+            #DS_URL: "http://influx:8086"
+            #DS_DB: "mydb"
         #ports:
-            #- 3000:3000
+            #- "3000:3000"
         #volumes:
             #- grafana:/var/lib/grafana
         #depends_on:
             #- influx
         #deploy:
             #replicas: 1
-        #depends_on:
-            #- influx    
             
     chronograf:
         image: chronograf
         ports:
+<<<<<<< HEAD
             - 30002:8888
+=======
+            - "8888:8888"
+>>>>>>> 9c5fd40faeb33756f972d41f5513ae5410286d8d
         command: chronograf --influxdb-url=http://influx:8086
         depends_on:
             - influx
@@ -137,8 +189,8 @@ services:
                     
     #cadvisor:
         #image: google/cadvisor
-        #ports:
-            #- 0.0.0.0:8080:8080
+        ##ports:
+            ##- 0.0.0.0:8080:8080
         #hostname: '{{.Node.ID}}'
         #command: -logtostderr -docker_only -storage_driver=influxdb -storage_driver_db=mydb -storage_driver_host=influx:8086
         #volumes:
@@ -149,15 +201,32 @@ services:
         #depends_on:
             #- influx
         #deploy:
-            #mode: global           
+            #mode: global
+            
+    #fuseki:
+        #image: blankdots/jena-fuseki
+        #environment:
+            #ADMIN_PASSWORD: "admin"
+        #ports:
+            #- "3030:3030"
+        #volumes:
+            #- fuseki:/data/fuseki/fuseki_DB
               
             
                                 
 volumes:
+<<<<<<< HEAD
   #influx:
     #driver: local
   #grafana:
     #driver: local
   webdav:
     driver: local    
+=======
+  influx:
+  grafana:
+  webdav:
+  fuseki:
+        
+>>>>>>> 9c5fd40faeb33756f972d41f5513ae5410286d8d
     

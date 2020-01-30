@@ -1,0 +1,572 @@
+@prefix vre4eic: <http://139.91.183.70:8090/vre4eic/> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml:   <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .
+@prefix ns0:   <http://purl.org/vocab/vann/> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+@prefix cerif: <http://eurocris.org/ontology/cerif#> .
+
+<http://139.91.183.70:8090/vre4eic/Classification.Workflow%20Relations.WADL>
+        a                            cerif:Classification ;
+        rdfs:label                   "WADL" ;
+        cerif:has_definition         "WADL" ;
+        cerif:has_descriptionSource  "VRE4EIC project" ;
+        cerif:has_roleExpression     "has type" ;
+        cerif:has_roleExpressionOpposite
+                "is type of" ;
+        cerif:has_term               "WADL" ;
+        cerif:has_termSource         "VRE4EIC project" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Created>
+        a                         cerif:Classification ;
+        rdfs:label                "Created" ;
+        cerif:has_roleExpression  "has type" ;
+        cerif:has_roleExpressionOpposite
+                "is type of" ;
+        cerif:has_term            "Created" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Install%20URL>
+        a                         cerif:Classification ;
+        rdfs:label                "Install URL" ;
+        cerif:has_roleExpression  "has type" ;
+        cerif:has_roleExpressionOpposite
+                "is type of" ;
+        cerif:has_term            "Install URL" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.Organisation%20Contact%20Details.Email>
+        a                         cerif:Classification ;
+        rdfs:label                "Email" ;
+        cerif:has_roleExpression  "has Email" ;
+        cerif:has_roleExpressionOpposite
+                "is Email" ;
+        cerif:has_term            "Email" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.BaseEntity%20Output%20Contributions.Maintainer>
+        a                         cerif:Classification ;
+        rdfs:label                "Maintainer" ;
+        cerif:has_roleExpression  "has role" ;
+        cerif:has_roleExpressionOpposite
+                "is role of" ;
+        cerif:has_term            "Maintainer" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.Identifier%20Types.Revision%20ID>
+        a                         cerif:Classification ;
+        rdfs:label                "Revision ID" ;
+        cerif:has_roleExpression  "has type" ;
+        cerif:has_roleExpressionOpposite
+                "is type of" ;
+        cerif:has_term            "Revision ID" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Filesize>
+        a                         cerif:Classification ;
+        rdfs:label                "Filesize" ;
+        cerif:has_roleExpression  "has type" ;
+        cerif:has_roleExpressionOpposite
+                "is type of" ;
+        cerif:has_term            "Filesize" .
+
+<http://139.91.183.70:8090/vre4eic/ClassScheme.Software%20Types>
+        a               cerif:ClassificationScheme ;
+        rdfs:label      "Software Types" ;
+        cerif:has_name  "Software Types" .
+
+<http://139.91.183.70:8090/vre4eic/ClassScheme.Person%20Access%20Rights>
+        a                      cerif:ClassificationScheme ;
+        rdfs:label             "Person Access Rights" ;
+        cerif:has_description  "The personal access rights in the VRE4EIC project" ;
+        cerif:has_name         "Person Access Rights" ;
+        cerif:is_classificationScheme_of
+                <http://139.91.183.70:8090/vre4eic/Classification.Person%20Access%20Rights.Controller> , <http://139.91.183.70:8090/vre4eic/Classification.Person%20Access%20Rights.Researcher> , <http://139.91.183.70:8090/vre4eic/Classification.Person%20Access%20Rights.Admin> , <http://139.91.183.70:8090/vre4eic/Classification.Person%20Access%20Rights.Operator> .
+
+<http://139.91.183.70:8090/vre4eic/Classification.Provenance%20Relations.Provider>
+        a                            cerif:Classification ;
+        rdfs:label                   "Provider" ;
+        cerif:has_definition         "A provider is the person that provides a resource." ;
+        cerif:has_description        "In CERIF terms, the provider role applies between an InfrastructureEntity or ResultEntity and a Person" ;
+        cerif:has_descriptionSource  "VRE4EIC project" ;
+        cerif:has_roleExpression     "has provided" ;
+        cerif:has_roleExpressionOpposite
+                "is provided by" ;
+        cerif:has_term               "Provider" ;
+        cerif:has_termSource         "VRE4EIC project" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Issued>
+        a                         cerif:Classification ;
+        rdfs:label                "Issued" ;
+        cerif:has_roleExpression  "has type" ;
+        cerif:has_roleExpressionOpposite
+                "is type of" ;
+        cerif:has_term            "Issued" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.Workflow%20Relations.Taverna%20Workflow>
+        a                            cerif:Classification ;
+        rdfs:label                   "Taverna Workflow" ;
+        cerif:has_definition         "Taverna Workflow" ;
+        cerif:has_descriptionSource  "VRE4EIC project" ;
+        cerif:has_roleExpression     "has type" ;
+        cerif:has_roleExpressionOpposite
+                "is type of" ;
+        cerif:has_term               "Taverna Workflow" ;
+        cerif:has_termSource         "VRE4EIC project" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Geographical%20Scope>
+        a                         cerif:Classification ;
+        rdfs:label                "Geographical Scope" ;
+        cerif:has_roleExpression  "has type" ;
+        cerif:has_roleExpressionOpposite
+                "is type of" ;
+        cerif:has_term            "Geographical Scope" .
+
+<http://139.91.183.70:8090/vre4eic/ClassScheme.VRE4EIC%20Types>
+        a                      cerif:ClassificationScheme ;
+        rdfs:label             "VRE4EIC Types" ;
+        cerif:has_description  "This scheme contains VRE4EIC misc Types. Need to be normalised." ;
+        cerif:has_name         "VRE4EIC Types" ;
+        cerif:is_classificationScheme_of
+                <http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Representation%20Technique> , <http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Scientific%20Contact> , <http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Temporal%20Validity> , <http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Logo> , <http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Financial%20Contact> , <http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Install%20URL> , <http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Domain> , <http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Access%20URL> , <http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Filesize> , <http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Created> , <http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Help> , <http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Geographical%20Scope> , <http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Legal%20Contact> , <http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.character%20Encoding> , <http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Download%20URL> , <http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Subdomain> , <http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Modified> , <http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.PIC> , <http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Landing%20Page> , <http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Issued> .
+
+<http://139.91.183.70:8090/vre4eic/Classification.BaseEntity%20Output%20Contributions.Author>
+        a                         cerif:Classification ;
+        rdfs:label                "Author" ;
+        cerif:has_roleExpression  "has role" ;
+        cerif:has_roleExpressionOpposite
+                "is role of" ;
+        cerif:has_term            "Author" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.Person%20Access%20Rights.Researcher>
+        a                     cerif:Classification ;
+        rdfs:label            "Researcher" ;
+        cerif:has_term        "Researcher" ;
+        cerif:has_termSource  "VRE4EIC project" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.Workflow%20Relations.Description>
+        a                            cerif:Classification ;
+        rdfs:label                   "Description" ;
+        cerif:has_definition         "Description" ;
+        cerif:has_description        "In CERIF terms, Description applies between an InfrastructureEntity or ResultEntity and a Medium" ;
+        cerif:has_descriptionSource  "VRE4EIC project" ;
+        cerif:has_roleExpression     "has description" ;
+        cerif:has_roleExpressionOpposite
+                "is description of" ;
+        cerif:has_term               "Description" ;
+        cerif:has_termSource         "VRE4EIC project" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.Provenance%20Relations.Importer>
+        a                            cerif:Classification ;
+        rdfs:label                   "Importer" ;
+        cerif:has_definition         "An importer is the person that imports the resource description in the VRE4EIC metadata catalogue." ;
+        cerif:has_description        "In CERIF terms, the importer role applies between an InfrastructureEntity or ResultEntity and a Person" ;
+        cerif:has_descriptionSource  "VRE4EIC project" ;
+        cerif:has_roleExpression     "imported" ;
+        cerif:has_roleExpressionOpposite
+                "is imported by" ;
+        cerif:has_term               "Importer" ;
+        cerif:has_termSource         "VRE4EIC project" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.Organisation%20Contact%20Details.Phone>
+        a                         cerif:Classification ;
+        rdfs:label                "Phone" ;
+        cerif:has_roleExpression  "has Phone" ;
+        cerif:has_roleExpressionOpposite
+                "is Phone" ;
+        cerif:has_term            "Phone" .
+
+<http://139.91.183.70:8090/vre4eic/ClassScheme.Character%20Encoding>
+        a               cerif:ClassificationScheme ;
+        rdfs:label      "Character Encoding" ;
+        cerif:has_name  "Character Encoding" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Modified>
+        a                         cerif:Classification ;
+        rdfs:label                "Modified" ;
+        cerif:has_roleExpression  "has type" ;
+        cerif:has_roleExpressionOpposite
+                "is type of" ;
+        cerif:has_term            "Modified" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Help>
+        a                         cerif:Classification ;
+        rdfs:label                "Help" ;
+        cerif:has_roleExpression  "has type" ;
+        cerif:has_roleExpressionOpposite
+                "is type of" ;
+        cerif:has_term            "Help" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.Organisation%20Contact%20Details.Organisation%20Postal%20Address>
+        a                         cerif:Classification ;
+        rdfs:label                "Organisation Postal Address" ;
+        cerif:has_definition      "The address to which legal notices may be served." ;
+        cerif:has_roleExpression  "has postal address" ;
+        cerif:has_roleExpressionOpposite
+                "is postal address of" ;
+        cerif:has_term            "Organisation Postal Address" ;
+        cerif:has_termSource      "VRE4EIC project" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.PIC>
+        a                         cerif:Classification ;
+        rdfs:label                "PIC" ;
+        cerif:has_roleExpression  "has type" ;
+        cerif:has_roleExpressionOpposite
+                "is type of" ;
+        cerif:has_term            "PIC" .
+
+<http://139.91.183.70:8090/vre4eic/ClassScheme.ISO19139%20CI_RoleCode>
+        a               cerif:ClassificationScheme ;
+        rdfs:label      "ISO19139 CI_RoleCode" ;
+        cerif:has_name  "ISO19139 CI_RoleCode" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.Service%20Types.RI>
+        a                         cerif:Classification ;
+        rdfs:label                "RI" ;
+        cerif:has_roleExpression  "has type" ;
+        cerif:has_roleExpressionOpposite
+                "is type of" ;
+        cerif:has_term            "RI" .
+
+<http://139.91.183.70:8090/vre4eic/ClassScheme.BaseEntity%20Contact%20Details>
+        a               cerif:ClassificationScheme ;
+        rdfs:label      "BaseEntity Contact Details" ;
+        cerif:has_name  "BaseEntity Contact Details" ;
+        cerif:is_classificationScheme_of
+                <http://139.91.183.70:8090/vre4eic/Classification.BaseEntity%20Contact%20Details.Email> .
+
+<http://139.91.183.70:8090/vre4eic/ClassScheme.Person%20Contact%20Details>
+        a                      cerif:ClassificationScheme ;
+        rdfs:label             "Person Contact Details" ;
+        cerif:has_description  "A person's electronic and postal contact coordinates. This scheme contains CERIF vocabulary terms applicable in the cfPerson_ElectroniAddress or cfPerson_PostAddress link entity, being thus person contact details." ;
+        cerif:has_name         "Person Contact Details" ;
+        cerif:is_classificationScheme_of
+                <http://139.91.183.70:8090/vre4eic/Classification.Person%20Contact%20Details.Phone> , <http://139.91.183.70:8090/vre4eic/Classification.Person%20Contact%20Details.Email> , <http://139.91.183.70:8090/vre4eic/Classification.Person%20Contact%20Details.Person%20Professional%20Postal%20Address> .
+
+<http://139.91.183.70:8090/vre4eic/Classification.Person%20Access%20Rights.Admin>
+        a                     cerif:Classification ;
+        rdfs:label            "Admin" ;
+        cerif:has_term        "Admin" ;
+        cerif:has_termSource  "VRE4EIC project" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.Service%20Types.VRE>
+        a                         cerif:Classification ;
+        rdfs:label                "VRE" ;
+        cerif:has_roleExpression  "has type" ;
+        cerif:has_roleExpressionOpposite
+                "is type of" ;
+        cerif:has_term            "VRE" .
+
+<http://139.91.183.70:8090/vre4eic/ClassScheme.Workflow%20Relations>
+        a                      cerif:ClassificationScheme ;
+        rdfs:label             "Workflow Relations" ;
+        cerif:has_description  "This scheme contains CERIF vocabulary terms applicable in a InfrastructureEntity or ResultEntity relation to Person\n link entity." ;
+        cerif:has_name         "Workflow Relations" ;
+        cerif:is_classificationScheme_of
+                <http://139.91.183.70:8090/vre4eic/Classification.Workflow%20Relations.Taverna%20Workflow> , <http://139.91.183.70:8090/vre4eic/Classification.Workflow%20Relations.WADL> , <http://139.91.183.70:8090/vre4eic/Classification.Workflow%20Relations.Definition> , <http://139.91.183.70:8090/vre4eic/Classification.Workflow%20Relations.Description> .
+
+<http://139.91.183.70:8090/vre4eic/Classification.Provenance%20Relations.provenance>
+        a                            cerif:Classification ;
+        rdfs:label                   "provenance" ;
+        cerif:has_definition         "Provenance Information" ;
+        cerif:has_description        "In CERIF terms, provenance applies between an InfrastructureEntity or ResultEntity and a Service that contains all the provenance information" ;
+        cerif:has_descriptionSource  "VRE4EIC project" ;
+        cerif:has_roleExpression     "has provenance info" ;
+        cerif:has_roleExpressionOpposite
+                "is provenance info of" ;
+        cerif:has_term               "provenance" ;
+        cerif:has_termSource         "VRE4EIC project" .
+
+<http://139.91.183.70:8090/vre4eic/ClassScheme.BaseEntity%20Output%20Contributions>
+        a                      cerif:ClassificationScheme ;
+        rdfs:label             "BaseEntity Output Contributions" ;
+        cerif:has_description  "This scheme contains states." ;
+        cerif:has_name         "BaseEntity Output Contributions" ;
+        cerif:is_classificationScheme_of
+                <http://139.91.183.70:8090/vre4eic/Classification.BaseEntity%20Output%20Contributions.Responsible> , <http://139.91.183.70:8090/vre4eic/Classification.BaseEntity%20Output%20Contributions.Contact> , <http://139.91.183.70:8090/vre4eic/Classification.BaseEntity%20Output%20Contributions.Creator> , <http://139.91.183.70:8090/vre4eic/Classification.BaseEntity%20Output%20Contributions.Maintainer> , <http://139.91.183.70:8090/vre4eic/Classification.BaseEntity%20Output%20Contributions.Author> .
+
+<http://139.91.183.70:8090/vre4eic/Classification.Provenance%20Relations.Harvester>
+        a                            cerif:Classification ;
+        rdfs:label                   "Harvester" ;
+        cerif:has_definition         "A Harvester is the service that collects the resource description to be imported in the VRE4EIC metadata catalogue." ;
+        cerif:has_description        "In CERIF terms, the harvester role applies between an InfrastructureEntity or ResultEntity and a Service" ;
+        cerif:has_descriptionSource  "VRE4EIC project" ;
+        cerif:has_roleExpression     "has provided" ;
+        cerif:has_roleExpressionOpposite
+                "is harvested from" ;
+        cerif:has_term               "Harvester" ;
+        cerif:has_termSource         "VRE4EIC project" .
+
+<http://139.91.183.70:8090/vre4eic/ClassScheme.Service%20Types>
+        a               cerif:ClassificationScheme ;
+        rdfs:label      "Service Types" ;
+        cerif:has_name  "Service Types" ;
+        cerif:is_classificationScheme_of
+                <http://139.91.183.70:8090/vre4eic/Classification.Service%20Types.VRE> , <http://139.91.183.70:8090/vre4eic/Classification.Service%20Types.RI> .
+
+<http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Download%20URL>
+        a                         cerif:Classification ;
+        rdfs:label                "Download URL" ;
+        cerif:has_roleExpression  "has type" ;
+        cerif:has_roleExpressionOpposite
+                "is type of" ;
+        cerif:has_term            "Download URL" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Legal%20Contact>
+        a                         cerif:Classification ;
+        rdfs:label                "Legal Contact" ;
+        cerif:has_roleExpression  "has role" ;
+        cerif:has_roleExpressionOpposite
+                "is role of" ;
+        cerif:has_term            "Legal Contact" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Domain>
+        a                         cerif:Classification ;
+        rdfs:label                "Domain" ;
+        cerif:has_roleExpression  "has type" ;
+        cerif:has_roleExpressionOpposite
+                "is type of" ;
+        cerif:has_term            "Domain" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Landing%20Page>
+        a                         cerif:Classification ;
+        rdfs:label                "Landing Page" ;
+        cerif:has_roleExpression  "has type" ;
+        cerif:has_roleExpressionOpposite
+                "is type of" ;
+        cerif:has_term            "Landing Page" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Financial%20Contact>
+        a                         cerif:Classification ;
+        rdfs:label                "Financial Contact" ;
+        cerif:has_roleExpression  "has role" ;
+        cerif:has_roleExpressionOpposite
+                "is role of" ;
+        cerif:has_term            "Financial Contact" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.BaseEntity%20Output%20Contributions.Contact>
+        a                         cerif:Classification ;
+        rdfs:label                "Contact" ;
+        cerif:has_roleExpression  "has role" ;
+        cerif:has_roleExpressionOpposite
+                "is role of" ;
+        cerif:has_term            "Contact" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Access%20URL>
+        a                         cerif:Classification ;
+        rdfs:label                "Access URL" ;
+        cerif:has_roleExpression  "has type" ;
+        cerif:has_roleExpressionOpposite
+                "is type of" ;
+        cerif:has_term            "Access URL" .
+
+<http://139.91.183.70:8090/vre4eic/ClassScheme.EPOS%20domains>
+        a               cerif:ClassificationScheme ;
+        rdfs:label      "EPOS domains" ;
+        cerif:has_name  "EPOS domains" .
+
+<http://139.91.183.70:8090/vre4eic/ClassScheme.Provenance%20Relations>
+        a                      cerif:ClassificationScheme ;
+        rdfs:label             "Provenance Relations" ;
+        cerif:has_description  "This scheme contains CERIF vocabulary terms applicable in a InfrastructureEntity or ResultEntity relation to Person\n link entity." ;
+        cerif:has_name         "Provenance Relations" ;
+        cerif:is_classificationScheme_of
+                <http://139.91.183.70:8090/vre4eic/Classification.Provenance%20Relations.provenance> , <http://139.91.183.70:8090/vre4eic/Classification.Provenance%20Relations.Harvester> , <http://139.91.183.70:8090/vre4eic/Classification.Provenance%20Relations.Importer> , <http://139.91.183.70:8090/vre4eic/Classification.Provenance%20Relations.Mapper> , <http://139.91.183.70:8090/vre4eic/Classification.Provenance%20Relations.Provider> .
+
+vre4eic:ClassScheme.State
+        a                      cerif:ClassificationScheme ;
+        rdfs:label             "State" ;
+        cerif:has_description  "This scheme contains states." ;
+        cerif:has_name         "State" .
+
+<http://139.91.183.70:8090/vre4eic/ClassScheme.EPOS%20subdomains>
+        a               cerif:ClassificationScheme ;
+        rdfs:label      "EPOS subdomains" ;
+        cerif:has_name  "EPOS subdomains" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.Workflow%20Relations.Definition>
+        a                            cerif:Classification ;
+        rdfs:label                   "Definition" ;
+        cerif:has_definition         "Defined" ;
+        cerif:has_description        "In CERIF terms, Defined applies between an InfrastructureEntity or ResultEntity and a Medium" ;
+        cerif:has_descriptionSource  "VRE4EIC project" ;
+        cerif:has_roleExpression     "is defined in" ;
+        cerif:has_roleExpressionOpposite
+                "defines" ;
+        cerif:has_term               "Definition" ;
+        cerif:has_termSource         "VRE4EIC project" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.Person%20Contact%20Details.Phone>
+        a                         cerif:Classification ;
+        rdfs:label                "Phone" ;
+        cerif:has_roleExpression  "has Phone" ;
+        cerif:has_roleExpressionOpposite
+                "is Phone" ;
+        cerif:has_term            "Phone" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.Provenance%20Relations.Mapper>
+        a                            cerif:Classification ;
+        rdfs:label                   "Mapper" ;
+        cerif:has_definition         "A mapper is the person that provides the mapping of the original resource schema to cerif." ;
+        cerif:has_description        "In CERIF terms, the mapper role applies between an InfrastructureEntity or ResultEntity and a Person" ;
+        cerif:has_descriptionSource  "VRE4EIC project" ;
+        cerif:has_roleExpression     "has mapped" ;
+        cerif:has_roleExpressionOpposite
+                "is mapped by" ;
+        cerif:has_term               "Mapper" ;
+        cerif:has_termSource         "VRE4EIC project" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.Media%20Relations.Logo>
+        a                         cerif:Classification ;
+        rdfs:label                "Logo" ;
+        cerif:has_roleExpression  "has type" ;
+        cerif:has_roleExpressionOpposite
+                "is type of" ;
+        cerif:has_term            "Logo" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Subdomain>
+        a                         cerif:Classification ;
+        rdfs:label                "Subdomain" ;
+        cerif:has_roleExpression  "has type" ;
+        cerif:has_roleExpressionOpposite
+                "is type of" ;
+        cerif:has_term            "Subdomain" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.BaseEntity%20Output%20Contributions.Responsible>
+        a                         cerif:Classification ;
+        rdfs:label                "Responsible" ;
+        cerif:has_roleExpression  "has role" ;
+        cerif:has_roleExpressionOpposite
+                "is role of" ;
+        cerif:has_term            "Responsible" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.Identifier%20Types.PIC>
+        a                         cerif:Classification ;
+        rdfs:label                "PIC" ;
+        cerif:has_roleExpression  "has type" ;
+        cerif:has_roleExpressionOpposite
+                "is type of" ;
+        cerif:has_term            "PIC" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.Person%20Access%20Rights.Controller>
+        a                     cerif:Classification ;
+        rdfs:label            "Controller" ;
+        cerif:has_term        "Controller" ;
+        cerif:has_termSource  "VRE4EIC project" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.Person%20Contact%20Details.Person%20Professional%20Postal%20Address>
+        a                           cerif:Classification ;
+        rdfs:label                  "Person Professional Postal Address" ;
+        cerif:has_definition        "The work address of a person to which physical correspondance can be delivered." ;
+        cerif:has_definitionSource  "RMAS Vocabulary" ;
+        cerif:has_roleExpression    "has postal address" ;
+        cerif:has_roleExpressionOpposite
+                "is postal address of" ;
+        cerif:has_term              "Person Professional Postal Address" ;
+        cerif:has_termSource        "RMAS project" .
+
+<http://139.91.183.70:8090/vre4eic/ClassScheme.Media%20Relations>
+        a               cerif:ClassificationScheme ;
+        rdfs:label      "Media Relations" ;
+        cerif:has_name  "Media Relations" ;
+        cerif:is_classificationScheme_of
+                <http://139.91.183.70:8090/vre4eic/Classification.Media%20Relations.Logo> .
+
+<http://139.91.183.70:8090/vre4eic/Classification.Person%20Contact%20Details.Email>
+        a                         cerif:Classification ;
+        rdfs:label                "Email" ;
+        cerif:has_roleExpression  "has Email" ;
+        cerif:has_roleExpressionOpposite
+                "is Email" ;
+        cerif:has_term            "Email" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.BaseEntity%20Output%20Contributions.Creator>
+        a                         cerif:Classification ;
+        rdfs:label                "Creator" ;
+        cerif:has_roleExpression  "has role" ;
+        cerif:has_roleExpressionOpposite
+                "is role of" ;
+        cerif:has_term            "Creator" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Logo>
+        a                         cerif:Classification ;
+        rdfs:label                "Logo" ;
+        cerif:has_roleExpression  "has type" ;
+        cerif:has_roleExpressionOpposite
+                "is type of" ;
+        cerif:has_term            "Logo" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Scientific%20Contact>
+        a                         cerif:Classification ;
+        rdfs:label                "Scientific Contact" ;
+        cerif:has_roleExpression  "has role" ;
+        cerif:has_roleExpressionOpposite
+                "is role of" ;
+        cerif:has_term            "Scientific Contact" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Temporal%20Validity>
+        a                         cerif:Classification ;
+        rdfs:label                "Temporal Validity" ;
+        cerif:has_roleExpression  "has type" ;
+        cerif:has_roleExpressionOpposite
+                "is type of" ;
+        cerif:has_term            "Temporal Validity" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.BaseEntity%20Contact%20Details.Email>
+        a                         cerif:Classification ;
+        rdfs:label                "Email" ;
+        cerif:has_roleExpression  "is Email" ;
+        cerif:has_roleExpressionOpposite
+                "has Email" ;
+        cerif:has_term            "Email" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.Person%20Access%20Rights.Operator>
+        a                     cerif:Classification ;
+        rdfs:label            "Operator" ;
+        cerif:has_term        "Operator" ;
+        cerif:has_termSource  "VRE4EIC project" .
+
+<http://139.91.183.70:8090/vre4eic/ClassScheme.Identifier%20Types>
+        a                      cerif:ClassificationScheme ;
+        rdfs:label             "Identifier Types" ;
+        cerif:has_description  "This scheme contains CERIF vocabulary terms applicable in the cfFederatedIdentifier_Classification link entity, being thus a vocabulary of current authority identifiers (extensible and meant as a first start)." ;
+        cerif:has_name         "Identifier Types" ;
+        cerif:is_classificationScheme_of
+                <http://139.91.183.70:8090/vre4eic/Classification.Identifier%20Types.URL> , <http://139.91.183.70:8090/vre4eic/Classification.Identifier%20Types.Revision%20ID> , <http://139.91.183.70:8090/vre4eic/Classification.Identifier%20Types.PIC> .
+
+<http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.character%20Encoding>
+        a                         cerif:Classification ;
+        rdfs:label                "character Encoding" ;
+        cerif:has_roleExpression  "has type" ;
+        cerif:has_roleExpressionOpposite
+                "is type of" ;
+        cerif:has_term            "character Encoding" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.Identifier%20Types.URL>
+        a                         cerif:Classification ;
+        rdfs:label                "URL" ;
+        cerif:has_roleExpression  "has type" ;
+        cerif:has_roleExpressionOpposite
+                "is type of" ;
+        cerif:has_term            "URL" .
+
+<http://139.91.183.70:8090/vre4eic/Classification.VRE4EIC%20Types.Representation%20Technique>
+        a                         cerif:Classification ;
+        rdfs:label                "Representation Technique" ;
+        cerif:has_roleExpression  "has type" ;
+        cerif:has_roleExpressionOpposite
+                "is type of" ;
+        cerif:has_term            "Representation Technique" .
+
+<http://139.91.183.70:8090/vre4eic/ClassScheme.Organisation%20Contact%20Details>
+        a                      cerif:ClassificationScheme ;
+        rdfs:label             "Organisation Contact Details" ;
+        cerif:has_description  "An organisation's electronic and postal contact coordinates. This scheme contains CERIF vocabulary terms applicable in the cfOrganisationUnit_ElectroniAddress or cfOrganisationUnit_PostAddress link entity, being thus organisation contact details." ;
+        cerif:has_name         "Organisation Contact Details" ;
+        cerif:is_classificationScheme_of
+                <http://139.91.183.70:8090/vre4eic/Classification.Organisation%20Contact%20Details.Phone> , <http://139.91.183.70:8090/vre4eic/Classification.Organisation%20Contact%20Details.Email> , <http://139.91.183.70:8090/vre4eic/Classification.Organisation%20Contact%20Details.Organisation%20Postal%20Address> .
+
+<http://139.91.183.70:8090/vre4eic/ClassScheme.Output%20Tags>
+        a               cerif:ClassificationScheme ;
+        rdfs:label      "Output Tags" ;
+        cerif:has_name  "Output Tags" .
+

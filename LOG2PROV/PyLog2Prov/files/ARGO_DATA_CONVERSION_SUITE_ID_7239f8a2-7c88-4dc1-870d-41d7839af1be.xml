@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<prov:document xmlns:prov="http://www.w3.org/ns/prov#" xmlns:d4s="http://d4science.org/#" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <prov:activity prov:id="d4s:ARGO_DATA_CONVERSION_SUITE_ID_7239f8a2-7c88-4dc1-870d-41d7839af1be">
+      <prov:startTime>27/09/2018 09:34:04</prov:startTime>
+      <prov:endTime>27/09/2018 09:43:15</prov:endTime>
+      <prov:type xsi:type="xsd:QName">d4s:computation</prov:type>
+      <prov:softwareAgent prov:id="d4s:dataminer.d4science.org"/>
+      <prov:person prov:id="d4s:s.koulouzis"/>
+      <prov:entity prov:id="d4s:operator_name">
+         <prov:value xsi:type="xsd:string">ARGO_DATA_CONVERSION_SUITE</prov:value>
+      </prov:entity>
+      <prov:entity prov:id="d4s:operator_id">
+         <prov:value xsi:type="xsd:string">org.gcube.dataanalysis.wps.statisticalmanager.synchserver.mappedclasses.transducerers.ARGO_DATA_CONVERSION_SUITE</prov:value>
+      </prov:entity>
+      <prov:entity prov:id="d4s:operator_description">
+         <prov:value xsi:type="xsd:string">The process converts a single ARGO CSV dataset into N NetCDF files, where N represents the numbers of variables (v1)</prov:value>
+      </prov:entity>
+      <prov:entity prov:id="d4s:VRE">
+         <prov:value xsi:type="xsd:string">/d4science.research-infrastructures.eu/gCubeApps/RPrototypingLab</prov:value>
+      </prov:entity>
+      <prov:entity prov:id="d4s:status">
+         <prov:value xsi:type="xsd:string">100</prov:value>
+      </prov:entity>
+      <prov:entity prov:id="d4s:input_file_name_[ARGO_DATA_CONVERSION_SUITE_ID_7239f8a2-7c88-4dc1-870d-41d7839af1be].csv">
+         <prov:value xsi:type="xsd:string">payload was not made available for this dataset</prov:value>
+         <prov:activity prov:ref="d4s:ARGO_DATA_CONVERSION_SUITE_ID_7239f8a2-7c88-4dc1-870d-41d7839af1be"/>
+         <prov:entity prov:ref="d4s:ARGO_DATA_CONVERSION_SUITE"/>
+         <prov:entity prov:id="d4s:data_description">
+            <prov:value xsi:type="xsd:string">input_file_name</prov:value>
+         </prov:entity>
+         <prov:type xsi:type="xsd:QName">d4s:IMPORTED</prov:type>
+         <prov:type xsi:type="xsd:QName">d4s:text/csv</prov:type>
+      </prov:entity>
+      <prov:entity prov:id="d4s:input_file_name">
+         <prov:value xsi:type="xsd:string">payload was not made available for this dataset</prov:value>
+         <prov:activity prov:ref="d4s:ARGO_DATA_CONVERSION_SUITE_ID_7239f8a2-7c88-4dc1-870d-41d7839af1be"/>
+         <prov:entity prov:ref="d4s:ARGO_DATA_CONVERSION_SUITE"/>
+         <prov:entity prov:id="d4s:data_description">
+            <prov:value xsi:type="xsd:string">input_file_name</prov:value>
+         </prov:entity>
+         <prov:type xsi:type="xsd:QName">d4s:IMPORTED</prov:type>
+         <prov:type xsi:type="xsd:QName">d4s:text/plain</prov:type>
+      </prov:entity>
+      <prov:entity prov:id="d4s:scope">
+         <prov:value xsi:type="xsd:string">/d4science.research-infrastructures.eu/gCubeApps/RPrototypingLab</prov:value>
+         <prov:activity prov:ref="d4s:ARGO_DATA_CONVERSION_SUITE_ID_7239f8a2-7c88-4dc1-870d-41d7839af1be"/>
+         <prov:entity prov:ref="d4s:ARGO_DATA_CONVERSION_SUITE"/>
+         <prov:entity prov:id="d4s:data_description">
+            <prov:value xsi:type="xsd:string">scope</prov:value>
+         </prov:entity>
+         <prov:type xsi:type="xsd:QName">d4s:IMPORTED</prov:type>
+         <prov:type xsi:type="xsd:QName">d4s:text/plain</prov:type>
+      </prov:entity>
+      <prov:entity prov:id="d4s:user.name">
+         <prov:value xsi:type="xsd:string">s.koulouzis</prov:value>
+         <prov:activity prov:ref="d4s:ARGO_DATA_CONVERSION_SUITE_ID_7239f8a2-7c88-4dc1-870d-41d7839af1be"/>
+         <prov:entity prov:ref="d4s:ARGO_DATA_CONVERSION_SUITE"/>
+         <prov:entity prov:id="d4s:data_description">
+            <prov:value xsi:type="xsd:string">user.name</prov:value>
+         </prov:entity>
+         <prov:type xsi:type="xsd:QName">d4s:IMPORTED</prov:type>
+         <prov:type xsi:type="xsd:QName">d4s:text/plain</prov:type>
+      </prov:entity>
+      <prov:entity prov:id="d4s:usertoken">
+         <prov:value xsi:type="xsd:string">XXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXX-XXXXXXXX</prov:value>
+         <prov:activity prov:ref="d4s:ARGO_DATA_CONVERSION_SUITE_ID_7239f8a2-7c88-4dc1-870d-41d7839af1be"/>
+         <prov:entity prov:ref="d4s:ARGO_DATA_CONVERSION_SUITE"/>
+         <prov:entity prov:id="d4s:data_description">
+            <prov:value xsi:type="xsd:string">usertoken</prov:value>
+         </prov:entity>
+         <prov:type xsi:type="xsd:QName">d4s:IMPORTED</prov:type>
+         <prov:type xsi:type="xsd:QName">d4s:text/plain</prov:type>
+      </prov:entity>
+      <prov:entity prov:id="d4s:LogFile">
+         <prov:value xsi:type="xsd:string">http://data.d4science.org/a1pqa00yNG80cHBiVXpNM0N4UlQwSytLYmVpNm9XMmpHbWJQNStIS0N6Yz0</prov:value>
+         <prov:activity prov:ref="d4s:ARGO_DATA_CONVERSION_SUITE_ID_7239f8a2-7c88-4dc1-870d-41d7839af1be"/>
+         <prov:entity prov:ref="d4s:ARGO_DATA_CONVERSION_SUITE"/>
+         <prov:entity prov:id="d4s:data_description">
+            <prov:value xsi:type="xsd:string">Log of the computation</prov:value>
+         </prov:entity>
+         <prov:type xsi:type="xsd:QName">d4s:COMPUTED</prov:type>
+         <prov:type xsi:type="xsd:QName">d4s:text/csv</prov:type>
+      </prov:entity>
+      <prov:entity prov:id="d4s:output_file_name">
+         <prov:value xsi:type="xsd:string">http://data.d4science.org/Y0NWYWNXYjdxTlpiVXpNM0N4UlQwUC9NYzh0Kzd5MUdHbWJQNStIS0N6Yz0</prov:value>
+         <prov:activity prov:ref="d4s:ARGO_DATA_CONVERSION_SUITE_ID_7239f8a2-7c88-4dc1-870d-41d7839af1be"/>
+         <prov:entity prov:ref="d4s:ARGO_DATA_CONVERSION_SUITE"/>
+         <prov:entity prov:id="d4s:data_description">
+            <prov:value xsi:type="xsd:string">output_file_name</prov:value>
+         </prov:entity>
+         <prov:type xsi:type="xsd:QName">d4s:COMPUTED</prov:type>
+         <prov:type xsi:type="xsd:QName">d4s:application/d4science</prov:type>
+      </prov:entity>
+   </prov:activity>
+</prov:document>
