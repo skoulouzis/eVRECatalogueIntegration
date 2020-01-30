@@ -1,0 +1,11 @@
+docker run -it -p 15672:15672 -p 4369:4369 -p 5671-5672:5671-5672 -p 15671:15671 rabbitmq:3-management
+docker run -p 127.0.0.1:8086:8086 -p 127.0.0.1:8083:8083 -v influxdb:/var/lib/influxdb influxdb
+docker run -p 8888:8888 chronograf --influxdb-url=http://localhost:8086
+docker run -it -p 80:80 visity/webdav
+
+
+
+curl -X POST -H 'Content-Type:text/turtle' -H 'Authorization: Basic YWRtaW46taW4=' -H 'Host: localhost' -d @Mapping115_b2a19c73-be27-42a6-b4e1-332349b781c0.ttl  http://fuseki:3030/db/data
+curl -v -X PUT      --digest -u dba:dba      -H Content-Type:text/turtle      -T Mapping115_0ca0eeb1-41fd-4b25-bbea-070461188521.ttl      -G http://localhost:8890/sparql-graph-crud-auth  --data-urlencode graph=http://envri-data
+curl -X PUT -H Content-Type:text/turtle  -T Mapping115_0ca0eeb1-41fd-4b25-bbea-070461188521.ttl -G http://localhost:3030/envri/data -data-urlencode graph=http://envri-data
+

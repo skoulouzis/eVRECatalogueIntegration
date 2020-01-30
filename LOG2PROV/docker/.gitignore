@@ -1,0 +1,15 @@
+/statistics_cat/target/
+/CerifDataHarvester/target/
+CatMap/cat_worker/target
+/CatMap/CerifDataHarvester/target
+/CatMap/rest_cat/target
+/CatMap/x3ml-1.9.0/target
+/eVRETaverna/target
+/eVRETaverna-gis-plugin/target
+/LOG2PROV/Log2ProvService/target
+/WPS2WADL/target
+/LOG2PROV/PRovenanceIntegratorSErvice/target/
+/CatMap/statistics_cat/target/
+/CatMap/rest_cat/nbproject/
+/.git-rewrite/t/eVRETaverna/eVRETaverna-activity/target/
+/PRovenanceIntegratorSErvice/*.jar
