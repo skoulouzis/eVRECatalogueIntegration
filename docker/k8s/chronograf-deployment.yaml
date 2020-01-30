@@ -9,6 +9,9 @@ metadata:
     io.kompose.service: chronograf
   name: chronograf
 spec:
+  selector:
+   matchLabels:
+    app: chronograf
   replicas: 1
   strategy: {}
   template:
